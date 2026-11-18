@@ -1,0 +1,75 @@
+import { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import { ChevronDown, LogOut } from 'lucide-react';
+import { toast } from 'sonner';
+import { useAuth } from '@/auth/useAuth';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { formatApiError } from '@/api/errors';
+import { initials } from '@/lib/utils';
+
+export function UserMenu() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [signingOut, setSigningOut] = useState(false);
+
+  if (!user) return null;
+
+  const signOut = async (): Promise<void> => {
+    setSigningOut(true);
+    try {
+      await logout();
+      toast.success('Signed out securely');
+      await navigate({ to: '/login', replace: true });
+    } catch (error) {
+      toast.error(formatApiError(error));
+      await navigate({ to: '/login', replace: true });
+    } finally {
+      setSigningOut(false);
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-11 gap-2 rounded-xl px-2 sm:px-3" aria-label="Open account menu">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy text-xs font-bold text-white">
+            {initials(user.displayName)}
+          </span>
+          <span className="hidden min-w-0 text-left md:block">
+            <span className="block max-w-36 truncate text-sm font-semibold leading-tight">{user.displayName}</span>
+            <span className="block max-w-36 truncate text-xs font-normal text-muted-foreground">{user.email}</span>
+          </span>
+          <ChevronDown aria-hidden="true" className="hidden h-4 w-4 opacity-60 md:block" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuLabel>Signed in</DropdownMenuLabel>
+        <div className="px-3 pb-2">
+          <p className="truncate text-sm font-semibold">{user.displayName}</p>
+          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+          {user.designation && <p className="mt-1 truncate text-xs text-muted-foreground">{user.designation}</p>}
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          disabled={signingOut}
+          onSelect={(event) => {
+            event.preventDefault();
+            void signOut();
+          }}
+          className="text-destructive focus:text-destructive"
+        >
+          <LogOut aria-hidden="true" className="h-4 w-4" />
+          {signingOut ? 'Signing out…' : 'Sign out'}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
