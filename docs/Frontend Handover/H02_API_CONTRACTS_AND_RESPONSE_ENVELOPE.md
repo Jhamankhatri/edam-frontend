@@ -89,7 +89,9 @@ Source: `ErrorCode.java` + `GlobalExceptionHandler.statusFor(...)`.
 | 403 | `EDAM-2002` ACCESS_DENIED | Spring Security access denied |
 | 403 | `EDAM-2005` PERMISSION_DENIED | `@EdamPermission` failure |
 | 403 | `EDAM-2003` INSTITUTION_REQUIRED, `EDAM-2004` INSTITUTION_ACCESS_DENIED | Multi-institution checks (reserved) |
-| 409 | `EDAM-1004/1005/1006` IDEMPOTENCY_CONFLICT / IN_PROGRESS / UNKNOWN_OUTCOME | Idempotency failures |
+| 409 | `EDAM-1004 IDEMPOTENCY_CONFLICT` | Same idempotency key reused with a different request body |
+| 409 | `EDAM-1005 IDEMPOTENCY_IN_PROGRESS` | An identical request is currently being processed — retry after a short delay (normal outcome for the loser of a concurrent same-key race; do NOT treat as an error) |
+| 409 | `EDAM-1006 IDEMPOTENCY_UNKNOWN_OUTCOME` | The in-progress claim aged past the stale-grace window without a recorded outcome (out-of-band reconciliation required) |
 | 409 | `EDAM-3002` CONCURRENT_MODIFICATION | Optimistic-lock conflict (on `@Version`) |
 | 409 | `EDAM-3003` PRECONDITION_FAILED | If-Match / version mismatch |
 | 409 | `EDAM-3004` INVALID_STATE_TRANSITION | Action not permitted in the current state |
@@ -220,14 +222,34 @@ The `@Digits(integer=15, fraction=4)` constraint caps precision. Clients MUST:
   BigDecimal. For amounts larger than 2^53 − 1 (≈ 90 trillion, which is implausible for EDAM),
   a string is not an option; configure Jackson if needed in a future iteration.
 
-## 6. Idempotency endpoints
+## 6. Idempotency endpoints & concurrency contract
 
-The seven endpoints annotated `@IdempotentOperation` (source
-`com.edam.common.api.IdempotentOperation` plus controller annotations):
-REQ-002 POST create, REQ-004 PUT update, REQ-006 POST cancel, REQ-007 POST submit,
-APL-004/005/006/008 POST approve/forward/reject/revert, plus AUTH-006 POST login.
-Each must send `Idempotency-Key: <uuidv4>` header. The key persists across retries of the same
-user gesture.
+Endpoints annotated `@IdempotentOperation` (source `com.edam.common.api.IdempotencyOperation`,
+enforced by `IdempotencyAspect` + `IdempotencyService`):
+
+- REQ-002 POST create, REQ-004 PUT update, REQ-006 POST cancel, REQ-007 POST submit,
+- APL-004 POST approve, APL-005 POST forward, APL-006 POST reject, APL-008 POST revert,
+- Integration execution submission (`IntegrationService.submitExecution`) for keyed calls (note: this is an internal service path; the HTTP-exposed idempotency set is exactly the 8 endpoints listed above).
+
+Client rules:
+
+- Send `Idempotency-Key: <uuidv4>` on every request to these endpoints. Reuse the SAME key
+  across retries of the same user gesture; generate a NEW key for new gestures.
+- Replays (identical key + identical body by the same actor) return the original response
+  body and HTTP status without re-running the business operation.
+- Same key with a different body returns HTTP 409 `EDAM-1004 IDEMPOTENCY_CONFLICT`.
+- Concurrent same-key submissions collapse to exactly one execution. The loser receives
+  either the original response (if the winner committed before the loser retried) or
+  HTTP 409 `EDAM-1005 IDEMPOTENCY_IN_PROGRESS` while the winner is still running. Clients
+  MUST treat 409/EDAM-1005 as a normal "retry later" state (reissue the same key after a
+  short backoff); do NOT surface it as an error toast.
+- HTTP 409 `EDAM-1006 IDEMPOTENCY_UNKNOWN_OUTCOME` means the original claim aged past the
+  stale-grace window without a recorded outcome; the user should reconcile out-of-band
+  (e.g. refresh the list view).
+- Collision handling uses nested `REQUIRES_NEW` transactions; duplicate-key errors from
+  PostgreSQL are caught OUTSIDE the nested transaction (after it rolls back cleanly), so
+  the outer transaction remains usable and returns the winner's record (PR #24 fix,
+  commit `92c7d5a`).
 
 ## 7. Raw binary response (RPT-002 export)
 

@@ -15,7 +15,7 @@ fixed by Flyway **V28** (D-09).
 | `request:view-all` | Catalogue code. Controller gate is still `request:view-own`; service returns installation-wide results. | CEO, CFO, Head of Admin/GSD, Report Administrator, System Administrator |
 
 `RequirePermissionAspect` does exact-match only (source: `if (!principal.hasPermission(edamPermission.value()))`).
-Without V28, roles seeded with only `view-scope` or `view-all` received 403 at the controller.
+Before V28, roles seeded with only `view-scope` or `view-all` received 403 at the controller.
 V28 grants `request:view-own` to every role that already holds one of the wider codes; service
 visibility is unchanged, so no privilege is broadened.
 

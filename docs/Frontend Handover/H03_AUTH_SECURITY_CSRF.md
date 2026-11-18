@@ -9,7 +9,7 @@ double-submit cookie. No JWT, no localStorage tokens.
 |-------|-----|---------|----------|
 | App boot | `GET /auth/me` (AUTH-008). If 401 → anonymous state. | Reuses existing `JSESSIONID`. | Hydrate auth store; if 401 → treat as anonymous. |
 | CSRF priming | `GET /auth/csrf` (AUTH-003) BEFORE first write. | Explicitly sets/rotates `XSRF-TOKEN` cookie. | Read cookie after response resolves. |
-| Login | `POST /auth/login` (AUTH-006) with `Idempotency-Key`, body `{username, password}`. | Sets `JSESSIONID` (HttpOnly, SameSite=Lax) and rotates `XSRF-TOKEN`. | Store `CurrentUserResponse`, call `/auth/csrf` or re-read cookie. |
+| Login | `POST /auth/login` (AUTH-006), body `{username, password}`. | Sets `JSESSIONID` (HttpOnly, SameSite=Lax) and rotates `XSRF-TOKEN`. | Store `CurrentUserResponse`, call `/auth/csrf` or re-read cookie. |
 | Logout | `POST /auth/logout` (AUTH-007). No body. | Invalidates `JSESSIONID`; `XSRF-TOKEN` rotated. | Clear QueryClient and auth store; navigate `/login`. |
 | Session expires | Any call returning 401 `EDAM-2001`. | Cookies may still be present. | Publish `auth:expired`, clear store, redirect `/login?returnTo=`. |
 | Must-change-password | `GET /auth/me` returns `mustChangePassword:true`. | — | Force redirect `/change-password`. |

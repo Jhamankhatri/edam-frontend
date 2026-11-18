@@ -20,7 +20,9 @@ react-hook-form via `setError`. Server `message` values are safe and localized �
 | 404 EDAM-4001 | `<NotFound/>` |
 | 409 EDAM-3002/3003 (concurrency / precondition) | Modal: "Record changed elsewhere" → reload |
 | 409 EDAM-5002 (duplicate) | Field-level error on offending input |
-| 409 IDEMPOTENCY_* | "Request already in progress"; link to record |
+| 409 EDAM-1004 IDEMPOTENCY_CONFLICT | Same key reused with different body — prompt user to generate a new key. |
+| 409 EDAM-1005 IDEMPOTENCY_IN_PROGRESS | Loser of concurrent same-key race — auto-retry with same key after short backoff (2 s, max 3 retries); do NOT toast as an error. |
+| 409 EDAM-1006 IDEMPOTENCY_UNKNOWN_OUTCOME | Claim timed out before outcome recorded — ask user to refresh the list to reconcile. |
 | 422 EDAM-2008 (weak password) | Password policy hints |
 | 423 EDAM-2007 (account locked) | Lockout screen |
 | 400 EDAM-5004 (invalid document) | Inline upload error (type/size/scan) |

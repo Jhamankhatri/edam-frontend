@@ -21,5 +21,9 @@
 ## Contract drift
 - CI fetches `/v3/api-docs` and diffs against the committed `schema.d.ts`; fails on breaking
   change (new required fields, renamed endpoints, missing IDs in H09/H10/Appendix A).
-- D-09 permission seed test (backend) asserts every role with view-scope/view-all holds
-  view-own after V28.
+- D-09 permission seed test (`SeededRolePermissionsD09Test`) asserts every role with
+  view-scope/view-all holds view-own after V28; runs against a Testcontainers Postgres
+  (exercises V28 + the self-verification DO block in-VM). Passes on CI at `38cedbc`.
+- Idempotency concurrency tests (`IntegrationApiTest.concurrentSameKeyCollapses`,
+  `IdempotencyApiTest.concurrentDuplicateExecutesOnce`, `IdempotencyApiTest.concurrentInProgressReturns409`)
+  exercise the REQUIRES_NEW collision path; they pass after the `92c7d5a` fix.

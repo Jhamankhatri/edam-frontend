@@ -11,7 +11,7 @@ once here and reused by multiple screens; hook up via shared TanStack Query hook
 ## Screens
 | Screen | GETs | POST/PUT/DELETE |
 |--------|------|-----------------|
-| Login | BRD-005 | AUTH-006 login (Idempotency-Key) |
+| Login | BRD-005 | AUTH-006 login |
 | Logout | — | AUTH-007 logout |
 | Forgot password | — | AUTH-004 |
 | Reset password | — | AUTH-009 |

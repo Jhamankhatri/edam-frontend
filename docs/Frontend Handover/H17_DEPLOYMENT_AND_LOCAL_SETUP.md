@@ -6,7 +6,7 @@
 2. Configure database and installation token via environment variables (see `application.yml`):
    - `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`
    - `EDAM_INSTALLATION_TOKEN` (one-time bootstrap secret; must match the header the UI sends).
-3. Run: `./mvnw spring-boot:run` — listens on `0.0.0.0:8080`.
+3. Run: `mvn spring-boot:run` — listens on `0.0.0.0:8080` (Java 21; the Maven wrapper is NOT checked in).
 4. Flyway runs on boot; V28 (`grant_view_own_to_wider_view_roles.sql`) is applied automatically.
 5. Bootstrap once via the UI or:
    ```

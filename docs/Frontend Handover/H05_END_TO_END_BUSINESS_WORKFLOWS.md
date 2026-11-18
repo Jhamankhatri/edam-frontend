@@ -13,7 +13,7 @@ Endpoint IDs reference Appendix A.
 ## W2. Login / logout
 - **Route:** `/login`; logout from user menu.
 - **Sequence (login):** GET `/public/configuration` (branding) → GET `/auth/csrf` → POST
-  `/auth/login` with Idempotency-Key. On success store `CurrentUserResponse`, re-read CSRF cookie,
+  `/auth/login`. On success store `CurrentUserResponse`, re-read CSRF cookie,
   route to `returnTo` or `/app/dashboard`. If `mustChangePassword` redirect to `/change-password`.
 - **Sequence (logout):** POST `/auth/logout` → invalidate client caches → `/login`.
 - **Errors:** `INVALID_CREDENTIALS` (generic, no user enumeration), `ACCOUNT_LOCKED`,

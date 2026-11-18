@@ -1,12 +1,24 @@
 # H16 — Traceability & Verification
 
 ## Verification method
-This package was verified against static source inspection of the backend at commit
-`0253e18` plus the remediation Flyway migration V28 (branch `docs/frontend-handover-remediation`).
-**No runtime backend execution was performed during this pass.** Endpoints, DTOs, handler
-method names, paths, permissions, public matchers, and annotations were read directly from
-source; Appendix A is regenerated from `docs/phase-4j/_generated/controllers.json`
-introspection with handler → Java source cross-check.
+This package was verified against the backend source at merge commit `38cedbc` (PR #24
+merge of branch `docs/frontend-handover-remediation`), which includes the initial 19-file
+handover (PR #23), the D-01…D-27 corrections, Flyway V28, the `SeededRolePermissionsD09Test`
+regression test, and the idempotency transaction bug fix (`92c7d5a`).
+
+Verification combined:
+- **Static source inspection:** every controller, DTO, SecurityConfig public-matchers list,
+  `@PublicEndpoint`/`@EdamPermission` annotations, `RequirePermissionAspect`,
+  `ExpenseRequestService.isVisible`, migration files V5/V12/V27/V28, and idempotency
+  services (`IdempotencyService`, `IntegrationService`).
+- **CI execution (GitHub Actions run 44322838892 + push run 44322826952):** 37 test
+  classes / 433 tests / 0 failures / 0 errors / 3 pre-existing skips, across three jobs
+  (`build-and-test`, `prod-profile-smoke-test`, `war-package-smoke-test`).
+- **Appendix A regeneration** directly from controller source + `Permissions.java`, with
+  handler → Java method cross-check.
+
+Endpoint, DTO, handler, path, permission, and annotation claims in this package are backed
+by the source files listed in §Source evidence.
 
 ## Endpoint coverage
 Total `/api/v1` endpoints covered in Appendix A: **206** (8 public, 3 authenticated-only,
@@ -69,7 +81,7 @@ Total `/api/v1` endpoints covered in Appendix A: **206** (8 public, 3 authentica
 | Controller aspect (exact-match permission gate) | `src/main/java/com/edam/common/aspect/RequirePermissionAspect.java` |
 | ApiResponse / PageResponse / PageQuery / ErrorCode | `src/main/java/com/edam/common/api/*.java` |
 | GlobalExceptionHandler | `src/main/java/com/edam/common/exception/GlobalExceptionHandler.java` |
-| Idempotency handling | `src/main/java/com/edam/common/api/IdempotencyOperation.java`, `.../web/IdempotencyFilter.java` |
+| Idempotency handling | `src/main/java/com/edam/common/api/{IdempotencyOperation,IdempotencyService,IdempotencyAspect,IdempotencyRecord,IdempotencyRecordRepository}.java`, `src/main/java/com/edam/integrations/service/IntegrationService.java` |
 | Request visibility (service-layer scope enforcement) | `src/main/java/com/edam/expenserequest/service/ExpenseRequestService.java` `isVisible()` (lines ~419–434) |
 | Expense-request DTOs | `src/main/java/com/edam/expenserequest/dto/ExpenseRequestDtos.java` |
 | Approval DTOs / case-file | `src/main/java/com/edam/approval/dto/` |
@@ -78,4 +90,6 @@ Total `/api/v1` endpoints covered in Appendix A: **206** (8 public, 3 authentica
 | Public configuration response | `src/main/java/com/edam/web/PublicConfigurationResponse.java`, `web/SystemController.java` |
 | Notification inbox | `src/main/java/com/edam/communication/controller/NotificationInboxController.java` |
 | Seeded roles/permissions (canonical) | `src/main/resources/db/migration/V12__access_management.sql` (V3/V4 dropped by V13) |
+| Idempotency partial unique index | `src/main/resources/db/migration/V27__phase4i_idempotency_unique_fix.sql` |
+| D-09 regression test | `src/test/java/com/edam/rolemanagement/SeededRolePermissionsD09Test.java` |
 | D-09 migration | `src/main/resources/db/migration/V28__grant_view_own_to_wider_view_roles.sql` |

@@ -5,14 +5,17 @@
 | Item | Value |
 |------|-------|
 | Repository | `Jhamankhatri/edam` (backend) |
-| Starting branch | `main` at `0253e18` (post PR #23 merge) |
-| Remediation branch | `docs/frontend-handover-remediation` |
-| Flyway migration added | `V28__grant_view_own_to_wider_view_roles.sql` (D-09 fix) |
+| Baseline (post-merge) | `main` at `38cedbc` (merge of PR #24) |
+| PR #24 head | `92c7d5a` (docs remediation + D-09 + idempotency TX fix) |
+| Relevant Flyway migrations | V5 (access management), V12 (role/perm seeds), V27 (integration idempotency partial unique index), V28 (D-09 `request:view-own` grant) |
 | API base URL | `/api/v1` (Vite dev-proxied to backend) |
 | SpringDoc | `/v3/api-docs` (OpenAPI 3.1 JSON) |
 | Swagger UI | `/swagger-ui.html` (internal/VPN only) |
-| Backend build | Maven (`mvn spring-boot:run`; wrapper `./mvnw` if present) |
-| Frontend repo | `Jhamankhatri/edam-frontend` (not modified by this remediation) |
+| Backend build | Maven (`mvn spring-boot:run`; Java 21) |
+| Frontend repo | `Jhamankhatri/edam-frontend` (not modified by this handover) |
+
+> **Note:** the Maven Wrapper (`./mvnw`) is NOT checked into this repository. Use a
+> system-installed `mvn` (Maven 3.9+ recommended).
 
 ## 2. Conventions
 
@@ -62,13 +65,16 @@ exists (deferred).
   streams raw CSV/XLSX bytes (H02 §7, H12).
 - CSRF required on every POST/PUT/PATCH/DELETE via `X-XSRF-TOKEN` header (H03 §3).
 - `Idempotency-Key` header required on endpoints annotated `@IdempotentOperation` (H02 §6).
+  Concurrent same-key submissions collapse to a single execution on the server; the loser
+  receives the original response (replay) or HTTP 409 `EDAM-1005 IDEMPOTENCY_IN_PROGRESS`
+  while the winner is still running.
 - Pagination: `PageResponse<T>` for most lists (page 0-based, size default 20, capped 200);
   `RegisterResponse` for RPT-003 (capped 500, default sort `submittedAt,desc`); keyset
   (`cursor`+`size`, cap 200) for REQ-005 timeline.
 - Use `error.code` (stable `EDAM-nnnn` strings) for conditional logic; never match on the
   human-readable `error.message`.
-- Public surface in SecurityConfig: `/auth/login|logout|csrf|installation|bootstrap|
-  forgot-password|reset-password`, `/public/configuration`, `/error`, `/v3/api-docs*`,
+- Public surface per `SecurityConfig.publicMatchers`: `/auth/login|logout|csrf|installation|
+  bootstrap|forgot-password|reset-password`, `/public/configuration`, `/error`, `/v3/api-docs*`,
   `/swagger-ui*`, `/actuator/health*`, `/actuator/info`. Authenticated-only (no permission):
   `GET /auth/me`, `POST /auth/change-password`.
 - `GET /system/info` carries `@PublicEndpoint` annotation but is NOT in the public matchers
@@ -94,6 +100,9 @@ exists (deferred).
 - Permission catalogue: `src/main/java/com/edam/common/security/Permissions.java`.
 - Pagination & envelope: `src/main/java/com/edam/common/api/{ApiResponse,PageResponse,PageQuery,ErrorCode}.java`.
 - Error mapping: `src/main/java/com/edam/common/exception/GlobalExceptionHandler.java`.
+- Idempotency: `src/main/java/com/edam/common/api/{IdempotencyService,IdempotencyAspect}.java`, `src/main/java/com/edam/integrations/service/IntegrationService.java`.
 - Service-layer visibility: `src/main/java/com/edam/expenserequest/service/ExpenseRequestService.java` `isVisible()`.
 - Seeded roles/permissions (canonical): `src/main/resources/db/migration/V12__access_management.sql` (V3/V4 provisional tables dropped by V13).
+- Idempotency index: `src/main/resources/db/migration/V27__phase4i_idempotency_unique_fix.sql` (partial unique index on `integration_executions`, null-keyed executions never collapse).
 - D-09 fix: `src/main/resources/db/migration/V28__grant_view_own_to_wider_view_roles.sql`.
+- D-09 regression test: `src/test/java/com/edam/rolemanagement/SeededRolePermissionsD09Test.java`.
