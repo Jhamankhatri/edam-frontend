@@ -358,8 +358,9 @@ unmerged because the owner asked for review before any merge.
 - Base: `37c0a02f79728ea4a95a88b3952b864fb81b7309`
 - Audit code commit: `c3d5186f053730e2f78d655115cc71a004d60041`
 - CI finalization commit: `5f579f95acb3f5940d4bbaed8a32bf63be0b1d82`
+- Genuine-artifact implementation commit: `d4fccf000fc729ec6e3d6f6934ea590560b0909d` (§14)
 - PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged)
-- Remote CI: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
+- Remote CI: PASS — GitHub Actions `Frontend CI` concluded `success` on `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`), `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`), `e49f449` (push run `44382157316`, `pull_request` run `44382804285`), and `d4fccf0` (push run `44405260075`, `pull_request` run `44405268208`); `gh pr checks 3` reports both `Typecheck, lint, test and build` and `Pinned OpenAPI snapshot and generated types` pass.
 - No new PR, no merge, no `main` push, no backend commit/push, no Step 2 or business module work.
 
 **Audit verdict (superseded by §14):** the Step 1 frontend is clean, reusable, optimized, secure,
@@ -485,4 +486,21 @@ unmerged; no Step 2 or business-module work was performed.
 
 ### 14.6 Commit, CI and PR results
 
-_Recorded after the remote CI runs complete._
+- Genuine-artifact implementation commit: `d4fccf000fc729ec6e3d6f6934ea590560b0909d`
+  (`feat: pin genuine OpenAPI artifact, generate schema, and resolve Category 1/2`), 16 files
+  changed, 12,209 insertions / 128 deletions.
+- Two preparatory commits on the same branch: `a14d636b905b39d52c75be71eea66efff4922e2d`
+  (temporary bootstrap workflow, removed in `d4fccf0`) and
+  `470255554c9c12152598d9d6611f2624c6773771` (bootstrap-pinned JSON + `.meta.txt`). The bootstrap
+  workflow's PR run on `4702555` reported `action_required` because it was authored by
+  `github-actions[bot]`; that historical run is superseded by the passing runs below.
+- GitHub Actions on `d4fccf0`: push run `44405260075` **success** (job `135158666880`
+  `Pinned OpenAPI snapshot and generated types`, job `135158667319`
+  `Typecheck, lint, test and build`); pull_request run `44405268208` **success** (jobs
+  `135158697526` and `135158696989`). `gh pr checks 3` reports both checks **pass** (26s / 42s).
+- PR #3: `OPEN`, not draft, `MERGEABLE`, `CLEAN`, base `main`, head
+  `arena/807bbe3c-edam-frontend`. It is **not merged**; the owner asked for review first.
+- No backend repository modification, no `main` push, no new PR, no merge, no Step 2 work.
+
+The final docs-only commit that records these results is reported in the chat answer and by
+`git rev-parse HEAD`; it changes no code or snapshot bytes.

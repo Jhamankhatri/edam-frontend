@@ -246,6 +246,9 @@ Other limitations (unchanged): no live Spring Boot/PostgreSQL E2E run, no full W
 - PR state: open; not merged or closed
 - Engineering audit code commit SHA: `c3d5186f053730e2f78d655115cc71a004d60041`
 - CI finalization / report commit SHA: `5f579f95acb3f5940d4bbaed8a32bf63be0b1d82`
+- Precision-pass commit SHA: `e49f449c1a3a8455f486a5e432b6bd1fde98b648`
+- Genuine-artifact / Category 1+2 implementation commit SHA: `d4fccf000fc729ec6e3d6f6934ea590560b0909d`
+- Bootstrap helper commits (branch history only): `a14d636b905b39d52c75be71eea66efff4922e2d` and `470255554c9c12152598d9d6611f2624c6773771`
 - Remote CI status: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
 - No push to `main`, no merge, no backend commit/push, and no backend file modification.
 
@@ -358,11 +361,36 @@ preview with 201 controls / 15 forms; proxy HTTP 200 on both; Puppeteer login sm
 
 ### 7. Changed files and commit SHA
 
-_Recorded after the final push._
+Implementation commit `d4fccf000fc729ec6e3d6f6934ea590560b0909d` — **16 files changed,
+12,209 insertions / 128 deletions**:
+
+| Area | Files |
+|---|---|
+| Pinned artifact | `openapi-spec/openapi-620f7a795cc67a16e905115131f561bbd986af85.json`, `.meta.txt` (committed earlier at `4702555`) |
+| Generated schema | `src/api/generated/schema.d.ts` (new, 11,377 lines) |
+| Generation / verification | `package.json`, `scripts/verify-openapi-snapshot.mjs`, `scripts/annotate-openapi-schema.mjs` |
+| CI | `.github/workflows/frontend-ci.yml` (new `openapi-contract` job); temporary `.github/workflows/openapi-bootstrap.yml` deleted |
+| Category 2 implementation | `src/api/error-status.ts` (new), `src/api/errors.ts`, `src/api/endpoints.ts`, `src/api/client.ts`, `src/api/contracts.ts`, `src/test/server.ts`, `src/api/openapi-contract.test.ts` (new, 8 tests) |
+| Documentation | `docs/PHASE1_STEP1_CONTRACT_NOTES.md`, `docs/PHASE1_STEP1_ENGINEERING_AUDIT.md`, `docs/PHASE1_STEP1_FINAL_REPORT.md` |
+
+Preparatory commits on this branch: `a14d636b905b39d52c75be71eea66efff4922e2d` (temporary
+bootstrap workflow, removed in `d4fccf0`) and `470255554c9c12152598d9d6611f2624c6773771` (the
+bootstrap-pinned JSON and metadata). The docs-only commit that records these exact CI results is
+reported in the chat answer and by `git rev-parse HEAD`; it changes no code or snapshot bytes.
 
 ### 8. PR #3 status and CI
 
-_Recorded after the remote CI runs complete._
+- PR #3: **OPEN**, not draft, `MERGEABLE`, `CLEAN`, base `main`, head
+  `arena/807bbe3c-edam-frontend`; **not merged** (owner review requested).
+- Push run `44405260075` — **success**: `Pinned OpenAPI snapshot and generated types`
+  (`135158666880`) and `Typecheck, lint, test and build` (`135158667319`).
+- Pull-request run `44405268208` — **success**: `Pinned OpenAPI snapshot and generated types`
+  (`135158697526`) and `Typecheck, lint, test and build` (`135158696989`).
+- `gh pr checks 3` — both checks **pass** (26s / 42s).
+- A historical `pull_request` run `44401861614` on the bot-authored bootstrap commit `4702555`
+  ended `action_required`; it is superseded by the two passing runs on `d4fccf0`.
+- PR body updated to reflect the cleared Category 1/2 gates and the new CI checks; the
+  "awaiting review — do not merge" instruction is retained.
 
 ### 9. Remaining blockers and engineering-audit classification
 
