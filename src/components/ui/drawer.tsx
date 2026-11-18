@@ -10,7 +10,6 @@ import { Button } from './button';
 
 export const Drawer = DialogPrimitive.Root;
 export const DrawerTrigger = DialogPrimitive.Trigger;
-export const DrawerClose = DialogPrimitive.Close;
 export const DrawerTitle = DialogPrimitive.Title;
 export const DrawerDescription = DialogPrimitive.Description;
 
@@ -19,11 +18,11 @@ export const DrawerContent = forwardRef<
   ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm" />
+    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-sm" />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed inset-y-0 left-0 z-50 flex h-full w-[min(20rem,calc(100vw-2rem))] flex-col border-r border-white/10 bg-brand-navy text-white shadow-elevated focus:outline-none',
+        'fixed inset-y-0 left-0 z-50 flex h-full w-drawer flex-col border-r border-brand-panel-border bg-brand-navy text-brand-panel-foreground shadow-elevated focus:outline-none',
         className,
       )}
       {...props}
@@ -33,7 +32,7 @@ export const DrawerContent = forwardRef<
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-2 top-2 text-white hover:bg-white/10"
+          className="absolute right-2 top-2 text-brand-panel-foreground hover:bg-brand-panel-hover"
           aria-label="Close navigation"
         >
           <X className="h-5 w-5" />

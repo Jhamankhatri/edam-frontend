@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowLeft, Mail } from 'lucide-react';
@@ -18,6 +18,8 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
+const serverFields = ['email'] satisfies readonly FieldPath<FormValues>[];
+
 export function ForgotPasswordForm({ onSubmit }: { onSubmit: (values: ForgotPasswordRequest) => Promise<void> }) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const {
@@ -32,20 +34,20 @@ export function ForgotPasswordForm({ onSubmit }: { onSubmit: (values: ForgotPass
     try {
       await onSubmit(values);
     } catch (error) {
-      if (!setServerFieldErrors(setError, error)) setSubmitError(formatApiError(error));
+      if (!setServerFieldErrors(setError, error, serverFields)) setSubmitError(formatApiError(error));
       else setSubmitError('Please correct the highlighted field.');
     }
   });
 
   return (
-    <section className="glass-panel motion-safe:animate-fade-up rounded-2xl border border-white/70 p-5 shadow-elevated sm:p-7">
+    <section className="auth-card motion-safe:animate-fade-up">
       <div className="mb-6">
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+        <p className="flex items-center gap-2 auth-eyebrow">
           <Mail aria-hidden="true" className="h-4 w-4" />
           Account recovery
         </p>
         <h2 className="mt-2 font-display text-2xl font-semibold">Reset your password</h2>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        <p className="auth-description">
           EDAM returns the same response whether or not an address is registered.
         </p>
       </div>

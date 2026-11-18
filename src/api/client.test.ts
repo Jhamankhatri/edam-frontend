@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
-import { apiFetch } from '@/api/client';
+import { apiFetch, apiFetchRaw } from '@/api/client';
 import { primeCsrf, readCsrfCookie } from '@/api/csrf';
-import { ENDPOINTS } from '@/api/endpoints';
+import { ENDPOINTS, IDEMPOTENT_ROUTES, isIdempotentEndpoint } from '@/api/endpoints';
 import { ApiError, formatApiError } from '@/api/errors';
 import {
   bootstrapInstallation,
@@ -28,6 +28,28 @@ import {
 const CSRF_PATH = `/api/v1${ENDPOINTS.authCsrf}`;
 const LOGIN_PATH = `/api/v1${ENDPOINTS.authLogin}`;
 const BOOTSTRAP_PATH = `/api/v1${ENDPOINTS.authBootstrap}`;
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const IDEMPOTENT_CALLS: readonly [method: 'POST' | 'PUT', path: string][] = [
+  ['POST', '/expense-requests'],
+  ['PUT', '/expense-requests/request-1'],
+  ['POST', '/expense-requests/request-1/cancel'],
+  ['POST', '/expense-requests/request-1/submit'],
+  ['POST', '/approvals/tasks/task-1/approve'],
+  ['POST', '/approvals/tasks/task-1/forward'],
+  ['POST', '/approvals/tasks/task-1/reject'],
+  ['POST', '/approvals/tasks/task-1/revert'],
+];
+
+function mockSuccess({ request }: { request: Request }) {
+  return HttpResponse.json({
+    success: true,
+    data: null,
+    correlationId: 'test-correlation-id',
+    path: new URL(request.url).pathname,
+    timestamp: '2026-11-18T10:00:00Z',
+  });
+}
 
 function findRequest(method: string, path: string) {
   return getRequestLog().find((entry) => entry.method === method && entry.path === path);
@@ -90,9 +112,8 @@ describe('API client, CSRF and error envelope', () => {
 
     const createRequest = findRequest('POST', '/api/v1/expense-requests');
     const updateRequest = findRequest('PUT', '/api/v1/expense-requests/request-1');
-    const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    expect(createRequest?.idempotencyKey).toMatch(uuid);
-    expect(updateRequest?.idempotencyKey).toMatch(uuid);
+    expect(createRequest?.idempotencyKey).toMatch(UUID);
+    expect(updateRequest?.idempotencyKey).toMatch(UUID);
     expect(findRequest('POST', LOGIN_PATH)).toBeUndefined();
   });
 
@@ -228,6 +249,93 @@ describe('API client, CSRF and error envelope', () => {
     });
     expect(findRequest('POST', `/api/v1${ENDPOINTS.authForgotPassword}`)).toMatchObject({
       csrf: INITIAL_CSRF_TOKEN,
+    });
+  });
+
+  it('sends an Idempotency-Key to exactly the eight documented business routes', async () => {
+    expect(IDEMPOTENT_ROUTES).toHaveLength(8);
+    expect(IDEMPOTENT_CALLS.every(([method, path]) => isIdempotentEndpoint(method, path))).toBe(true);
+    await primeCsrf({ force: true });
+
+    const writes: {
+      method: string;
+      path: string;
+      credentials: string;
+      csrf: string | null;
+      idempotencyKey: string | null;
+      installationToken: string | null;
+      authorization: string | null;
+    }[] = [];
+    server.use(
+      http.all('*/api/v1/*', ({ request }) => {
+        writes.push({
+          method: request.method,
+          path: new URL(request.url).pathname,
+          credentials: request.credentials,
+          csrf: request.headers.get('X-XSRF-TOKEN'),
+          idempotencyKey: request.headers.get('Idempotency-Key'),
+          installationToken: request.headers.get('X-Installation-Token'),
+          authorization: request.headers.get('Authorization'),
+        });
+        return mockSuccess({ request });
+      }),
+    );
+
+    for (const [method, path] of IDEMPOTENT_CALLS) {
+      await apiFetch({ method, path, body: {} });
+    }
+
+    expect(writes).toHaveLength(8);
+    expect(writes.every((entry) => UUID.test(entry.idempotencyKey ?? ''))).toBe(true);
+    expect(writes.every((entry) => entry.csrf === INITIAL_CSRF_TOKEN)).toBe(true);
+    expect(writes.every((entry) => entry.credentials === 'include')).toBe(true);
+    expect(writes.every((entry) => entry.installationToken === null)).toBe(true);
+    expect(writes.every((entry) => entry.authorization === null)).toBe(true);
+  });
+
+  it('keeps credentials in cookies only and never leaks privileged headers on ordinary writes', async () => {
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+    await login({ username: 'admin', password: TEST_PASSWORD });
+    await apiFetch({ method: 'POST', path: ENDPOINTS.authForgotPassword, body: { email: 'user@example.invalid' } });
+
+    const requests = getRequestLog();
+    expect(requests.every((entry) => entry.credentials === 'include')).toBe(true);
+    expect(requests.every((entry) => entry.authorization === null)).toBe(true);
+    expect(requests.every((entry) => entry.installationToken === null)).toBe(true);
+    expect(findRequest('POST', LOGIN_PATH)?.idempotencyKey).toBeNull();
+    expect(findRequest('POST', `/api/v1${ENDPOINTS.authForgotPassword}`)?.idempotencyKey).toBeNull();
+    expect(window.localStorage.length).toBe(0);
+    expect(window.sessionStorage.length).toBe(0);
+  });
+
+  it('returns raw export responses without parsing them as an envelope', async () => {
+    server.use(
+      http.get(
+        '*/api/v1/reports/export',
+        () =>
+          new HttpResponse('amount,currency\n1,USD', {
+            status: 200,
+            headers: { 'Content-Type': 'text/csv; charset=utf-8' },
+          }),
+      ),
+    );
+
+    const response = await apiFetchRaw({ method: 'GET', path: '/reports/export' });
+    expect(response).toBeInstanceOf(Response);
+    expect(response.headers.get('content-type')).toContain('text/csv');
+    await expect(response.text()).resolves.toContain('amount,currency');
+  });
+
+  it('rejects a successful HTTP response that is not a valid ApiResponse envelope', async () => {
+    server.use(
+      http.get(`*/api/v1${ENDPOINTS.approvalsCount}`, () => HttpResponse.json({ unexpected: true })),
+    );
+
+    await expect(getApprovalCount()).rejects.toMatchObject({
+      code: 'HTTP_NON_JSON',
+      status: 200,
+      message: 'EDAM returned an unreadable server response.',
     });
   });
 });

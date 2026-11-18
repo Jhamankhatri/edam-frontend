@@ -7,11 +7,8 @@ import {
   ListFilter,
   type LucideIcon,
 } from 'lucide-react';
-import {
-  permissionRequirement,
-  satisfiesPermissionRequirement,
-  type PermissionRequirement,
-} from '@/auth/permissions';
+import { satisfiesPermissionRequirement } from '@/auth/permissions';
+import { getNavigationRequirement } from './route-access';
 
 export type AppRoute =
   | '/app/dashboard'
@@ -26,49 +23,43 @@ export interface NavigationItem {
   to: AppRoute;
   icon: LucideIcon;
   description: string;
-  access: PermissionRequirement | null;
   badge?: 'approvals' | 'notifications';
 }
 
-/** H04 §3 navigation → permission mapping. Dashboard nav is available to every authenticated user. */
+/**
+ * H04 §3 navigation metadata. Permission requirements live only in the route
+ * matrix so navigation and route guards cannot drift apart.
+ */
 export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
   {
     label: 'Dashboard',
     to: '/app/dashboard',
     icon: LayoutDashboard,
     description: 'Institution overview',
-    access: null,
   },
   {
     label: 'My Requests',
     to: '/app/requests/mine',
     icon: Files,
     description: 'Requests you created',
-    access: permissionRequirement(['request:view-own']),
   },
   {
     label: 'All Requests',
     to: '/app/requests/all',
     icon: ListFilter,
     description: 'Scoped register view',
-    access: permissionRequirement(
-      ['request:view-own', 'request:view-scope', 'request:view-all'],
-      'any',
-    ),
   },
   {
     label: 'New Request',
     to: '/app/requests/new',
     icon: FilePlus2,
     description: 'Create a draft request',
-    access: permissionRequirement(['request:create']),
   },
   {
     label: 'Approval Inbox',
     to: '/app/approvals',
     icon: ClipboardCheck,
     description: 'Assigned approval tasks',
-    access: permissionRequirement(['approval:view']),
     badge: 'approvals',
   },
   {
@@ -76,13 +67,12 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     to: '/app/notifications',
     icon: Bell,
     description: 'Your notification inbox',
-    access: permissionRequirement(['notification:view']),
     badge: 'notifications',
   },
 ] as const;
 
 export function getVisibleNavigation(permissions: readonly string[] | undefined): NavigationItem[] {
   return NAVIGATION_ITEMS.filter((item) =>
-    satisfiesPermissionRequirement(permissions, item.access),
+    satisfiesPermissionRequirement(permissions, getNavigationRequirement(item.to)),
   );
 }

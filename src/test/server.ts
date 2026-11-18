@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { ENDPOINTS } from '@/api/endpoints';
 import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from '@/api/csrf';
+import { isRecord } from '@/api/envelope';
 import type {
   ApiEnvelope,
   BootstrapRequest,
@@ -28,6 +29,7 @@ export interface LoggedRequest {
   csrf: string | null;
   idempotencyKey: string | null;
   installationToken: string | null;
+  authorization: string | null;
 }
 
 interface BackendState {
@@ -105,6 +107,33 @@ function failure(
   };
 }
 
+function isLoginRequest(value: unknown): value is LoginRequest {
+  return (
+    isRecord(value) &&
+    typeof value.username === 'string' &&
+    typeof value.password === 'string'
+  );
+}
+
+function isBootstrapRequest(value: unknown): value is BootstrapRequest {
+  return (
+    isRecord(value) &&
+    typeof value.username === 'string' &&
+    typeof value.firstName === 'string' &&
+    typeof value.lastName === 'string' &&
+    typeof value.email === 'string' &&
+    typeof value.password === 'string'
+  );
+}
+
+async function readJson(request: Request): Promise<unknown> {
+  try {
+    return await request.json();
+  } catch {
+    return null;
+  }
+}
+
 function log(request: Request): void {
   const url = new URL(request.url);
   state.requests.push({
@@ -114,6 +143,7 @@ function log(request: Request): void {
     csrf: request.headers.get(CSRF_HEADER_NAME),
     idempotencyKey: request.headers.get('Idempotency-Key'),
     installationToken: request.headers.get('X-Installation-Token'),
+    authorization: request.headers.get('Authorization'),
   });
 }
 
@@ -182,9 +212,9 @@ const handlers = [
     log(request);
     const csrfError = csrfFailure(request);
     if (csrfError) return csrfError;
-    const body = (await request.json()) as LoginRequest;
+    const body: unknown = await readJson(request);
     const path = new URL(request.url).pathname;
-    if (body.username !== 'admin' || body.password !== TEST_PASSWORD) {
+    if (!isLoginRequest(body) || body.username !== 'admin' || body.password !== TEST_PASSWORD) {
       return HttpResponse.json(
         failure('EDAM-2006', 'The username or password is incorrect.', path),
         { status: 401 },
@@ -220,8 +250,8 @@ const handlers = [
         { status: 403 },
       );
     }
-    const body = (await request.json()) as BootstrapRequest;
-    if (!body.username || !body.password) {
+    const body: unknown = await readJson(request);
+    if (!isBootstrapRequest(body) || !body.username || !body.password) {
       return HttpResponse.json(failure('EDAM-1001', 'Validation failed.', path), { status: 400 });
     }
     state.bootstrapCalls += 1;

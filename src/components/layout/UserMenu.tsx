@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
 import { ChevronDown, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/auth/useAuth';
+import { useSignOut } from '@/auth/useSignOut';
+import { formatApiError } from '@/api/errors';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,27 +12,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { formatApiError } from '@/api/errors';
 import { initials } from '@/lib/utils';
 
 export function UserMenu() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const [signingOut, setSigningOut] = useState(false);
+  const { user } = useAuth();
+  const { signOut, signingOut } = useSignOut();
 
   if (!user) return null;
 
-  const signOut = async (): Promise<void> => {
-    setSigningOut(true);
+  const handleSignOut = async (): Promise<void> => {
     try {
-      await logout();
+      await signOut();
       toast.success('Signed out securely');
-      await navigate({ to: '/login', replace: true });
     } catch (error) {
       toast.error(formatApiError(error));
-      await navigate({ to: '/login', replace: true });
-    } finally {
-      setSigningOut(false);
     }
   };
 
@@ -40,7 +33,7 @@ export function UserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-11 gap-2 rounded-xl px-2 sm:px-3" aria-label="Open account menu">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy text-xs font-bold text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy text-xs font-bold text-brand-panel-foreground">
             {initials(user.displayName)}
           </span>
           <span className="hidden min-w-0 text-left md:block">
@@ -62,7 +55,7 @@ export function UserMenu() {
           disabled={signingOut}
           onSelect={(event) => {
             event.preventDefault();
-            void signOut();
+            void handleSignOut();
           }}
           className="text-destructive focus:text-destructive"
         >

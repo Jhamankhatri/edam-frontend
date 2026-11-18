@@ -40,7 +40,7 @@ function clearCookies(): void {
 
 // Node's fetch requires an absolute URL; browser-facing app code intentionally uses relative /api/v1 URLs.
 // Resolve only at the network boundary so tests preserve the real relative-URL behavior.
-const nodeFetch = globalThis.fetch.bind(globalThis) as typeof globalThis.fetch;
+const nodeFetch = globalThis.fetch.bind(globalThis);
 Object.defineProperty(globalThis, 'fetch', {
   writable: true,
   value: (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {

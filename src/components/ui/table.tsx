@@ -12,14 +12,14 @@ export function TableWrapper({ className, ...props }: HTMLAttributes<HTMLDivElem
 
 export const Table = forwardRef<HTMLTableElement, TableHTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <table ref={ref} className={cn('w-full min-w-[42rem] caption-bottom text-sm', className)} {...props} />
+    <table ref={ref} className={cn('w-full min-w-table caption-bottom text-sm', className)} {...props} />
   ),
 );
 Table.displayName = 'Table';
 
 export const TableHeader = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <thead ref={ref} className={cn('bg-slate-50', className)} {...props} />
+    <thead ref={ref} className={cn('bg-muted', className)} {...props} />
   ),
 );
 TableHeader.displayName = 'TableHeader';
@@ -33,7 +33,7 @@ TableBody.displayName = 'TableBody';
 
 export const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
-    <tr ref={ref} className={cn('border-b border-border transition-colors hover:bg-slate-50', className)} {...props} />
+    <tr ref={ref} className={cn('border-b border-border transition-colors hover:bg-muted', className)} {...props} />
   ),
 );
 TableRow.displayName = 'TableRow';

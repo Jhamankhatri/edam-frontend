@@ -35,4 +35,14 @@ describe('public branding and theme tokens', () => {
     expect(document.documentElement.lang).toBe('en-GB');
     expect(meta.content).toBe('#1e5fd6');
   });
+
+  it('creates the theme-color meta when the HTML shell omits a hardcoded color', () => {
+    expect(document.querySelector('meta[name="theme-color"]')).toBeNull();
+
+    applyPublicBranding(publicConfiguration);
+
+    expect(document.querySelector('meta[name="theme-color"]')?.getAttribute('content')).toBe(
+      '#1e5fd6',
+    );
+  });
 });

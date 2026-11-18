@@ -65,14 +65,6 @@ export function isUnauthenticatedError(error: unknown): boolean {
   return error instanceof ApiError && error.code === 'EDAM-2001';
 }
 
-export function isPermissionError(error: unknown): boolean {
-  return error instanceof ApiError && permissionCodes.has(error.code);
-}
-
-export function isValidationError(error: unknown): boolean {
-  return error instanceof ApiError && error.code === 'EDAM-1001';
-}
-
 export function isLikelyCsrfFailure(status: number, envelope: ApiEnvelope<unknown> | undefined): boolean {
   if (status !== 403) return false;
   const code = envelope?.error?.code;

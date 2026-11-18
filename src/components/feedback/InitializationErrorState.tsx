@@ -10,7 +10,7 @@ interface InitializationErrorStateProps {
 export function InitializationErrorState({ error, onRetry }: InitializationErrorStateProps) {
   return (
     <main className="auth-canvas flex min-h-screen items-center justify-center px-4 py-10">
-      <section className="glass-panel w-full max-w-xl rounded-2xl border border-white/70 p-6 shadow-elevated sm:p-8">
+      <section className="glass-card w-full max-w-xl p-6 sm:p-8">
         <BrandMark className="text-brand-ink" />
         <div className="mt-7">
           <ErrorState

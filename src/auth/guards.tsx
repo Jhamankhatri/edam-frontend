@@ -37,18 +37,14 @@ export function RequireAuth({ children, allowMustChangePassword = false }: Guard
   const { pathname, href } = useRouterState({
     select: (state) => ({ pathname: state.location.pathname, href: state.location.href }),
   });
-  const captured = useRef(false);
-  const returnTo = useRef<string | undefined>(undefined);
+  // Capture the first protected href without mutating refs during render.
+  const returnTo = useRef<string | undefined>(safeReturnTo(href));
 
   if (status === 'initializing') return <FullPageLoader />;
   if (status === 'error') {
     return <InitializationErrorState error={initializationError} onRetry={retryInitialization} />;
   }
   if (status === 'anonymous' || !user) {
-    if (!captured.current) {
-      captured.current = true;
-      returnTo.current = safeReturnTo(href);
-    }
     return <RedirectToLogin returnTo={returnTo.current} />;
   }
   if (user.mustChangePassword && !allowMustChangePassword && pathname !== '/change-password') {

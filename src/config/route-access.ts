@@ -77,6 +77,17 @@ export function getRouteRequirement(pathname: string): PermissionRequirement | n
   return ROUTE_RULES.find((rule) => rule.pattern.test(pathname))?.requirement ?? null;
 }
 
+/**
+ * H04 keeps the Dashboard navigation item visible to every authenticated user,
+ * while H09/Appendix A keep the dashboard route itself behind `report:view`.
+ * This explicit exception preserves both rules without duplicating permission
+ * metadata in the navigation catalogue.
+ */
+export function getNavigationRequirement(pathname: string): PermissionRequirement | null {
+  if (/^\/app\/dashboard\/?$/.test(pathname)) return null;
+  return getRouteRequirement(pathname);
+}
+
 export function getPageMeta(pathname: string): PageMeta {
   const rule = ROUTE_RULES.find((entry) => entry.pattern.test(pathname));
   if (!rule) {

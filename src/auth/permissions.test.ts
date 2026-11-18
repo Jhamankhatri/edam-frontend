@@ -6,8 +6,8 @@ import {
   satisfiesPermissionRequirement,
 } from './permissions';
 import { PERMISSION_CODES, PERMISSION_CODE_SET } from './permission-codes';
-import { getVisibleNavigation, NAVIGATION_ITEMS } from '@/config/navigation';
-import { getPageMeta, getRouteRequirement } from '@/config/route-access';
+import { getVisibleNavigation } from '@/config/navigation';
+import { getNavigationRequirement, getPageMeta, getRouteRequirement } from '@/config/route-access';
 
 describe('permission catalogue and centralized guards', () => {
   it('contains 60 unique source-derived permission codes and no invented document:view', () => {
@@ -30,9 +30,11 @@ describe('permission catalogue and centralized guards', () => {
       '/app/approvals',
       '/app/notifications',
     ]);
-    expect(NAVIGATION_ITEMS.find((item) => item.to === '/app/requests/new')?.access).toEqual(
+    expect(getNavigationRequirement('/app/requests/new')).toEqual(
       permissionRequirement(['request:create']),
     );
+    expect(getNavigationRequirement('/app/dashboard')).toBeNull();
+    expect(getRouteRequirement('/app/dashboard')).toEqual(permissionRequirement(['report:view']));
   });
 
   it('applies all and any permission requirements from the route matrix', () => {

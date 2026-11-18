@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowRight, Building2, LockKeyhole } from 'lucide-react';
@@ -19,6 +19,8 @@ const loginSchema = z.object({
 });
 
 export type LoginValues = z.infer<typeof loginSchema>;
+
+const serverFields = ['username', 'password'] satisfies readonly FieldPath<LoginValues>[];
 
 interface LoginFormProps {
   onSubmit: (values: LoginRequest) => Promise<void>;
@@ -41,16 +43,16 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     try {
       await onSubmit(values);
     } catch (error) {
-      if (!setServerFieldErrors(setError, error)) setSubmitError(formatApiError(error));
+      if (!setServerFieldErrors(setError, error, serverFields)) setSubmitError(formatApiError(error));
       else setSubmitError('Please correct the highlighted fields.');
     }
   });
 
   return (
-    <section className="glass-panel motion-safe:animate-fade-up rounded-2xl border border-white/70 p-5 shadow-elevated sm:p-7">
+    <section className="auth-card motion-safe:animate-fade-up">
       <div className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Welcome back</p>
-        <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight">Sign in to EDAM</h2>
+        <p className="auth-eyebrow">Welcome back</p>
+        <h2 className="auth-title">Sign in to EDAM</h2>
         <p className="mt-1.5 text-sm text-muted-foreground">Use your institution credentials to continue.</p>
       </div>
 

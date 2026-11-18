@@ -1,6 +1,7 @@
 import { env } from '@/config/env';
-import { ensureCsrfCookie, primeCsrf, readCsrfCookie, CSRF_HEADER_NAME } from './csrf';
+import { ensureCsrfCookie, primeCsrf, CSRF_HEADER_NAME } from './csrf';
 import type { ApiEnvelope } from './contracts';
+import { parseApiEnvelope } from './envelope';
 import { isIdempotentEndpoint } from './endpoints';
 import {
   ApiError,
@@ -49,17 +50,6 @@ function resolveIdempotencyKey(options: ApiRequestOptions): string | undefined {
   return isIdempotentEndpoint(options.method, options.path) ? createUuidV4() : undefined;
 }
 
-async function parseEnvelope<T>(response: Response): Promise<ApiEnvelope<T> | undefined> {
-  const clone = response.clone();
-  const text = await clone.text();
-  if (!text) return undefined;
-  try {
-    return JSON.parse(text) as ApiEnvelope<T>;
-  } catch {
-    return undefined;
-  }
-}
-
 function toFetchBody(body: unknown): { body?: BodyInit; contentType?: string } {
   if (body === undefined || body === null) return {};
   if (body instanceof FormData) return { body };
@@ -68,10 +58,10 @@ function toFetchBody(body: unknown): { body?: BodyInit; contentType?: string } {
   return { body: JSON.stringify(body), contentType: 'application/json' };
 }
 
-async function execute<T>(
+async function execute(
   options: ApiRequestOptions,
   allowCsrfRetry: boolean,
-): Promise<ApiEnvelope<T> | Response> {
+): Promise<ApiEnvelope<unknown> | Response> {
   const headers: Record<string, string> = {
     Accept: options.responseType === 'raw' ? '*/*' : 'application/json',
     ...options.headers,
@@ -104,13 +94,13 @@ async function execute<T>(
 
   if (options.responseType === 'raw') {
     if (!response.ok) {
-      const envelope = await parseEnvelope<unknown>(response);
+      const envelope = await parseApiEnvelope(response);
       throw createApiErrorFromEnvelope(response.status, envelope, 'The download could not be completed.');
     }
     return response;
   }
 
-  const envelope = await parseEnvelope<T>(response);
+  const envelope = await parseApiEnvelope(response);
   if (!response.ok || !envelope?.success) {
     const error = createApiErrorFromEnvelope(
       response.status,
@@ -119,7 +109,14 @@ async function execute<T>(
     );
     if (isLikelyCsrfFailure(response.status, envelope) && allowCsrfRetry && isWrite(options.method)) {
       await primeCsrf({ force: true });
-      return execute<T>(options, false);
+      return execute(options, false);
+    }
+    if (!envelope && response.ok) {
+      throw new ApiError({
+        code: NON_JSON_ERROR_CODE,
+        message: 'EDAM returned an unreadable server response.',
+        status: response.status,
+      });
     }
     if (error.code === 'EDAM-2001' && !options.suppressAuthExpiration) {
       publishAuthExpired({ path: options.path, correlationId: error.correlationId });
@@ -136,34 +133,32 @@ async function execute<T>(
   return envelope;
 }
 
-async function executeWithGetRetry<T>(options: ApiRequestOptions): Promise<ApiEnvelope<T> | Response> {
+async function executeWithGetRetry(options: ApiRequestOptions): Promise<ApiEnvelope<unknown> | Response> {
   try {
-    return await execute<T>(options, true);
+    return await execute(options, true);
   } catch (error) {
     if (options.method === 'GET' && error instanceof ApiError && error.code === NETWORK_ERROR_CODE) {
       await new Promise((resolve) => setTimeout(resolve, 250));
-      return execute<T>(options, true);
+      return execute(options, true);
     }
     throw error;
   }
 }
 
 export async function apiFetch<T>(options: ApiRequestOptions): Promise<T> {
-  const result = await executeWithGetRetry<T>({ ...options, responseType: 'json' });
+  const result = await executeWithGetRetry({ ...options, responseType: 'json' });
   if (result instanceof Response) {
     throw new ApiError({ code: NON_JSON_ERROR_CODE, message: 'Unexpected raw response.', status: 0 });
   }
+  // Single network-boundary cast: `openapi-typescript` output is not available in this
+  // frontend-only workspace, so service functions declare the payload type explicitly.
   return result.data as T;
 }
 
 export async function apiFetchRaw(options: ApiRequestOptions): Promise<Response> {
-  const result = await executeWithGetRetry<unknown>({ ...options, responseType: 'raw' });
+  const result = await executeWithGetRetry({ ...options, responseType: 'raw' });
   if (!(result instanceof Response)) {
     throw new ApiError({ code: NON_JSON_ERROR_CODE, message: 'Unexpected JSON response.', status: 0 });
   }
   return result;
-}
-
-export function currentCsrfCookieValue(): string | null {
-  return readCsrfCookie();
 }

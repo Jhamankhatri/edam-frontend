@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { KeyRound, UserPlus } from 'lucide-react';
@@ -29,6 +29,8 @@ const bootstrapSchema = z
   });
 
 type BootstrapValues = z.infer<typeof bootstrapSchema>;
+
+const serverFields = ['installationToken', 'username', 'firstName', 'lastName', 'email', 'employeeCode', 'password', 'confirmPassword'] satisfies readonly FieldPath<BootstrapValues>[];
 
 interface BootstrapFormProps {
   onSubmit: (installationToken: string, payload: BootstrapRequest) => Promise<void>;
@@ -68,20 +70,20 @@ export function BootstrapForm({ onSubmit }: BootstrapFormProps) {
     try {
       await onSubmit(values.installationToken, payload);
     } catch (error) {
-      if (!setServerFieldErrors(setError, error)) setSubmitError(formatApiError(error));
+      if (!setServerFieldErrors(setError, error, serverFields)) setSubmitError(formatApiError(error));
       else setSubmitError('Please correct the highlighted fields.');
     }
   });
 
   return (
-    <section className="glass-panel motion-safe:animate-fade-up rounded-2xl border border-white/70 p-5 shadow-elevated sm:p-7">
+    <section className="auth-card motion-safe:animate-fade-up">
       <div className="mb-6">
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+        <p className="flex items-center gap-2 auth-eyebrow">
           <KeyRound aria-hidden="true" className="h-4 w-4" />
           First-run setup
         </p>
-        <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight">Create the administrator</h2>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        <h2 className="auth-title">Create the administrator</h2>
+        <p className="auth-description">
           The installation token is sent only in the documented header. Bootstrap does not sign you in.
         </p>
       </div>

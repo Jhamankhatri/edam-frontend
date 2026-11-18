@@ -40,7 +40,7 @@ export const SelectContent = forwardRef<
       ref={ref}
       position={position}
       className={cn(
-        'relative z-50 max-h-72 min-w-[10rem] overflow-hidden rounded-xl border border-border bg-card text-foreground shadow-elevated',
+        'relative z-50 max-h-72 min-w-select overflow-hidden rounded-xl border border-border bg-card text-foreground shadow-elevated',
         position === 'popper' && 'data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1',
         className,
       )}

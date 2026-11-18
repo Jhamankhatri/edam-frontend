@@ -1,29 +1,25 @@
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { ArrowLeft, LogOut, ShieldAlert } from 'lucide-react';
 import { useAuth } from '@/auth/useAuth';
-import { NAVIGATION_ITEMS, type AppRoute } from '@/config/navigation';
+import { useSignOut } from '@/auth/useSignOut';
+import { NAVIGATION_ITEMS } from '@/config/navigation';
 import { getRouteRequirement } from '@/config/route-access';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function AccessDenied() {
-  const { satisfiesRequirement, logout } = useAuth();
-  const navigate = useNavigate();
+  const { satisfiesRequirement } = useAuth();
+  const { signOut } = useSignOut();
   const destination = NAVIGATION_ITEMS.find(
     (item) => item.to !== '/app/dashboard' && satisfiesRequirement(getRouteRequirement(item.to)),
-  )?.to as AppRoute | undefined;
-
-  const signOut = async (): Promise<void> => {
-    await logout().catch(() => undefined);
-    await navigate({ to: '/login', replace: true });
-  };
+  )?.to;
 
   return (
     <section className="mx-auto flex w-full max-w-2xl items-center justify-center py-8 sm:py-14">
       <Card className="overflow-hidden rounded-2xl">
         <div className="h-1.5 w-full bg-brand-gold" aria-hidden="true" />
         <CardHeader className="gap-4 p-6 sm:p-8">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-warning">
+          <span className="feedback-icon bg-status-warning-surface text-warning">
             <ShieldAlert aria-hidden="true" className="h-6 w-6" />
           </span>
           <div>
@@ -43,7 +39,7 @@ export function AccessDenied() {
               </Link>
             </Button>
           ) : (
-            <Button variant="outline" onClick={() => void signOut()}>
+            <Button variant="outline" onClick={() => void signOut().catch(() => undefined)}>
               <LogOut aria-hidden="true" className="h-4 w-4" />
               Sign out and return to sign in
             </Button>

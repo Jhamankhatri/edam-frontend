@@ -2,6 +2,9 @@ import type { PublicConfigurationResponse } from '@/api/contracts';
 
 const appliedProperties = new Set<string>();
 const unsafeValue = /[;{}<>]/;
+// Bootstrap fallback used only when neither public configuration nor CSS custom
+// properties are available. Runtime branding remains isolated to this module.
+const FALLBACK_BRAND_NAVY = '#0b1f3a';
 
 const tokenAliases: Record<string, readonly string[]> = {
   background: ['--background'],
@@ -76,9 +79,18 @@ export function applyPublicBranding(config: PublicConfigurationResponse): void {
   applyThemeTokens(config.themeTokens);
   document.title = config.applicationName || 'EDAM';
   document.documentElement.lang = config.defaultLocale || 'en-GB';
-  const themeColor = document.querySelector('meta[name="theme-color"]');
-  if (themeColor) {
-    const primary = config.themeTokens?.primary ?? config.themeTokens?.['--primary'];
-    themeColor.setAttribute('content', primary && !unsafeValue.test(primary) ? primary : '#0b1f3a');
+  let themeColor = document.querySelector('meta[name="theme-color"]');
+  if (!themeColor) {
+    themeColor = document.createElement('meta');
+    themeColor.setAttribute('name', 'theme-color');
+    document.head.appendChild(themeColor);
   }
+  const primary = config.themeTokens?.primary ?? config.themeTokens?.['--primary'];
+  const cssFallback = getComputedStyle(document.documentElement)
+    .getPropertyValue('--brand-navy')
+    .trim();
+  themeColor.setAttribute(
+    'content',
+    primary && !unsafeValue.test(primary) ? primary : cssFallback || FALLBACK_BRAND_NAVY,
+  );
 }

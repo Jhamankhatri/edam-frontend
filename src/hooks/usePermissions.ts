@@ -6,10 +6,6 @@ export function useHasPermission(code: PermissionCode): boolean {
   return useAuth().hasPermission(code);
 }
 
-export function useHasAnyPermission(codes: readonly PermissionCode[]): boolean {
-  return useAuth().hasAnyPermission(codes);
-}
-
 export function useVisibleNavigation() {
   const { user } = useAuth();
   return getVisibleNavigation(user?.permissions);

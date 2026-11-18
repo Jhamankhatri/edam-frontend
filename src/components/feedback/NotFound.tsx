@@ -8,7 +8,7 @@ export function NotFound() {
     <main className="auth-canvas flex min-h-screen items-center justify-center px-4 py-10">
       <Card className="w-full max-w-xl rounded-2xl">
         <CardHeader className="gap-4 p-6 sm:p-8">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-info">
+          <span className="feedback-icon bg-status-info-surface text-info">
             <Compass aria-hidden="true" className="h-6 w-6" />
           </span>
           <div>

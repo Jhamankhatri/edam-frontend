@@ -12,9 +12,9 @@ interface AuthSuccessCardProps {
 
 export function AuthSuccessCard({ title, message, detail, actionLabel, onAction }: AuthSuccessCardProps) {
   return (
-    <Card className="rounded-2xl border border-white/70 shadow-elevated">
+    <Card className="elevated-card">
       <CardHeader className="gap-4 p-6 sm:p-7">
-        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-success">
+        <span className="feedback-icon bg-status-success-surface text-success">
           <CheckCircle2 aria-hidden="true" className="h-6 w-6" />
         </span>
         <div>

@@ -12,7 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 
 export const buttonVariants = cva(
-  'inline-flex min-h-10 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-55 active:translate-y-px',
+  'inline-flex min-h-10 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 active:translate-y-px',
   {
     variants: {
       variant: {
@@ -55,7 +55,7 @@ function createSlotChild(children: ReactNode, spinner: ReactNode): ReactElement<
         {spinner}
         {children.props.children}
       </span>,
-    ) as ReactElement<SlotChildProps>;
+    );
   }
   return (
     <span className="inline-flex items-center gap-2">

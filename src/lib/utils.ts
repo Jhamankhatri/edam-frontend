@@ -24,12 +24,3 @@ export function formatBadgeCount(value: number | undefined): string | null {
   if (value === undefined || !Number.isFinite(value) || value <= 0) return null;
   return value > 99 ? '99+' : String(value);
 }
-
-export function titleCase(value: string): string {
-  return value
-    .replace(/[-_]/g, ' ')
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/\b\w/g, (character) => character.toUpperCase());
-}

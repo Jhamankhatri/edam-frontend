@@ -26,7 +26,7 @@ export function ModulePlaceholder({ icon: Icon, title, description, endpointGrou
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Card className="rounded-2xl">
           <CardHeader>
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-info">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-status-info-surface text-info">
               <Icon aria-hidden="true" className="h-5 w-5" />
             </span>
             <CardTitle className="mt-3 text-base">Route and permission guard</CardTitle>
@@ -37,7 +37,7 @@ export function ModulePlaceholder({ icon: Icon, title, description, endpointGrou
         </Card>
         <Card className="rounded-2xl">
           <CardHeader>
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-success">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-status-success-surface text-success">
               <Layers3 aria-hidden="true" className="h-5 w-5" />
             </span>
             <CardTitle className="mt-3 text-base">API layer ready</CardTitle>
@@ -48,7 +48,7 @@ export function ModulePlaceholder({ icon: Icon, title, description, endpointGrou
         </Card>
         <Card className="rounded-2xl md:col-span-2 xl:col-span-1">
           <CardHeader>
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-warning">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-status-warning-surface text-warning">
               <ArrowUpRight aria-hidden="true" className="h-5 w-5" />
             </span>
             <CardTitle className="mt-3 text-base">Implementation intentionally deferred</CardTitle>

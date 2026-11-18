@@ -16,7 +16,7 @@ export function BrandMark({ className, compact = false }: BrandMarkProps) {
       {!compact && (
         <span className="leading-tight">
           <span className="block font-display text-xl font-semibold tracking-wide text-inherit">EDAM</span>
-          <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.19em] opacity-70">
+          <span className="block brand-kicker opacity-70">
             Expense Governance
           </span>
         </span>

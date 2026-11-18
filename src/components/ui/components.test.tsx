@@ -77,7 +77,7 @@ describe('reusable design-system components', () => {
     );
     const wrapper = container.firstElementChild;
     expect(wrapper).toHaveClass('overflow-x-auto', 'max-w-full');
-    expect(screen.getByRole('table')).toHaveClass('min-w-[42rem]');
+    expect(screen.getByRole('table')).toHaveClass('min-w-table');
   });
 
   it('renders select and confirmation dialog actions as functional controls', async () => {

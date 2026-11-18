@@ -50,11 +50,11 @@ Pinned stack: React 18.3.1, TypeScript 5.6.3, Vite 5.4.21, TanStack Router/CLI/p
 
 Key structure:
 
-- Root: `package.json`, `package-lock.json`, strict `tsconfig.json`, `tsr.config.json`, `vite.config.ts`, Tailwind/PostCSS/ESLint config, `.env.example`, `index.html`.
-- `src/api/`: `endpoints.ts`, `contracts.ts`, `client.ts`, `csrf.ts`, `errors.ts`, `services/auth.ts`.
-- `src/auth/`: `AuthProvider.tsx`, `auth-context.ts`, `guards.tsx`, `permissions.ts`, generated `permission-codes.ts`, `session-events.ts`.
+- Root: `package.json`, `package-lock.json`, strict `tsconfig.json`, `tsr.config.json`, `vite.config.ts`, Tailwind/PostCSS/ESLint config, `.env.example`, `index.html`, and lightweight `.github/workflows/frontend-ci.yml`.
+- `src/api/`: `endpoints.ts`, `contracts.ts`, `client.ts`, `csrf.ts`, `errors.ts`, `envelope.ts`, `services/auth.ts`.
+- `src/auth/`: `AuthProvider.tsx`, `auth-context.ts`, `guards.tsx`, `permissions.ts`, generated `permission-codes.ts`, `session-events.ts`, `useSignOut.ts`.
 - `src/config/`: environment, navigation, route-access rules, and the generated 60-code permission catalogue.
-- `src/components/ui/`: 16 reusable primitives (button, input, textarea, label, card, badge, skeleton, alert, select, table, dialog, drawer, dropdown-menu, tooltip, toaster, password-input).
+- `src/components/ui/`: 15 reusable primitives (button, input, label, card, badge, skeleton, alert, select, table, dialog, drawer, dropdown-menu, tooltip, toaster, password-input); the unused `textarea.tsx` and `EmptyState.tsx` were removed by the audit.
 - `src/components/{brand,feedback,forms,auth,layout}/`: brand mark, feedback states, form field wrapper, auth-expiry redirector, public layout, breadcrumbs, user menu, sidebar, mobile nav, topbar, and app shell.
 - `src/features/auth/`: login, bootstrap, forgot-password, reset-password, change-password forms and success card.
 - `src/routes/`, `src/routeTree.gen.ts`, `src/router.tsx`, `src/main.tsx`: generated file-based routes, shared `createAppRouter(history?)`, `trailingSlash: 'never'`, and app bootstrap.
@@ -68,7 +68,7 @@ Strict TypeScript uses the `@/* → src/*` alias. Browser code uses same-origin 
 
 ## 4. Design system and UX foundation
 
-`src/styles/tokens.css` and `src/styles/index.css` implement H08 fallback tokens as CSS custom properties on `:root`, including `--radius: .5rem`. `src/lib/theme.ts` accepts backend camelCase theme keys and maps prefixed/kebab/snake aliases without rejecting persisted keys. Tailwind maps colors to CSS variables.
+`src/styles/tokens.css` and `src/styles/index.css` implement H08 fallback tokens as CSS custom properties on `:root`, including `--radius: .5rem`. `src/lib/theme.ts` accepts backend camelCase theme keys and maps prefixed/kebab/snake aliases without rejecting persisted keys. Tailwind maps colors to CSS variables. The strict audit centralized all semantic surfaces, status colors, typography, spacing, widths, and shadows; removed scattered palette/white-alpha utilities and repeated arbitrary values; and shared global classes such as `.auth-card`, `.glass-card`, `.elevated-card`, and `.feedback-icon`. `index.html` no longer hardcodes a theme color; `src/lib/theme.ts` remains the isolated runtime-branding layer.
 
 The design foundation includes:
 
@@ -100,7 +100,7 @@ Implemented protected foundations:
 
 ## 6. API contracts and endpoints integrated
 
-`src/api/contracts.ts` is a source-transcribed Step-1 contract, not generated OpenAPI output. The envelope is `ApiResponse<T>` with `success, data, error, fieldErrors, correlationId, path, timestamp`; errors expose `{ code, message }` and conditional logic keys off `EDAM-nnnn` codes. Network and non-JSON failures normalize to `ApiError`.
+`src/api/contracts.ts` is a source-transcribed Step-1 contract, not generated OpenAPI output. The audit added `src/api/envelope.ts` as the single runtime `ApiResponse` envelope validator and removed duplicate JSON parsers from the client and CSRF modules. The envelope is `ApiResponse<T>` with `success, data, error, fieldErrors, correlationId, path, timestamp`; errors expose `{ code, message }` and conditional logic keys off `EDAM-nnnn` codes. Network and non-JSON failures normalize to `ApiError`.
 
 Step-1 integrated endpoints under `/api/v1`:
 
@@ -143,7 +143,7 @@ Automated coverage includes exact CSRF/session-cookie login behavior, bootstrap 
 
 `src/config/permission-catalogue.json` and generated `src/auth/permission-codes.ts` contain exactly 60 unique backend permission codes. `document:view` is intentionally absent: it appears in docs but not in `Permissions.java` or backend generated evidence.
 
-RBAC uses permissions, not roles. Centralized `RequireAuth`, `RequireAnonymous`, `RequirePermission`, and `RequirePasswordChange` guards enforce initialization, anonymous, authenticated, permission, and mandatory-password-change states. `src/config/navigation.ts` and `src/config/route-access.ts` drive visible navigation and route requirements; unauthorized actions are hidden and routes show `AccessDenied`. Frontend checks are UX only; the backend remains authoritative.
+RBAC uses permissions, not roles. Centralized `RequireAuth`, `RequireAnonymous`, `RequirePermission`, and `RequirePasswordChange` guards enforce initialization, anonymous, authenticated, permission, and mandatory-password-change states. `src/config/navigation.ts` now holds metadata only, while `src/config/route-access.ts` is the sole permission-rule source through `getNavigationRequirement()` and `getRouteRequirement()`. The H04/H09 dashboard exception is explicit and tested. Unauthorized actions are hidden and routes show `AccessDenied`. Frontend checks are UX only; the backend remains authoritative.
 
 Dashboard conflict decision: H04 says the Dashboard nav is visible to every authenticated user and widgets require `report:view`; H09/Appendix A require `report:view` for the route. Step 1 shows the nav item to authenticated users, guards the route/placeholders with `report:view`, shows access denied to users without it, and calls no dashboard API. This remains an unresolved product wording decision, not a backend contract change.
 
@@ -151,7 +151,7 @@ Dashboard conflict decision: H04 says the Dashboard nav is visible to every auth
 
 ## 9. Forms, validation, and error handling
 
-Forms use React Hook Form + Zod with `FormField` labels, hints, `aria-invalid`, inline error text, and alert regions. `src/forms/server-errors.ts` maps backend `fieldErrors` into RHF field errors without guessing codes. `formatApiError` and `ApiError` normalize validation, authentication, permission, CSRF, network, and non-JSON failures.
+Forms use React Hook Form + Zod with `FormField` labels, hints, `aria-invalid`, inline error text, and alert regions. `src/forms/server-errors.ts` maps backend `fieldErrors` into RHF field errors only through caller-supplied `FieldPath<T>` allowlists, so unexpected backend field names are never asserted into form state. It does not guess codes. `formatApiError` and `ApiError` normalize validation, authentication, permission, CSRF, network, and non-JSON failures.
 
 Password policy is displayed from `CurrentUserResponse.passwordPolicy`. Because the backend publishes `requireSpecial` without an accepted character class, no special-character regex was invented; the server's `EDAM-2008 WEAK_PASSWORD` remains authoritative. Bootstrap sends `X-Installation-Token` in the documented header and never establishes a session.
 
@@ -176,19 +176,22 @@ Sidebar visibility, mobile trigger visibility, drawer navigation, no horizontal 
 
 | Command | Result |
 |---|---|
+| `npm ci --no-audit --no-fund` | Passed; 649 packages from lockfile |
 | `npm run routes:generate` | Passed; generated `src/routeTree.gen.ts` with no test-file route warning |
-| `npm run typecheck` | Passed |
-| `npm run lint` | Passed with `--max-warnings=0` |
-| `npm test` | 8 files / 41 tests passed |
-| `npm run build` | Passed; 1892 modules transformed; built in 4.98s |
+| `npm run typecheck` | Passed (`routes:generate` + `tsc --noEmit`) |
+| `npm run lint` | Passed with `--max-warnings=0` and zero warnings |
+| `npm test` | 8 files / **47 tests** passed after audit corrections |
+| `npm run build` | Passed; 1893 modules transformed; built in 4.63s |
+| `npm run contracts:permissions` | Passed; 60 codes; no generated diff |
+| `git diff --check` | Passed |
 
-Test coverage spans endpoint/idempotency rules, API client CSRF/retry/error behavior, permission helpers, theme token aliases, server field-error mapping, UI primitives, `AuthProvider` lifecycle, and end-to-end-in-jsdom login/bootstrap/password-change route flows. Outputs were captured in `/tmp` logs including `/tmp/test-after-button-fix.txt`, `/tmp/typecheck-after-button-fix.txt`, `/tmp/lint-after-button-fix.txt`, and `/tmp/build-final.txt`.
+Test coverage spans endpoint/idempotency rules (all eight documented routes plus near-miss negatives), API client CSRF/retry/error/raw-response/malformed-envelope behavior, privileged-header and storage restrictions, permission helpers, theme token aliases including runtime meta creation, server field-error allowlists, UI primitives, `AuthProvider` lifecycle, and end-to-end-in-jsdom login/bootstrap/password-change route flows. Final audit evidence is under `/tmp/audit-*.txt`, `/tmp/audit-*.json`, and `/tmp/tailwind-audit-final.css`; local CI-equivalent output is `/tmp/audit-ci-local-final.txt`.
 
 ---
 
 ## 12. Production build and runtime/dev/preview verification
 
-`npm run build` produces a route-split production bundle in `dist/` (701K total; main JS 341.82 kB / 107.76 kB gzip, CSS 28.32 kB / 6.53 kB gzip). Generated artifacts remain ignored by Git.
+`npm run build` produces a route-split production bundle in `dist/` (705K total / 29 files; main JS 341.48 kB / 107.65 kB gzip, CSS 31.54 kB / 6.83 kB gzip). Generated artifacts remain ignored by Git. `autoCodeSplitting: true` remains enabled and emits route-level chunks.
 
 Live processes in this workspace:
 
@@ -196,7 +199,7 @@ Live processes in this workspace:
 - `EDAM Production Preview` — Vite preview on `0.0.0.0:4173`.
 - `EDAM Mock API` — local in-memory mock API on `0.0.0.0:8080` for preview/demo only; it is not committed and is not the Spring Boot backend.
 
-Both dev and preview proxy same-origin `/api/v1/...` calls to the local mock API. A browser smoke test cleared cookies, loaded `/login` on each server, signed in with `admin` / `InitialPass1`, reached `/app/dashboard`, and verified the primary nav, user menu, and Dashboard heading. No browser runtime errors were observed. Start/preview host configuration permits the Arena preview host; no preview-breaking host/origin warning was reported.
+Both dev and preview proxy same-origin `/api/v1/...` calls to the local mock API; `/api/v1/public/configuration` returned HTTP 200 with a valid envelope on each. After the audit corrections, a cookie-isolated browser smoke test loaded `/login` on each server, signed in with `admin` / `InitialPass1`, reached `/app/dashboard`, and verified the primary nav, user menu, and Dashboard heading. No browser runtime errors were observed. Start/preview host configuration permits the Arena preview host; no preview-breaking host/origin warning was reported.
 
 ---
 
@@ -225,14 +228,14 @@ A full automated axe contrast/tree audit, screen-reader pass, keyboard-only trav
 11. `PublicConfigurationResponse.activeThemeType` is Java `String`; TypeScript uses `string | null`.
 12. `document:view` is docs-only, not one of the 60 backend permission codes.
 
-Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audit, no production deployment, no business modules, no reporting/dashboard data, and no generated OpenAPI schema. `npm run types:generate` remains available for an environment with the documented backend runtime.
+Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audit, no production deployment, no business modules, no reporting/dashboard data, and no generated OpenAPI schema. `npm run types:generate` remains available for an environment with the documented backend runtime. Section 13 of `docs/PHASE1_STEP1_CONTRACT_NOTES.md` now classifies all 12 discrepancies; under a strict H02 reading, the missing generated OpenAPI schema is a **Category 1 must-resolve-before-PR-#3-merge** item. PR #3 therefore remains open and is not merged.
 
 ---
 
 ## 15. Feature branch, commit, push, and pull request
 
 - Fixed feature branch: `arena/807bbe3c-edam-frontend`
-- Branch status: `active`
+- Branch status: `pr_open`
 - Base commit: `37c0a02f79728ea4a95a88b3952b864fb81b7309`
 - Implementation commit SHA: `bc60741812ac578ea917fb9fd1ea81ccd6eeef16`
 - Implementation commit message: `feat: implement Phase 1 Step 1 foundation, auth, and RBAC`
@@ -241,14 +244,35 @@ Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audi
 - Pull request: **#3** — <https://github.com/Jhamankhatri/edam-frontend/pull/3>
 - PR title: `Phase 1 Step 1: foundation, authentication, and RBAC`
 - PR state: open; not merged or closed
+- Engineering audit code commit SHA: `__AUDIT_COMMIT_SHA__`
+- Remote CI status: `__CI_STATUS__`
 - No push to `main`, no merge, no backend commit/push, and no backend file modification.
 
-This final report is delivered as a subsequent verification-report commit on the same fixed branch so the PR URL can be recorded accurately.
+This report is updated by a subsequent docs-only commit after the audit code commit is pushed and its CI status is observed; PR #3 head is authoritative for the latest SHA.
 
 ---
 
 ## 16. Completion verdict and next-step boundary
 
-**Phase 1 / Step 1 is complete for review.** All requested foundation, authentication, RBAC, testing, responsive, build, dev/preview, documentation, commit, push, and PR deliverables are in place. The implementation intentionally stops here.
+**Phase 1 / Step 1 implementation is complete for review, and the strict engineering audit is complete.** All local quality gates were rerun after corrections: 47 tests, zero-warning lint/TypeScript, production build, 27/27 responsive checks on dev and preview, proxy 200s, and cookie-isolated login smoke on both servers. A lightweight CI workflow was added. The implementation intentionally stops here.
 
-Before Step 2, product/backend owners should resolve the dashboard wording conflict, decide whether cross-origin bootstrap requires a backend CORS change, provide a live OpenAPI runtime for generated schema types, and clarify the `document:view` docs-vs-permissions mismatch. None of those decisions was silently resolved in this Step 1 implementation.
+PR #3 remains open and **must not be merged** until the strict Category 1 generated-OpenAPI-schema requirement is satisfied or a separately approved exception is recorded. Before Step 2, owners should also resolve status mapping and lookup paths; later-module and deployment/product decisions are classified in the contract notes. No decision was silently resolved by this audit.
+
+---
+
+## 17. Strict engineering audit addendum (2026-11-18)
+
+A separate `docs/PHASE1_STEP1_ENGINEERING_AUDIT.md` records the full strict audit: 99 application `.ts/.tsx/.css` files reviewed, inline-CSS and design-token results, architecture, TypeScript, performance, UI/UX, security/RBAC, CI, fixed/deferred issues, commands, and evidence.
+
+Audit highlights:
+
+- **0** ordinary React inline `style={{...}}`; **4** `!important` only in the reduced-motion global override; **0** scattered palette utilities or hardcoded colors outside centralized tokens, isolated runtime branding, and test fixtures.
+- Strict TypeScript: **0** explicit `any`, **0** `@ts-ignore`/`@ts-expect-error`, and **1** isolated network-boundary `result.data as T` cast. Runtime envelope, event-detail, and form field-path guards replaced unsafe assertions.
+- Architecture/performance: centralized route/navigation permissions, one shell badge observer, shared sign-out hook, shared envelope validator, route-level code splitting, four unused runtime dependencies removed, and dead files/exports removed.
+- Security/RBAC: session cookies only, CSRF before writes, `X-Installation-Token` only for bootstrap, no login `Idempotency-Key`, exactly eight idempotent business routes, backend authority, and no unauthorized content during initialization. All eight idempotent routes, privileged-header/storage restrictions, raw responses, and malformed envelopes now have tests.
+- CI: `.github/workflows/frontend-ci.yml` runs `npm ci`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` on PRs and feature-branch pushes; no expensive jobs. Remote CI status: `__CI_STATUS__`.
+- Final local results: `npm ci` 649 packages; typecheck/lint exit 0; 8 files / 47 tests; build 1893 modules / 4.63s / `dist` 705K; responsive 27/27 dev and 27/27 preview; proxy HTTP 200 on both; login smoke PASS on both; `git diff --check` exit 0.
+- Audit code commit: `__AUDIT_COMMIT_SHA__`. PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged).
+- Strict acceptance keeps PR #3 unmerged until the Category 1 live-generated OpenAPI schema requirement is satisfied or separately approved as an exception. No live backend integration, production verification, full axe/screen-reader WCAG audit, or OpenAPI-generated schema is claimed.
+
+Work stops after this audit. No Step 2 or business-module implementation was started.

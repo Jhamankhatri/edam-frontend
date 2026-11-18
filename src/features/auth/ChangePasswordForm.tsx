@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ShieldCheck } from 'lucide-react';
@@ -47,6 +47,7 @@ interface ChangePasswordFormProps {
 export function ChangePasswordForm({ policy, onSubmit }: ChangePasswordFormProps) {
   const schema = createSchema(policy);
   type FormValues = z.infer<typeof schema>;
+  const serverFields = ['currentPassword', 'newPassword', 'confirmPassword'] satisfies readonly FieldPath<FormValues>[];
   const [submitError, setSubmitError] = useState<string | null>(null);
   const {
     register,
@@ -63,7 +64,7 @@ export function ChangePasswordForm({ policy, onSubmit }: ChangePasswordFormProps
     try {
       await onSubmit({ currentPassword: values.currentPassword, newPassword: values.newPassword });
     } catch (error) {
-      if (!setServerFieldErrors(setError, error)) setSubmitError(formatApiError(error));
+      if (!setServerFieldErrors(setError, error, serverFields)) setSubmitError(formatApiError(error));
       else setSubmitError('Please correct the highlighted fields.');
     }
   });
@@ -77,14 +78,14 @@ export function ChangePasswordForm({ policy, onSubmit }: ChangePasswordFormProps
   ].filter(Boolean);
 
   return (
-    <section className="glass-panel motion-safe:animate-fade-up rounded-2xl border border-white/70 p-5 shadow-elevated sm:p-7">
+    <section className="auth-card motion-safe:animate-fade-up">
       <div className="mb-6">
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+        <p className="flex items-center gap-2 auth-eyebrow">
           <ShieldCheck aria-hidden="true" className="h-4 w-4" />
           Security verification
         </p>
         <h2 className="mt-2 font-display text-2xl font-semibold">Change your password</h2>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        <p className="auth-description">
           A password change is required before the workspace can be accessed.
         </p>
       </div>

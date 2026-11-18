@@ -1,14 +1,10 @@
-import { PERMISSION_CODE_SET, type PermissionCode } from './permission-codes';
+import type { PermissionCode } from './permission-codes';
 
 export type { PermissionCode };
 
 export interface PermissionRequirement {
   mode: 'all' | 'any';
   codes: readonly PermissionCode[];
-}
-
-export function isPermissionCode(value: string): value is PermissionCode {
-  return PERMISSION_CODE_SET.has(value);
 }
 
 export function hasPermission(

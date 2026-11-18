@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
+import type { ShellBadges } from '@/hooks/useShellBadges';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -10,7 +11,7 @@ import {
 } from '@/components/ui/drawer';
 import { Sidebar } from './Sidebar';
 
-export function MobileNav() {
+export function MobileNav({ badges }: { badges: ShellBadges }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,11 +23,11 @@ export function MobileNav() {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerTitle className="px-5 pb-1 pt-5 font-display text-xl font-semibold">EDAM</DrawerTitle>
-        <DrawerDescription className="px-5 pb-4 text-xs text-white/60">
+        <DrawerDescription className="px-5 pb-4 text-xs text-brand-panel-muted">
           Permission-aware navigation
         </DrawerDescription>
         <div className="min-h-0 flex-1">
-          <Sidebar compactHeader onNavigate={() => setOpen(false)} />
+          <Sidebar compactHeader badges={badges} onNavigate={() => setOpen(false)} />
         </div>
       </DrawerContent>
     </Drawer>

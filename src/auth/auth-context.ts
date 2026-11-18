@@ -24,7 +24,6 @@ export interface AuthContextValue {
   refresh: () => Promise<CurrentUserResponse>;
   retryInitialization: () => void;
   hasPermission: (code: PermissionCode) => boolean;
-  hasAnyPermission: (codes: readonly PermissionCode[]) => boolean;
   satisfiesRequirement: (requirement: PermissionRequirement | null) => boolean;
 }
 

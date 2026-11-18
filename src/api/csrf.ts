@@ -1,6 +1,7 @@
 import { env } from '@/config/env';
 import type { ApiEnvelope, CsrfTokenResponse } from './contracts';
 import { ENDPOINTS } from './endpoints';
+import { isRecord, parseApiEnvelope } from './envelope';
 import { ApiError, createApiErrorFromEnvelope, CSRF_ERROR_CODE } from './errors';
 
 export const CSRF_COOKIE_NAME = 'XSRF-TOKEN';
@@ -18,12 +19,13 @@ export function readCsrfCookie(): string | null {
   }
 }
 
-async function parseEnvelope(response: Response): Promise<ApiEnvelope<CsrfTokenResponse> | undefined> {
-  try {
-    return (await response.json()) as ApiEnvelope<CsrfTokenResponse>;
-  } catch {
-    return undefined;
-  }
+function isCsrfTokenResponse(value: unknown): value is CsrfTokenResponse {
+  return (
+    isRecord(value) &&
+    typeof value.headerName === 'string' &&
+    typeof value.parameterName === 'string' &&
+    typeof value.token === 'string'
+  );
 }
 
 async function requestAndVerifyCsrfCookie(): Promise<string> {
@@ -43,7 +45,7 @@ async function requestAndVerifyCsrfCookie(): Promise<string> {
     });
   }
 
-  const envelope = await parseEnvelope(response);
+  const envelope: ApiEnvelope<unknown> | undefined = await parseApiEnvelope(response);
   if (!response.ok || !envelope?.success) {
     throw createApiErrorFromEnvelope(
       response.status,
@@ -51,7 +53,9 @@ async function requestAndVerifyCsrfCookie(): Promise<string> {
       'EDAM could not initialise a secure session.',
     );
   }
-  if (envelope.data?.headerName && envelope.data.headerName !== CSRF_HEADER_NAME) {
+
+  const data = envelope.data;
+  if (isCsrfTokenResponse(data) && data.headerName !== CSRF_HEADER_NAME) {
     throw new ApiError({
       code: CSRF_ERROR_CODE,
       message: 'The server returned an unexpected CSRF header name.',

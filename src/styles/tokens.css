@@ -28,4 +28,53 @@
   --brand-teal: #0f766e;
   --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+
+  /* Centralized semantic surfaces, borders, overlays and status colors. */
+  --brand-panel-foreground: #ffffff;
+  --brand-panel-strong: rgba(255, 255, 255, 0.8);
+  --brand-panel-quiet: rgba(255, 255, 255, 0.75);
+  --brand-panel-soft: rgba(255, 255, 255, 0.65);
+  --brand-panel-muted: rgba(255, 255, 255, 0.6);
+  --brand-panel-dim: rgba(255, 255, 255, 0.55);
+  --brand-panel-faint: rgba(255, 255, 255, 0.45);
+  --brand-panel-border: rgba(255, 255, 255, 0.1);
+  --brand-panel-border-strong: rgba(255, 255, 255, 0.2);
+  --brand-panel-border-active: rgba(255, 255, 255, 0.12);
+  --brand-panel-hover: rgba(255, 255, 255, 0.1);
+  --brand-panel-active: rgba(255, 255, 255, 0.12);
+  --brand-panel-surface: rgba(255, 255, 255, 0.08);
+  --brand-panel-subtle: rgba(255, 255, 255, 0.05);
+  --brand-panel-glass-border: rgba(255, 255, 255, 0.7);
+  --brand-panel-gold-border: rgba(209, 160, 85, 0.5);
+  --brand-panel-glow-gold: rgba(209, 160, 85, 0.19);
+  --brand-panel-grid-line: rgba(255, 255, 255, 0.045);
+  --brand-panel-grid-mask: #000000;
+  --brand-panel-end: #0a3552;
+
+  --auth-canvas-glow-primary: rgba(30, 95, 214, 0.22);
+  --auth-canvas-glow-gold: rgba(209, 160, 85, 0.18);
+  --auth-canvas-start: #f8fbff;
+  --auth-canvas-mid: #eef3f9;
+  --auth-canvas-end: #f8fafc;
+
+  --glass-surface: rgba(255, 255, 255, 0.9);
+  --skeleton-highlight: rgba(255, 255, 255, 0.65);
+  --overlay: rgba(7, 27, 51, 0.6);
+  --topbar: rgba(255, 255, 255, 0.95);
+
+  --status-info-surface: #eff6ff;
+  --status-info-border: #bfdbfe;
+  --status-success-surface: #ecfdf5;
+  --status-success-border: #a7f3d0;
+  --status-warning-surface: #fffbeb;
+  --status-warning-border: #fde68a;
+  --status-destructive-surface: #fef2f2;
+  --status-destructive-border: #fecaca;
+
+  --scrollbar-thumb: rgba(91, 101, 119, 0.45);
+  --scrollbar-thumb-soft: rgba(91, 101, 119, 0.35);
+
+  --shadow-soft: 0 1px 2px rgba(11, 18, 32, 0.04), 0 8px 24px rgba(11, 18, 32, 0.06);
+  --shadow-elevated: 0 18px 48px rgba(7, 27, 51, 0.14);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }

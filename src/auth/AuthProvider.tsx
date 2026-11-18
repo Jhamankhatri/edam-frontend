@@ -22,7 +22,6 @@ import {
 import { applyPublicBranding } from '@/lib/theme';
 import { AuthContext, type AuthContextValue, type AuthStatus } from './auth-context';
 import {
-  hasAnyPermission,
   hasPermission,
   satisfiesPermissionRequirement,
   type PermissionCode,
@@ -171,7 +170,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       refresh,
       retryInitialization,
       hasPermission: (code: PermissionCode) => hasPermission(user?.permissions, code),
-      hasAnyPermission: (codes: readonly PermissionCode[]) => hasAnyPermission(user?.permissions, codes),
       satisfiesRequirement: (requirement: PermissionRequirement | null) =>
         satisfiesPermissionRequirement(user?.permissions, requirement),
     }),

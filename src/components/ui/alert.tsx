@@ -7,10 +7,10 @@ const alertVariants = cva('relative flex w-full items-start gap-3 rounded-xl bor
   variants: {
     variant: {
       default: 'border-border bg-card text-foreground',
-      info: 'border-blue-200 bg-blue-50 text-foreground',
-      success: 'border-emerald-200 bg-emerald-50 text-foreground',
-      warning: 'border-amber-200 bg-amber-50 text-foreground',
-      destructive: 'border-red-200 bg-red-50 text-foreground',
+      info: 'border-status-info-border bg-status-info-surface text-foreground',
+      success: 'border-status-success-border bg-status-success-surface text-foreground',
+      warning: 'border-status-warning-border bg-status-warning-surface text-foreground',
+      destructive: 'border-status-destructive-border bg-status-destructive-surface text-foreground',
     },
   },
   defaultVariants: { variant: 'default' },
