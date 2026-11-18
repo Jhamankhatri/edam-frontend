@@ -354,7 +354,7 @@ H10 and Appendix A are unchanged; no H10 path is encoded in any Step 1 screen.
 
 `types:checksum` OK; `types:generate` OK and idempotent; `types:check` OK; `npm run typecheck` exit 0;
 `npm run lint` exit 0 (zero warnings); `npm test` **9 files / 55 tests** (8 new contract tests);
-`npm run build` exit 0 (1893 modules / 5.07s / 29 files / `dist` 705K); responsive 27/27 on dev and
+`npm run build` exit 0 (1894 modules / 5.10s / 29 files / `dist` 705K); responsive 27/27 on dev and
 preview with 201 controls / 15 forms; proxy HTTP 200 on both; Puppeteer login smoke PASS on both;
 `git diff --check` exit 0. GitHub Actions results, changed files and commit SHAs are recorded in
 §18.7/§18.8 below.
@@ -391,6 +391,11 @@ reported in the chat answer and by `git rev-parse HEAD`; it changes no code or s
   ended `action_required`; it is superseded by the two passing runs on `d4fccf0`.
 - PR body updated to reflect the cleared Category 1/2 gates and the new CI checks; the
   "awaiting review — do not merge" instruction is retained.
+- Docs-results commit `9560426bd327d8496f686db2c052fd82fc43c450` also passed push run
+  `44405663255` and pull_request run `44405674478` (both `success`); `gh pr checks 3` reports both
+  checks pass. The final docs-only commit is reported in the chat answer and by
+  `git rev-parse HEAD`; the complete final local gate sequence exited 0 on it
+  (`/tmp/openapi-final-gates.txt`).
 
 ### 9. Remaining blockers and engineering-audit classification
 

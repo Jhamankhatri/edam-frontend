@@ -280,7 +280,7 @@ Evidence files are under `/tmp/audit-*.txt`, `/tmp/audit-*.json`, and `/tmp/tail
 | `npm run typecheck` | Exit 0 |
 | `npm run lint` | Exit 0; zero warnings |
 | `npm test` | Exit 0; **9 files / 55 tests** (8 new OpenAPI contract tests) |
-| `npm run build` | Exit 0; 1893 modules / 5.07s / 29 files / `dist` 705K |
+| `npm run build` | Exit 0; 1894 modules / 5.10s / 29 files / `dist` 705K |
 | `npm run responsive:check` on `:5173` and `:4173` | Both exit 0; 27/27 route/viewport checks, 201 controls, 15 forms, 0 tables |
 | Puppeteer login smoke on `:5173` and `:4173` | Both PASS: `admin` → `/app/dashboard`, Dashboard heading and app nav present |
 | Proxy smoke `GET /api/v1/public/configuration` on `:5173` and `:4173` | Both HTTP 200 with `success: true` envelope |
@@ -474,7 +474,7 @@ them with weaker generated shapes. No `any`, `@ts-ignore`, or unsafe assertion w
 
 Local: `npm ci`-equivalent install present; `types:checksum` OK; `types:generate` OK and
 idempotent; `types:check` OK; `typecheck` exit 0; `lint` exit 0; `test` 9 files / 55 tests;
-`build` 1893 modules / 5.07s / 29 files / `dist` 705K; responsive 27/27 on dev and preview;
+`build` 1894 modules / 5.10s / 29 files / `dist` 705K; responsive 27/27 on dev and preview;
 proxy HTTP 200 on both; Puppeteer login smoke PASS on both; `git diff --check` exit 0. GitHub
 Actions results for the pushed commits are recorded in §14.6.
 
@@ -502,5 +502,10 @@ unmerged; no Step 2 or business-module work was performed.
   `arena/807bbe3c-edam-frontend`. It is **not merged**; the owner asked for review first.
 - No backend repository modification, no `main` push, no new PR, no merge, no Step 2 work.
 
-The final docs-only commit that records these results is reported in the chat answer and by
-`git rev-parse HEAD`; it changes no code or snapshot bytes.
+Docs-results commit `9560426bd327d8496f686db2c052fd82fc43c450` also passed CI: push run
+`44405663255` **success** (jobs `135160068576` and `135160068646`) and pull_request run
+`44405674478` **success** (jobs `135160105687` and `135160104899`); `gh pr checks 3` reports both
+checks pass (17s / 38s). The final docs-only commit that records the last build figures is reported
+in the chat answer and by `git rev-parse HEAD`; it changes no code or snapshot bytes. The complete
+final local sequence (`types:checksum`, `types:check`, `typecheck`, `lint`, `test`, `build`,
+`git diff --check`) exited 0 on that HEAD and is captured in `/tmp/openapi-final-gates.txt`.
