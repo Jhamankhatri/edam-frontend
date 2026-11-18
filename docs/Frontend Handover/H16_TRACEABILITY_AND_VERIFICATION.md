@@ -1,130 +1,95 @@
 # H16 — Traceability & Verification
 
-Cross-reference of the 206 API endpoints (H01) against screens (H09) and workflows (H05), plus verification evidence for this handover.
+## Verification method
+This package was verified against the backend source at merge commit `38cedbc` (PR #24
+merge of branch `docs/frontend-handover-remediation`), which includes the initial 19-file
+handover (PR #23), the D-01…D-27 corrections, Flyway V28, the `SeededRolePermissionsD09Test`
+regression test, and the idempotency transaction bug fix (`92c7d5a`).
 
-## 1. Coverage summary
+Verification combined:
+- **Static source inspection:** every controller, DTO, SecurityConfig public-matchers list,
+  `@PublicEndpoint`/`@EdamPermission` annotations, `RequirePermissionAspect`,
+  `ExpenseRequestService.isVisible`, migration files V5/V12/V27/V28, and idempotency
+  services (`IdempotencyService`, `IntegrationService`).
+- **CI execution (GitHub Actions run 44322838892 + push run 44322826952):** 37 test
+  classes / 433 tests / 0 failures / 0 errors / 3 pre-existing skips, across three jobs
+  (`build-and-test`, `prod-profile-smoke-test`, `war-package-smoke-test`).
+- **Appendix A regeneration** directly from controller source + `Permissions.java`, with
+  handler → Java method cross-check.
 
-- Total `/api/v1` endpoints: **206**.
-- Public: **8**; authenticated-only: **3**; permission-guarded: **195**.
-- Phase 1 modules (AUTH, SYS, REQ, APL, DOC, RPT, NTF + required ORG/MST/CFG lookups + BRD public config): **102** endpoints.
-- Phase 1 endpoints mapped to a screen/workflow in this handover: **53 / 102** (51%).
-- Admin/Phase 2+ endpoints documented in Appendix A but not yet assigned a Phase 1 screen: **104**. These contracts are locked and will receive UI coverage in their respective phases per H14.
+Endpoint, DTO, handler, path, permission, and annotation claims in this package are backed
+by the source files listed in §Source evidence.
 
-## 2. Endpoint → screen / workflow map (Phase 1)
+## Endpoint coverage
+Total `/api/v1` endpoints covered in Appendix A: **206** (8 public, 3 authenticated-only,
+195 permission-guarded). Phase 1 screens map to a focused subset (see H10):
 
-| ID | Method | Path | Used by |
-|----|--------|------|--------|
-| APL-001 | `GET` | `/api/v1/approvals` | W12 Approval inbox list |
-| APL-002 | `GET` | `/api/v1/approvals/count` | Shell badges (approval count) |
-| APL-003 | `GET` | `/api/v1/approvals/tasks/{taskId}` | W8–W11 Case file view |
-| APL-004 | `POST` | `/api/v1/approvals/tasks/{taskId}/approve` | W8 Approve |
-| APL-005 | `POST` | `/api/v1/approvals/tasks/{taskId}/forward` | W10 Forward |
-| APL-006 | `POST` | `/api/v1/approvals/tasks/{taskId}/reject` | W9 Reject |
-| APL-007 | `GET` | `/api/v1/approvals/tasks/{taskId}/request` | Case file request snapshot |
-| APL-008 | `POST` | `/api/v1/approvals/tasks/{taskId}/revert` | W11 Revert |
-| AUTH-001 | `POST` | `/api/v1/auth/bootstrap` | W1 Bootstrap |
-| AUTH-002 | `POST` | `/api/v1/auth/change-password` | Change password (forced & self-service) |
-| AUTH-003 | `GET` | `/api/v1/auth/csrf` | W2/H03 CSRF token |
-| AUTH-004 | `POST` | `/api/v1/auth/forgot-password` | W3 Forgot password |
-| AUTH-005 | `GET` | `/api/v1/auth/installation` | W1 Bootstrap (status check) |
-| AUTH-006 | `POST` | `/api/v1/auth/login` | W2 Login |
-| AUTH-007 | `POST` | `/api/v1/auth/logout` | W2 Logout |
-| AUTH-008 | `GET` | `/api/v1/auth/me` | Shell auth boot (/auth/me) |
-| AUTH-009 | `POST` | `/api/v1/auth/reset-password` | W3 Reset password |
-| BRD-005 | `GET` | `/api/v1/public/configuration` | Public config (branding on login/shell boot) |
-| CFG-001 | `GET` | `/api/v1/expense-configuration/categories` | New/edit request form (expense-config lookup) |
-| CFG-006 | `GET` | `/api/v1/expense-configuration/natures` | New/edit request form (expense-config lookup) |
-| CFG-009 | `GET` | `/api/v1/expense-configuration/request-types` | New/edit request form (expense-config lookup) |
-| DOC-001 | `POST` | `/api/v1/documents` | W17 Document upload |
-| DOC-002 | `GET` | `/api/v1/documents/requests/{requestId}` | Documents tab (per request) |
-| DOC-003 | `GET` | `/api/v1/documents/{id}` | Document metadata |
-| DOC-004 | `DELETE` | `/api/v1/documents/{id}` | Signed download URL |
-| DOC-005 | `GET` | `/api/v1/documents/{id}/download-url` | Scan history |
-| DOC-006 | `GET` | `/api/v1/documents/{id}/scans` | Delete document |
-| MST-001 | `GET` | `/api/v1/master-data/currencies` | New/edit request form (master-data lookup) |
-| MST-005 | `GET` | `/api/v1/master-data/exchange-rates` | New/edit request form (master-data lookup) |
-| MST-008 | `GET` | `/api/v1/master-data/tax-authorities` | New/edit request form (master-data lookup) |
-| MST-012 | `GET` | `/api/v1/master-data/vendors` | New/edit request form (master-data lookup) |
-| NTF-001 | `GET` | `/api/v1/notifications` | Notifications inbox |
-| NTF-002 | `POST` | `/api/v1/notifications/read-all` | Mark all read |
-| NTF-003 | `GET` | `/api/v1/notifications/unread-count` | Unread count (badge) |
-| NTF-004 | `POST` | `/api/v1/notifications/{id}/read` | Mark one read |
-| ORG-001 | `GET` | `/api/v1/organization/branches` | New/edit request form (org lookup) |
-| ORG-005 | `GET` | `/api/v1/organization/departments` | New/edit request form (org lookup) |
-| ORG-009 | `GET` | `/api/v1/organization/profile` | New/edit request form (org lookup) |
-| ORG-012 | `GET` | `/api/v1/organization/unit-types` | New/edit request form (org lookup) |
-| ORG-013 | `GET` | `/api/v1/organization/units` | New/edit request form (org lookup) |
-| REQ-001 | `GET` | `/api/v1/expense-requests` | My Requests / All Requests registers |
-| REQ-002 | `POST` | `/api/v1/expense-requests` | W4 Create (draft) |
-| REQ-003 | `GET` | `/api/v1/expense-requests/{id}` | Request detail |
-| REQ-004 | `PUT` | `/api/v1/expense-requests/{id}` | W5 Edit |
-| REQ-005 | `GET` | `/api/v1/expense-requests/{id}/activity` | W13 Timeline/activity |
-| REQ-006 | `POST` | `/api/v1/expense-requests/{id}/cancel` | W7 Cancel/withdraw |
-| REQ-007 | `POST` | `/api/v1/expense-requests/{id}/submit` | W6 Submit (and RETURNED→SUBMITTED resubmission) |
-| RPT-001 | `GET` | `/api/v1/reporting/dashboard` | W15 Dashboard / Reports dashboard |
-| RPT-002 | `POST` | `/api/v1/reporting/expense-requests/export` | W14 Export (CSV+XLSX) |
-| RPT-003 | `GET` | `/api/v1/reporting/expense-requests/register` | Register report |
-| RPT-004 | `GET` | `/api/v1/reporting/reports` | Report catalogue (admin Phase 2) |
-| RPT-005 | `GET` | `/api/v1/reporting/widgets` | Widget catalogue (admin Phase 2) |
-| SYS-001 | `GET` | `/api/v1/system/info` | Shell footer (optional, authenticated-only) |
+- Auth surface: AUTH-001…AUTH-009.
+- Public branding: BRD-005.
+- System info: SYS-001 (authenticated — see H03 §5).
+- Requests: REQ-001…REQ-007 (list/create/get/update/timeline/cancel/submit).
+- Approvals: APL-001…APL-008 (inbox/count/case/approve/forward/reject/requestFor/revert).
+- Documents: DOC-001…DOC-006 (upload/list/get/delete/download-url/scans).
+- Reporting: RPT-001…RPT-003 (dashboard/export/register); RPT-004/RPT-005 deferred (Phase 2 admin).
+- Notifications: NTF-001…NTF-004 (list/mark-all/unread/mark-one).
+- Lookups (shared): `GET /configuration/request-types`, `/configuration/expense-categories`,
+  `/configuration/expense-natures`, `/configuration/workflows/active`, `/master-data/currencies`,
+  `/master-data/vendors`, `/master-data/tax-authorities`, `/organization/departments/tree`,
+  `/organization/branches`.
 
-## 3. Deferred endpoints (Phase 2 / Phase 3)
+## Correction status (D-01…D-27)
 
-These endpoints have their contracts locked in Appendix A and types will be generated via OpenAPI codegen, but their UI screens are scheduled for later phases.
+| ID | Issue | Status |
+|----|-------|--------|
+| D-01 | Endpoint IDs misaligned with handlers | Resolved (Appendix A regenerated) |
+| D-02 | Documents endpoint list wrong (order, paths, IDs) | Resolved (DOC-001…DOC-006 aligned to source) |
+| D-03 | Document permissions wrong (claimed `document:view`) | Resolved (only `document:upload/download/delete`) |
+| D-04 | Reporting filter contract wrong | Resolved (13-arg dashboard; custom `RegisterResponse` for register) |
+| D-05 | Phase arithmetic wrong (over-scoped Phase 1) | Resolved (H14 locks D-19 scope) |
+| D-06 | Request permission semantics (view-scope/view-all vs view-own) | Resolved via V28 (H04 §5) |
+| D-07 | Audit export claimed but no endpoint exists | Resolved (documented as unimplemented; deferred) |
+| D-08 | Dashboard/notification permission gates wrong | Resolved (notifications require `notification:view`; RPT-004/005 deferred) |
+| D-09 | Seeded roles missing `request:view-own` | Resolved by Flyway V28 (H04 §5) |
+| D-10 | CSRF cookie behaviour wrong (GETs auto-set) | Resolved (H03 §3 — call `/auth/csrf` before writes) |
+| D-11 | Raw CSV/XLSX export envelope (wrapped as `ApiResponse`) | Resolved (raw bytes; H02 §7) |
+| D-12 | Error code catalogue incomplete | Resolved (H02 §3) |
+| D-13 | Approval DTOs wrong (remarks optional; `targetUserId`) | Resolved (remarks required; `recipientUserId`) |
+| D-14 | OPEX/CAPEX/STA payloads wrong | Resolved (H02 §4.6) |
+| D-15 | Request list query params wrong (claimed `branchId` filter at list level) | Resolved (correct params in H10) |
+| D-16 | Route file naming wrong (React Router colon params) | Resolved (TanStack Router `$id`; H07) |
+| D-17 | Idempotency inventory incomplete | Resolved (H02 §6) |
+| D-18 | Bootstrap/login behaviour wrong (session after bootstrap) | Resolved (bootstrap returns 201, no session; D-23) |
+| D-19 | Phase 1 scope locked | Resolved (H14) |
+| D-20 | Appendix A cross-references broken by path-doubling | Resolved (Appendix A regenerated with correct paths) |
+| D-21 | Document preview deferred until URLs/CSP verified | Resolved (H11) |
+| D-22 | Tax-authority endpoint permission documented incorrectly | Resolved (requires `currency:view`, not a separate tax perm) |
+| D-23 | Bootstrap returns 201, explicit login required | Resolved (H03 §2) |
+| D-24 | BigDecimal claimed as string on the wire | Resolved (JSON number; H02 §5) |
+| D-25 | PageQuery max size cap wrong | Resolved (general 200, register 500; H02 §2) |
+| D-26 | Heterogeneous list responses (catalogue endpoints) noted | Resolved (RPT-004/005 return `List<String>` — deferred to Phase 2) |
+| D-27 | `themeTokens` contract vs unsupported fields | Resolved (H02 §4.5; public config fields documented exactly) |
 
-| Module | Count | Phase target |
-|--------|------|--------------|
-| Audit (`AUD-`) | 2 | Phase 2 |
-| Business rules (`BR-`) | 9 | Phase 3 |
-| Branding / configuration (`BRD-`) | 16 | Phase 2 (admin branding/settings) |
-| Expense configuration (`CFG-`) | 9 | Phase 2 (config management — lookups already in Phase 1) |
-| Committees (`CMT-`) | 10 | Phase 2 |
-| Delegation (`DEL-`) | 5 | Phase 2 |
-| Notification events (`EVT-`) | 2 | Phase 2 |
-| Integrations (`INT-`) | 13 | Phase 3 |
-| Approval limits (`LIM-`) | 18 | Phase 2 |
-| Master data (`MST-`) | 12 | Phase 2 (master-data management screens — lookups already in Phase 1) |
-| Organization (`ORG-`) | 12 | Phase 2 (org management — lookups already in Phase 1) |
-| Roles (`ROL-`) | 7 | Phase 2 |
-| SMTP (`SMT-`) | 4 | Phase 2 |
-| Email templates (`TPL-`) | 7 | Phase 2 |
-| Users (`USR-`) | 14 | Phase 2 |
-| Workflow configuration (`WF-`) | 13 | Phase 3 |
+## Source evidence index
 
-## 4. Verification evidence
-
-1. **Backend HEAD** confirmed at `93a89eb28cf4a17feae15abf572c51c14e45f0e7` with a clean working tree; no Java/migration/config/DTO files modified.
-2. **Endpoint introspection** regenerated from source (`docs/phase-4j/_generated/controllers.json`): 206 endpoints across 26 controllers; all handler names resolved (no `?`); no `src/main/java/src/main/java/` path duplication.
-3. **Permission catalogue** verified against `src/main/java/com/edam/common/security/Permissions.java` (60 codes, exact match).
-4. **Bootstrap header** verified at `AuthController.java:196` → `X-Installation-Token` (prior handover's `X-EDAM-Bootstrap-Token` was wrong).
-5. **CSRF** verified at `SecurityConfig.java:185` → `CookieCsrfTokenRepository.withHttpOnlyFalse()`, cookie `XSRF-TOKEN`, header `X-XSRF-TOKEN`.
-6. **Public endpoints** verified against `SecurityConfig.publicMatchers()`: 8 business endpoints public (AUTH-001, 003, 004, 005, 006, 007, 009 + BRD-005). `/api/v1/system/info` is authenticated (deny-by-default).
-7. **XLSX export** verified from `ReportingDtos.java:107` (`enum ExportFormat { CSV, EXCEL }`) and `ReportingService.streamExcel()` (Apache POI SXSSF streaming writer). PDF/print are not implemented.
-8. **Approval actions** verified from `ApprovalController.java` methods: `approve`, `reject`, `revert`, `forward` at `/approvals/tasks/{taskId}/<action>`.
-9. **Request actions** verified from `ExpenseRequestController.java`: `create` (POST `/expense-requests`), `update` (PUT `/{id}`), `submit` (POST `/{id}/submit`), `cancel` (POST `/{id}/cancel`). RETURNED→SUBMITTED resubmission uses `submit` (no separate resubmit endpoint).
-10. **Module ID prefix collision** resolved: `APL-` = Approval Inbox & Actions, `LIM-` = Approval Limits.
-11. **`request:view` scope model** verified from `ExpenseRequestController` class Javadoc (lines 51–55) + `RequirePermissionAspect.java`: controller gate is `request:view-own`; service layer widens for `request:view-scope` and `request:view-all` holders.
-12. **Envelope shapes** (`ApiResponse`, `PageResponse`, error handling) read from `src/main/java/com/edam/common/api/` and `src/main/java/com/edam/common/exception/GlobalExceptionHandler.java`.
-13. **Document flow** verified from `src/main/java/com/edam/documents/controller/DocumentController.java`: multipart upload, 5-minute signed download URLs, malware-scan status polling.
-14. **No backend code was changed**: `git status` will show only additions under `docs/Frontend Handover/`.
-
-## 5. Source files referenced (read during this handover)
-
-- `src/main/java/com/edam/common/api/{ApiResponse,PageResponse,PageQuery,ErrorCode,ApiPaths}.java`
-- `src/main/java/com/edam/common/exception/{GlobalExceptionHandler,BusinessException,EdamException,ValidationFailedException}.java`
-- `src/main/java/com/edam/common/security/{Permissions.java,EdamPermission.java,RequirePermissionAspect.java}`
-- `src/main/java/com/edam/config/SecurityConfig.java`
-- `src/main/java/com/edam/identity/controller/AuthController.java`
-- `src/main/java/com/edam/identity/dto/AuthDtos.java`
-- `src/main/java/com/edam/expenserequest/controller/ExpenseRequestController.java`
-- `src/main/java/com/edam/expenserequest/dto/ExpenseRequestDtos.java`
-- `src/main/java/com/edam/workflow/controller/ApprovalController.java` (package `workflow`, not `approval`)
-- `src/main/java/com/edam/workflow/dto/ApprovalDtos.java`
-- `src/main/java/com/edam/documents/controller/DocumentController.java`
-- `src/main/java/com/edam/documents/dto/DocumentDtos.java`
-- `src/main/java/com/edam/reporting/controller/ReportingController.java`
-- `src/main/java/com/edam/reporting/service/ReportingService.java`
-- `src/main/java/com/edam/reporting/dto/ReportingDtos.java`
-- `src/main/java/com/edam/web/SystemController.java`
-- `src/main/java/com/edam/configuration/controller/ConfigurationController.java`
-- `docs/phase-4j/_generated/{controllers,dtos,entities,permissions,migrations}.json` (machine introspection)
+| Concern | Source file |
+|---------|-------------|
+| Controllers | `src/main/java/com/edam/**/*Controller.java` (27 controllers, 206 `/api/v1` endpoints) |
+| Security (public matchers) | `src/main/java/com/edam/config/SecurityConfig.java` |
+| Permissions enum | `src/main/java/com/edam/common/security/Permissions.java` (60 codes) |
+| Public/Authenticated annotations | `src/main/java/com/edam/common/security/{PublicEndpoint,AuthenticatedEndpoint}.java` |
+| Architecture test (enforces @EdamPermission or @PublicEndpoint) | `src/test/java/com/edam/architecture/EndpointAuthorizationArchitectureTest.java` |
+| Controller aspect (exact-match permission gate) | `src/main/java/com/edam/common/aspect/RequirePermissionAspect.java` |
+| ApiResponse / PageResponse / PageQuery / ErrorCode | `src/main/java/com/edam/common/api/*.java` |
+| GlobalExceptionHandler | `src/main/java/com/edam/common/exception/GlobalExceptionHandler.java` |
+| Idempotency handling | `src/main/java/com/edam/common/api/{IdempotencyOperation,IdempotencyService,IdempotencyAspect,IdempotencyRecord,IdempotencyRecordRepository}.java`, `src/main/java/com/edam/integrations/service/IntegrationService.java` |
+| Request visibility (service-layer scope enforcement) | `src/main/java/com/edam/expenserequest/service/ExpenseRequestService.java` `isVisible()` (lines ~419–434) |
+| Expense-request DTOs | `src/main/java/com/edam/expenserequest/dto/ExpenseRequestDtos.java` |
+| Approval DTOs / case-file | `src/main/java/com/edam/approval/dto/` |
+| Document DTOs / controller | `src/main/java/com/edam/document/{controller,dto}/**` |
+| Reporting DTOs / controller / service | `src/main/java/com/edam/reporting/{controller,dto,service}/**` |
+| Public configuration response | `src/main/java/com/edam/web/PublicConfigurationResponse.java`, `web/SystemController.java` |
+| Notification inbox | `src/main/java/com/edam/communication/controller/NotificationInboxController.java` |
+| Seeded roles/permissions (canonical) | `src/main/resources/db/migration/V12__access_management.sql` (V3/V4 dropped by V13) |
+| Idempotency partial unique index | `src/main/resources/db/migration/V27__phase4i_idempotency_unique_fix.sql` |
+| D-09 regression test | `src/test/java/com/edam/rolemanagement/SeededRolePermissionsD09Test.java` |
+| D-09 migration | `src/main/resources/db/migration/V28__grant_view_own_to_wider_view_roles.sql` |

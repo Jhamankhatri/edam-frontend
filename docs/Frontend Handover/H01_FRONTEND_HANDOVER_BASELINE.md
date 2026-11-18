@@ -1,109 +1,108 @@
 # H01 — Frontend Handover Baseline
 
-## 1. Backend commit this handover is locked to
+## 1. Baseline commit
 
 | Item | Value |
 |------|-------|
 | Repository | `Jhamankhatri/edam` (backend) |
-| Branch | `main` |
-| Commit | `93a89eb28cf4a17feae15abf572c51c14e45f0e7` |
-| State | PR #22 merged; working tree clean |
-| API base URL | `/api/v1` (proxied from Vite dev server to backend in development) |
-| SpringDoc | `/v3/api-docs` (OpenAPI 3.1 JSON, used by frontend codegen) |
-| Swagger UI | `/swagger-ui.html` (reference for humans, not for codegen) |
+| Baseline (post-merge) | `main` at `38cedbc` (merge of PR #24) |
+| PR #24 head | `92c7d5a` (docs remediation + D-09 + idempotency TX fix) |
+| Relevant Flyway migrations | V5 (access management), V12 (role/perm seeds), V27 (integration idempotency partial unique index), V28 (D-09 `request:view-own` grant) |
+| API base URL | `/api/v1` (Vite dev-proxied to backend) |
+| SpringDoc | `/v3/api-docs` (OpenAPI 3.1 JSON) |
+| Swagger UI | `/swagger-ui.html` (internal/VPN only) |
+| Backend build | Maven (`mvn spring-boot:run`; Java 21) |
+| Frontend repo | `Jhamankhatri/edam-frontend` (not modified by this handover) |
 
-This is the **single source of truth**. If the backend moves past this commit, re-run the
-introspection in `docs/phase-4j/_generated/` and regenerate this package before frontend work
-lands on a new contract.
+> **Note:** the Maven Wrapper (`./mvnw`) is NOT checked into this repository. Use a
+> system-installed `mvn` (Maven 3.9+ recommended).
 
-## 2. Conventions used across this package
+## 2. Conventions
 
-- **Endpoint IDs** (e.g. `REQ-004`, `APL-005`, `RPT-002`) come from Appendix A (the full endpoint inventory)
-  and are referenced verbatim by H05 (workflows), H10 (screen mapping), H16 (traceability).
-- **Permission codes** are kebab-case strings (e.g. `request:submit`, `approval:act`) that match
-  `com.edam.common.security.Permissions.java` constants. They are opaque strings to the frontend
-  except for gate checks.
-- **Module ID prefixes** (used to disambiguate IDs):
+- Endpoint IDs (e.g. `REQ-004`, `APL-005`) come from Appendix A and are referenced verbatim
+  by H05, H10, and H16. They are stable for the lifetime of Phase 1.
+- Permission codes are kebab-case strings from
+  `src/main/java/com/edam/common/security/Permissions.java` (60 codes).
+- All `/api/v1` endpoints except RPT-002 export return `ApiResponse<T>` JSON (H02 §1).
+- IDs are UUID strings; monetary values are JSON numbers (Jackson default for BigDecimal,
+  bounded by `@Digits(integer=15, fraction=4)`); timestamps are ISO-8601 instants.
+- Module prefixes used by endpoint IDs:
 
-| Prefix | Module |
-|--------|--------|
-| `APL-` | Approval inbox & actions (8 endpoints) |
-| `AUD-` | Audit (2 endpoints) |
-| `AUTH-` | Authentication (9 endpoints) |
-| `BR-` | Business rules (9 endpoints) |
-| `BRD-` | Branding / configuration (17 endpoints) |
-| `CFG-` | Expense configuration (12 endpoints) |
-| `CMT-` | Committees (10 endpoints) |
-| `DEL-` | Delegation (5 endpoints) |
-| `DOC-` | Documents (6 endpoints) |
-| `EVT-` | Notification events (2 endpoints) |
-| `INT-` | Integrations (13 endpoints) |
-| `LIM-` | Approval limits (18 endpoints) |
-| `MST-` | Master data (16 endpoints) |
-| `NTF-` | Notifications (4 endpoints) |
-| `ORG-` | Organization (17 endpoints) |
-| `REQ-` | Expense requests (7 endpoints) |
-| `ROL-` | Roles (7 endpoints) |
-| `RPT-` | Reports & dashboard (5 endpoints) |
-| `SMT-` | SMTP (4 endpoints) |
-| `SYS-` | System (1 endpoints) |
-| `TPL-` | Email templates (7 endpoints) |
-| `USR-` | Users (14 endpoints) |
-| `WF-` | Workflow configuration (13 endpoints) |
+| Prefix | Module | Endpoint count |
+|--------|--------|----------------|
+| AUTH | Authentication | 9 |
+| BRD | Public / bootstrap data | 1 (`/public/configuration`) |
+| SYS | System (authenticated) | 1 (`/system/info`) |
+| REQ | Expense requests | 7 |
+| APL | Approvals | 8 |
+| DOC | Documents | 6 |
+| RPT | Reporting | 5 |
+| NTF | Notifications | 4 |
+| AUD | Audit events | 2 (deferred in Phase 1) |
+| USR/ROL/ORG/MST/CFG/ADM/WFL/DCM/EXP/BDG/NTS/... | Lookup/admin modules | remaining endpoints (admin CRUD deferred to Phase 2+) |
 
-## 3. Environment variables the frontend must accept
+## 3. Environment variables (frontend)
 
-These mirror `application.yml` and deployment configuration; the frontend reads them at build
-time from Vite (`import.meta.env.VITE_*`) and, where needed, from `GET /api/v1/public/configuration`
-at runtime (see AUTH-* for the public config endpoint).
-
-| Variable | Purpose | Example |
+| Variable | Purpose | Default |
 |----------|---------|---------|
-| `VITE_API_BASE_URL` | Base URL for API calls (no trailing slash); `/api/v1` in dev/prod with proxy, or an absolute URL for cross-origin | `/api/v1` |
-| `VITE_APP_NAME` | Institution branding override (falls back to server-driven branding) | `EDAM` |
-| `VITE_ENABLE_PWA` | Toggle PWA/service-worker in production | `false` for Phase 1 |
-| `VITE_SENTRY_DSN` | Optional error reporting DSN (leave empty to disable) | `` |
-| `VITE_DEFAULT_LOCALE` | Fallback locale (`en-GB` for rollout) | `en-GB` |
-| `VITE_IDLE_TIMEOUT_MINUTES` | Session idle warning + auto-logout (matches server session TTL) | `25` |
+| `VITE_API_BASE_URL` | Base URL for API calls (no trailing slash) | `/api/v1` |
+| `VITE_APP_NAME` | Optional app-name override (falls back to server `applicationName`) | `` |
+| `VITE_DEFAULT_LOCALE` | Fallback locale | `en-GB` |
+| `VITE_IDLE_TIMEOUT_MINUTES` | Session idle warning + auto-logout | `25` (must align with server session TTL — see OD-2) |
+| `VITE_SENTRY_DSN` | Optional error reporting | `` |
 
-The server additionally exposes runtime branding (logo URL, theme palette, institution name)
-through `GET /api/v1/public/configuration` (BRD-* public endpoint) — the frontend must hydrate
-theme tokens from that response on boot and update CSS custom properties dynamically.
+Server runtime branding comes from `GET /api/v1/public/configuration` (BRD-005):
+`applicationName, organizationDisplayName, organizationName, supportEmail, logoAssetId,
+faviconAssetId, defaultLocale, defaultTimeZone, dateFormat, defaultCurrencyCode,
+activeThemeName, activeThemeType, themeTokens`. The frontend maps `themeTokens` to CSS
+custom properties on boot. `logoAssetId`/`faviconAssetId` are opaque asset IDs — do NOT
+assume a direct URL field (D-27); they require a resolution helper when an asset-endpoint
+exists (deferred).
 
-## 4. HTTP & REST conventions
+## 4. HTTP & REST conventions (summary)
 
-- All API responses are JSON, UTF-8, wrapped in `ApiResponse<T>` (see H02).
-- IDs are UUIDs (`string` in TypeScript, never numbers).
-- Monetary amounts are transmitted as strings (BigDecimal-safe); do **not** coerce to `number`
-  in JS (use `decimal.js-light` or store/display as strings until rendering).
-- Timestamps are ISO-8601 instants (`Instant` on the server) — always render in the user's TZ.
-- Lists use `PageResponse<T>` with zero-based `page`, `size ≤ 100`, and sorting via
-  `sort=property,(asc|desc)` (repeatable).
-- Write operations (`POST`, `PUT`, `PATCH`, `DELETE`) require the CSRF token header (H03).
-- Mutating `POST` endpoints that create or advance business state use idempotency keys — the
-  frontend MUST send an `Idempotency-Key` header (UUID v4, per request attempt) on:
-  `POST /api/v1/expense-requests`, `POST /expense-requests/{{id}}/submit`,
-  `POST /expense-requests/{{id}}/cancel`, `POST /approvals/tasks/{{taskId}}/approve|reject|forward|revert`,
-  `POST /api/v1/auth/login` (retry protection on slow networks).
-- The frontend never displays raw server error messages except the `error.message` field of the
-  envelope, which is guaranteed safe by the backend.
+- All API responses are JSON (UTF-8) wrapped in `ApiResponse<T>` **except** RPT-002 which
+  streams raw CSV/XLSX bytes (H02 §7, H12).
+- CSRF required on every POST/PUT/PATCH/DELETE via `X-XSRF-TOKEN` header (H03 §3).
+- `Idempotency-Key` header required on endpoints annotated `@IdempotentOperation` (H02 §6).
+  Concurrent same-key submissions collapse to a single execution on the server; the loser
+  receives the original response (replay) or HTTP 409 `EDAM-1005 IDEMPOTENCY_IN_PROGRESS`
+  while the winner is still running.
+- Pagination: `PageResponse<T>` for most lists (page 0-based, size default 20, capped 200);
+  `RegisterResponse` for RPT-003 (capped 500, default sort `submittedAt,desc`); keyset
+  (`cursor`+`size`, cap 200) for REQ-005 timeline.
+- Use `error.code` (stable `EDAM-nnnn` strings) for conditional logic; never match on the
+  human-readable `error.message`.
+- Public surface per `SecurityConfig.publicMatchers`: `/auth/login|logout|csrf|installation|
+  bootstrap|forgot-password|reset-password`, `/public/configuration`, `/error`, `/v3/api-docs*`,
+  `/swagger-ui*`, `/actuator/health*`, `/actuator/info`. Authenticated-only (no permission):
+  `GET /auth/me`, `POST /auth/change-password`.
+- `GET /system/info` carries `@PublicEndpoint` annotation but is NOT in the public matchers
+  list — it is authenticated at runtime (401 for anonymous); documented in H03 §5.
 
 ## 5. Glossary
 
 | Term | Meaning |
 |------|---------|
-| Institution | Tenant; EDAM supports one institution per deployment (single-tenant schema). |
-| Data scope | A `(department, branch)` pair the user is allowed to see; enforced in service layer. |
-| Task | A pending approval step in a workflow instance (BPMN user-task). |
-| Case file | The full aggregate returned for one approval task (request + history + available actions). |
-| OPEX / CAPEX | Expense type enum used throughout request configuration, limits, and reporting. |
-| Bootstrap | One-time initial-administrator creation before any users exist (`X-Installation-Token`). |
-| Principal | Server-side representation of the logged-in user, mirrored to the client via `CurrentUserResponse`. |
+| Institution | Single-tenant EDAM deployment. |
+| Data scope | A `(type, referenceId, referenceName)` pair from `DataScopeView`; type is `DEPARTMENT` or `BRANCH`. |
+| Task | A pending workflow user-task (one approval step). |
+| Case file | `ApprovalCaseFile` aggregate for one task; includes `availableActions[]`. |
+| OPEX / CAPEX | Expense types selected implicitly via `requestTypeId` + category `expense_type`; payload carries exactly one of `opex`/`capex`. |
+| STA (Straight-Through Allowance) | Sub-list of tax-related items inside CAPEX (`staDetails[]`); not a top-level expense type. |
+| Bootstrap | One-time admin creation via `/auth/bootstrap` with `X-Installation-Token`. Does NOT establish a session (D-23). |
+| Principal | Server-side logged-in user, mirrored as `CurrentUserResponse`. |
 
-## 6. Source evidence for this file
+## 6. Source evidence
 
-- Baseline commit & PR state: `git log -1 93a89eb`; PR #22 merged into `main`.
-- Idempotency annotations: `com.edam.common.api.IdempotentOperation` (applied on create/submit/cancel/approve/reject/forward/revert/login).
-- Pagination shape: `com.edam.common.api.PageResponse`.
-- CSRF configuration: `com.edam.config.SecurityConfig` (line 185: `CookieCsrfTokenRepository.withHttpOnlyFalse()`).
-- Public matchers: `SecurityConfig.publicMatchers()` (auth login/logout/csrf/bootstrap/forgot/reset + `/public/configuration`).
+- Controller inventory: `src/main/java/com/edam/**/*Controller.java` (27 controllers; 206 endpoints at `/api/v1`).
+- Security config (public matchers, CSRF, CORS): `src/main/java/com/edam/config/SecurityConfig.java`.
+- Permission catalogue: `src/main/java/com/edam/common/security/Permissions.java`.
+- Pagination & envelope: `src/main/java/com/edam/common/api/{ApiResponse,PageResponse,PageQuery,ErrorCode}.java`.
+- Error mapping: `src/main/java/com/edam/common/exception/GlobalExceptionHandler.java`.
+- Idempotency: `src/main/java/com/edam/common/api/{IdempotencyService,IdempotencyAspect}.java`, `src/main/java/com/edam/integrations/service/IntegrationService.java`.
+- Service-layer visibility: `src/main/java/com/edam/expenserequest/service/ExpenseRequestService.java` `isVisible()`.
+- Seeded roles/permissions (canonical): `src/main/resources/db/migration/V12__access_management.sql` (V3/V4 provisional tables dropped by V13).
+- Idempotency index: `src/main/resources/db/migration/V27__phase4i_idempotency_unique_fix.sql` (partial unique index on `integration_executions`, null-keyed executions never collapse).
+- D-09 fix: `src/main/resources/db/migration/V28__grant_view_own_to_wider_view_roles.sql`.
+- D-09 regression test: `src/test/java/com/edam/rolemanagement/SeededRolePermissionsD09Test.java`.

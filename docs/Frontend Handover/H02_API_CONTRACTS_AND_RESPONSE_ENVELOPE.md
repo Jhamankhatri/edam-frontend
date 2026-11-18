@@ -1,11 +1,12 @@
 # H02 — API Contracts, Response Envelope & OpenAPI Codegen
 
-## 1. Canonical response envelope
+All `/api/v1` responses except RPT-002 export are JSON wrapped in `ApiResponse<T>`. Sources:
+`src/main/java/com/edam/common/api/{ApiResponse,PageResponse,PageQuery,ErrorCode}.java`,
+`src/main/java/com/edam/common/exception/GlobalExceptionHandler.java`.
 
-Every non-HTML response from EDAM is wrapped in `ApiResponse<T>`:
+## 1. Response envelope
 
 ```ts
-// com.edam.common.api.ApiResponse
 interface ApiResponse<T> {
   success: boolean;
   data: T | null;
@@ -13,272 +14,276 @@ interface ApiResponse<T> {
   fieldErrors: FieldErrorDetail[] | null;
   correlationId: string;
   path: string;
-  timestamp: string; // ISO-8601 instant
+  timestamp: string;          // ISO-8601 instant
 }
-
-interface ErrorBody {
-  code: string;     // stable, machine-readable (e.g. "VALIDATION_FAILED", "ACCESS_DENIED")
-  message: string;  // safe for end users — never contains SQL, stack traces, or class names
-}
-
-interface FieldErrorDetail {
-  field: string;    // request-path expression (e.g. "allocations[2].amount")
-  message: string;  // human-readable, localized message from the backend
-}
+interface ErrorBody   { code: string; message: string; }  // code = EDAM-nnnn, message safe for users
+interface FieldErrorDetail { field: string; message: string; }  // rejected values NEVER echoed back
 ```
 
-Conventions enforced by `GlobalExceptionHandler.java`:
+- `@JsonInclude(NON_NULL)` — absent means null, do not require the field.
+- Success: `success:true`, `data:<payload>`, `error:null`, `fieldErrors:null`.
+- Validation failure: HTTP 400, `error.code="EDAM-1001"`, `fieldErrors[]` populated.
+- `correlationId` ties the response to server logs; surface it to the user on 5xx.
 
-- On success: `success: true`, `data: <payload>`, `error: null`, `fieldErrors: null`.
-- On validation failure: HTTP 400, `success: false`, `error.code = "VALIDATION_FAILED"`,
-  `fieldErrors[]` populated, **no rejected value is echoed back** (security policy).
-- On business errors: HTTP mapped by `ErrorCode` (see §3), `success: false`, `error.code` set.
-- `correlationId` is the bridge to server logs; show it to the user on 5xx so support can find the trace.
-- `null` fields are omitted (`@JsonInclude(NON_NULL)`); the TypeScript client must treat missing
-  fields as absent, not `null`.
+## 2. Pagination
 
-## 2. Pagination envelope
+### Standard list endpoints (`PageResponse<T>`)
 
-Every list endpoint returns `PageResponse<T>` inside `ApiResponse.data`:
+Used by nearly every list endpoint (requests list, approvals inbox, notifications,
+documents list, users, roles, etc.).
 
 ```ts
 interface PageResponse<T> {
   items: T[];
   page: number;          // zero-based
-  size: number;          // actual page size used (capped server-side at 100)
+  size: number;          // server-selected page size (capped at 200)
   totalElements: number;
   totalPages: number;
   hasNext: boolean;
   hasPrevious: boolean;
 }
 ```
+Request params: `page` (default 0), `size` (default 20, capped 200), `sort=property,(asc|desc)` (repeatable).
 
-Request parameters for every paginated list endpoint:
+### Expense-request register report (`RegisterResponse`)
 
-| Param | Type | Default | Notes |
-|-------|------|---------|-------|
-| `page` | int | 0 | zero-based; negative values → 400 `INVALID_PAGINATION` |
-| `size` | int | 20 | clamped server-side to `[1, 100]` |
-| `sort` | string | server default | `property,asc` or `property,desc`; repeat for multi-sort |
+Used only by RPT-003 `GET /reporting/expense-requests/register`. Uses Spring `Pageable` with
+default `size=50, sort=submittedAt,desc`; cap **500** rows (separate from the general 200 cap).
 
-Query contracts per list endpoint are not re-documented here — they come from SpringDoc
-(see §5).
+```ts
+interface RegisterResponse {
+  rows: RegisterRow[];
+  total: number;
+  page: number;
+  size: number;
+  totals: RegisterTotals;
+  availableColumns: string[];
+}
+interface RegisterTotals {
+  totalCount: number; totalBaseAmount: number;   // number (BigDecimal)
+  pendingCount: number; pendingBaseAmount: number;
+  approvedCount: number; approvedBaseAmount: number;
+  rejectedCount: number; returnedCount: number; cancelledCount: number;
+}
+```
 
-## 3. Error codes and HTTP status mapping
+### Request timeline (keyset pagination)
 
-The table below is the **frontend error-handling contract**. Every error the frontend will ever
-see from the API uses one of these codes. Source: `com.edam.common.api.ErrorCode.java` and
-`GlobalExceptionHandler.statusFor(...)`.
+REQ-005 uses keyset pagination: `size` (integer, capped 200) and `cursor` (opaque string; omit for
+first page). Returns `TimelinePage { events: TimelineEntry[]; nextCursor: string | null }`.
 
-| HTTP | `error.code` | When | Frontend action |
-|------|--------------|------|-----------------|
-| 400 | `VALIDATION_FAILED` | Bean validation failed | Render per-field errors from `fieldErrors[]` (see H06) |
-| 400 | `INVALID_REQUEST` | Malformed JSON, missing param, type mismatch | Show generic "Please check your request" toast |
-| 400 | `INVALID_PAGINATION` | page/size/sort out of range | Reset list paging state |
-| 400 | `INVALID_DOCUMENT` | Upload rejected (size/type/virus) | Show document-specific error inline |
-| 400 | `INVALID_CONFIGURATION` | Admin config change rejected | Show form error |
-| 401 | `UNAUTHENTICATED` | Session missing/expired | Redirect to `/login` preserving `?returnTo=` |
-| 401 | `INVALID_CREDENTIALS` | Login bad credentials | Show "Invalid username or password" on login form |
-| 401 | `INVALID_RESET_TOKEN` | Reset-password token expired/wrong | Show "This link has expired" |
-| 403 | `ACCESS_DENIED`, `PERMISSION_DENIED`, `INSTITUTION_REQUIRED`, `INSTITUTION_ACCESS_DENIED` | Authenticated but not allowed | Render `<AccessDenied/>` screen; hide nav entry |
-| 409 | `CONCURRENT_MODIFICATION` | Optimistic lock conflict (If-Match / @Version mismatch) | Reload record and ask user to re-apply edits |
-| 409 | `IDEMPOTENCY_CONFLICT`, `IDEMPOTENCY_IN_PROGRESS`, `IDEMPOTENCY_UNKNOWN_OUTCOME` | Duplicate/replayed mutating request | Show "Request already in progress / completed"; reload list |
-| 409 | `DUPLICATE_RESOURCE` | Unique constraint (e.g. duplicate username/email/code) | Show field-level error on the offending input |
-| 409 | `PERSISTENCE_ERROR` | DB constraint / general DB failure | Generic error toast; log with correlationId |
-| 423 | `ACCOUNT_LOCKED` | Too many failed logins | Show lockout screen with retry timing if provided |
-| 422 | `WEAK_PASSWORD` | Password does not meet policy | Show password-policy hints |
-| 422 | `INSTALLATION_ALREADY_COMPLETED` | Bootstrap attempted twice | Redirect to `/login` |
-| 422 | `INSTALLATION_NOT_BOOTSTRAPPED` | Login attempted before bootstrap | Redirect to `/bootstrap` |
-| 422 | `SYSTEM_ROLE_PROTECTED` | Attempt to edit/delete a built-in role | Show "This role is managed by the system" |
-| 404 | `NOT_FOUND` | No handler / record not found | Render `<NotFound/>`; for records outside scope the server returns 404 (not 403) to avoid existence leaks |
-| 405 | (no body — framework) | Wrong HTTP method | Should not happen if client uses generated types |
-| 500 | `INTERNAL_ERROR` | Unhandled server error | Show "Something went wrong" + correlationId; report to monitoring |
-| 503 | `PERSISTENCE_ERROR` | DB connectivity loss | Show "Service temporarily unavailable"; retry with backoff |
+## 3. HTTP status → `error.code` mapping
 
-Network-layer errors (no response, CORS, DNS failure, timeout) are not in the envelope — the
-frontend's fetch/query wrapper must translate them to a normalized shape before reaching UI code.
+Source: `ErrorCode.java` + `GlobalExceptionHandler.statusFor(...)`.
 
-## 4. Key DTO shapes used by every screen
+| HTTP | Code | Meaning |
+|------|------|---------|
+| 400 | `EDAM-1001` VALIDATION_FAILED | Bean validation failed (fieldErrors[]) |
+| 400 | `EDAM-1002` INVALID_REQUEST | Malformed JSON / missing param / type mismatch |
+| 400 | `EDAM-1003` INVALID_PAGINATION | page/size out of range (size > MAX_SIZE) |
+| 400 | `EDAM-5004` INVALID_DOCUMENT | Upload rejected (type/size/scan) |
+| 400 | `EDAM-5005` INVALID_CONFIGURATION | Admin config rejected |
+| 401 | `EDAM-2001` UNAUTHENTICATED | Session missing/expired |
+| 401 | `EDAM-2006` INVALID_CREDENTIALS | Bad credentials (identical for unknown user/wrong password/inactive) |
+| 401 | `EDAM-2009` INVALID_RESET_TOKEN | Reset token invalid/expired |
+| 403 | `EDAM-2002` ACCESS_DENIED | Spring Security access denied |
+| 403 | `EDAM-2005` PERMISSION_DENIED | `@EdamPermission` failure |
+| 403 | `EDAM-2003` INSTITUTION_REQUIRED, `EDAM-2004` INSTITUTION_ACCESS_DENIED | Multi-institution checks (reserved) |
+| 409 | `EDAM-1004 IDEMPOTENCY_CONFLICT` | Same idempotency key reused with a different request body |
+| 409 | `EDAM-1005 IDEMPOTENCY_IN_PROGRESS` | An identical request is currently being processed — retry after a short delay (normal outcome for the loser of a concurrent same-key race; do NOT treat as an error) |
+| 409 | `EDAM-1006 IDEMPOTENCY_UNKNOWN_OUTCOME` | The in-progress claim aged past the stale-grace window without a recorded outcome (out-of-band reconciliation required) |
+| 409 | `EDAM-3002` CONCURRENT_MODIFICATION | Optimistic-lock conflict (on `@Version`) |
+| 409 | `EDAM-3003` PRECONDITION_FAILED | If-Match / version mismatch |
+| 409 | `EDAM-3004` INVALID_STATE_TRANSITION | Action not permitted in the current state |
+| 409 | `EDAM-3001` BUSINESS_RULE_VIOLATION | Generic business-rule rejection |
+| 409 | `EDAM-5002` DUPLICATE_RESOURCE | Unique constraint violation |
+| 409 | `EDAM-5001` PERSISTENCE_ERROR | DB constraint/connectivity |
+| 422 | `EDAM-2008` WEAK_PASSWORD | Password fails policy |
+| 422 | `EDAM-2010` INSTALLATION_ALREADY_COMPLETED, `EDAM-2011` INSTALLATION_NOT_BOOTSTRAPPED | Bootstrap state errors |
+| 422 | `EDAM-3005` SYSTEM_ROLE_PROTECTED | Edit to protected system role rejected |
+| 423 | `EDAM-2007` ACCOUNT_LOCKED | Too many failed logins |
+| 404 | `EDAM-4001` NOT_FOUND | Record not found OR record outside caller's data scope (deliberately indistinguishable) |
+| 500 | `EDAM-9001` INTERNAL_ERROR | Unexpected (safe message only) |
+| 503 | `EDAM-5003` EXTERNAL_SERVICE_FAILURE | External provider failure (storage/mail/etc.) |
 
-Rather than hand-transcribe all 189 DTOs (which would drift the moment the backend changes),
-this section documents the **core cross-cutting DTOs** every screen uses. All other DTOs MUST
-be generated by OpenAPI codegen (§5).
+Network errors (no response, CORS, DNS) are not in the envelope; the fetch wrapper normalizes
+them into the same `ApiError` shape.
 
-### 4.1 Current user (AUTH-008 `GET /api/v1/auth/me` → `CurrentUserResponse`)
+## 4. Key DTO shapes
 
+Only cross-cutting DTOs are documented here. Generate all other types via OpenAPI (§8).
+
+### 4.1 `CurrentUserResponse` (AUTH-008 `GET /auth/me`)
 ```ts
 interface CurrentUserResponse {
-  userId: string;              // UUID
-  username: string;
-  employeeCode: string;
-  displayName: string;
-  email: string;
+  userId: string; username: string; employeeCode: string; displayName: string; email: string;
   designation: string | null;
-  departmentId: string | null; // UUID
-  departmentName: string | null;
-  branchId: string | null;     // UUID
-  branchName: string | null;
-  roles: string[];             // role codes
-  permissions: string[];       // kebab-case permission codes — used for UI gates (H04)
-  dataScopes: DataScopeView[]; // department/branch pairs visible to the user
-  installationScope: boolean;  // true → user has installation-wide (admin) scope
-  mustChangePassword: boolean; // true → force redirect to /change-password
-  lastLoginAt: string | null;  // ISO-8601
+  departmentId: string | null; departmentName: string | null;
+  branchId: string | null; branchName: string | null;
+  roles: string[]; permissions: string[];
+  dataScopes: DataScopeView[];   // { type: "DEPARTMENT"|"BRANCH"; referenceId; referenceName }
+  installationScope: boolean;
+  mustChangePassword: boolean;
+  lastLoginAt: string | null;
   passwordPolicy: PasswordPolicyView;
 }
-interface DataScopeView { departmentId: string; departmentName: string; branchId: string; branchName: string; }
-interface PasswordPolicyView { minLength: number; requireUppercase: boolean; requireDigit: boolean; requireSpecial: boolean; }
+interface PasswordPolicyView { minimumLength: number; maximumLength: number;
+  requireUppercase: boolean; requireLowercase: boolean; requireDigit: boolean; requireSpecial: boolean; }
 ```
 
-### 4.2 Login (AUTH-006 `POST /api/v1/auth/login`)
+### 4.2 Login / logout / bootstrap
+- `POST /auth/login` (AUTH-006): body `{ username, password }` → `ApiResponse<CurrentUserResponse>`;
+  sets `JSESSIONID` + rotated `XSRF-TOKEN` cookies.
+- `POST /auth/logout` (AUTH-007): no body → `ApiResponse<Void>`; invalidates session.
+- `POST /auth/bootstrap` (AUTH-001): header `X-Installation-Token: <token>`, body
+  `{ username, firstName, lastName, email, employeeCode?, password }` →
+  **HTTP 201** `ApiResponse<BootstrapResponse>` where `BootstrapResponse { userId, username, displayName, roles: string[], bootstrappedAt }`.
+  **Does not establish a session** — the admin must then explicitly log in (D-23).
 
-Request (`LoginRequest`):
+### 4.3 CSRF (AUTH-003)
+`GET /auth/csrf` returns `CsrfTokenResponse { headerName, parameterName, token }` AND explicitly
+saves the cookie via `csrfTokenRepository.saveToken(...)` so clients that call this endpoint
+before their first write are guaranteed to receive the `Set-Cookie: XSRF-TOKEN` header.
+`headerName` is always `X-XSRF-TOKEN` with the configured repository.
+
+### 4.4 Forgot/reset/change password
+- `POST /auth/forgot-password` → `ApiResponse<NeutralResponse> { message }` (constant message,
+  never reveals whether the email exists).
+- `POST /auth/reset-password` → `{ token, newPassword }` → `ApiResponse<Void>`.
+- `POST /auth/change-password` → `{ currentPassword, newPassword }` → `ApiResponse<Void>`.
+
+### 4.5 Public configuration (BRD-005 `GET /public/configuration`)
 ```ts
-{ username: string; password: string; }  // both @NotBlank, max 100/200 chars
+interface PublicConfigurationResponse {
+  applicationName: string; organizationDisplayName: string; organizationName: string;
+  supportEmail: string;
+  logoAssetId: string | null; faviconAssetId: string | null;
+  defaultLocale: string; defaultTimeZone: string; dateFormat: string;
+  defaultCurrencyCode: string;
+  activeThemeName: string; activeThemeType: "LIGHT"|"DARK";
+  themeTokens: Map<string,string>;   // e.g. { "--primary": "#1e5fd6", ... }
+}
 ```
-On success: HTTP 200, returns `CurrentUserResponse` as `data`; session cookie is set on the response (`Set-Cookie: JSESSIONID=...; HttpOnly; SameSite=Lax; Path=/`). The CSRF token cookie is also set/rotated.
+This is the ONLY data the login screen should rely on. It does NOT include feature flags, the
+password policy, or a logo URL (only asset IDs — D-27). Feature flags and password policy are
+available only after authentication (`GET /auth/me` and admin-only feature-flag endpoints).
 
-### 4.3 Bootstrap (AUTH-001 `POST /api/v1/auth/bootstrap`)
+### 4.6 Request DTOs (selected, H02 §4.6 continued in module docs)
 
-Requires the one-time installation token in header **`X-Installation-Token: <token>`** (not `X-EDAM-Bootstrap-Token`). Request body:
-```ts
-{ username: string; firstName: string; lastName: string; email: string; employeeCode?: string; password: string; }
-```
-On success, returns `BootstrapResponse` with the created admin user.
+`RequestSummary` (register rows):
+`{ id, requestNumber, status, classification, departmentId, currencyId, requestedAmount:number, createdAt, submittedAt }`.
 
-### 4.4 Password flows
+`RequestResponse` (detail) — see `ExpenseRequestDtos.java`; includes:
+`opex?: OpexDetailResponse`, `capex?: CapexDetailResponse`,
+`allocations[], items[], quotations[], invoices[], previousSummaries[], staDetails[], budgetSummaries[]`,
+plus action flags `canEdit, canSubmit, canCancel, terminal` computed server-side. Clients
+must rely on these flags (not status-name heuristics).
 
-- `POST /api/v1/auth/forgot-password` → `{ email: string }` (AUTH-004) — always returns success to
-  avoid account enumeration.
-- `POST /api/v1/auth/reset-password` → `{ token: string; newPassword: string }` (AUTH-009).
-- `POST /api/v1/auth/change-password` → `{ currentPassword: string; newPassword: string }` (AUTH-002, authenticated).
+`CreateRequest`: `{ requestTypeId, expenseCategoryId, expenseSubcategoryId?, expenseNatureId,
+departmentId, branchId?, currencyId, requestedAmount:number|string, justification?, opex?,
+capex?, allocations?, items?, quotations?, invoices?, previousSummaries?, staDetails?,
+budgetSummaries?, documents?: DocumentReferencePayload[] }` where `DocumentReferencePayload {
+mediaAssetId: UUID; documentType: string; mandatory: boolean }`. Exactly one of `opex`/`capex`
+must be supplied.
 
-### 4.5 CSRF token (AUTH-003 `GET /api/v1/auth/csrf`)
+`UpdateRequest`: same fields minus `departmentId` (department is immutable after create).
 
-Returns:
-```ts
-interface CsrfTokenResponse { token: string; headerName: string; parameterName: string; }
-// headerName is always "X-XSRF-TOKEN" when CookieCsrfTokenRepository is used
-```
-The response also sets (or rotates) the cookie `XSRF-TOKEN`. The client echoes it back as the
-`X-XSRF-TOKEN` header on every non-GET request (see H03).
+`CancelRequest`: `{ reason: string }` (body is required; not path-only).
 
-### 4.6 Expense request summary (returned by list endpoints)
+### 4.7 Approval DTOs
+- `ApproveRequest`  `{ remarks: string }` — **remarks required** (`@NotBlank`, max 2000).
+- `RejectRequest`   `{ remarks: string }` — required.
+- `RevertRequest`   `{ remarks: string }` — required.
+- `ForwardRequest`  `{ recipientUserId: UUID; remarks: string }` — both required.
+- `ActionResponse { taskId, taskStatus, workflowStateCode, workflowStateType, workflowCompleted, requestId, requestStatus, newTaskIds: UUID[] }`.
+- `ApprovalCaseFile` carries `availableActions: ActionAvailability[]` where `{ action, available, reason }` — render buttons only for available actions.
 
-`RequestSummary` (`com.edam.expenserequest.dto.ExpenseRequestDtos.java`):
+### 4.8 Document DTOs
+- `DocumentResponse { id, originalFilename, category, mimeType, sizeBytes:number, description, lifecycleStatus, scanStatus:"PENDING"|"CLEAN"|"INFECTED", uploadedBy, uploadedByName, uploadedAt, expenseRequestId }`.
+- `UploadDocumentRequest` is built server-side from multipart fields `file, expenseRequestId, category, description?`. The `category` is one of the `DocumentCategory` enum codes (`QUOTATION`, `INVOICE`, `SUPPORTING_DOCUMENT`, `APPROVAL_DOCUMENT`, `TAX_DOCUMENT`, `GRN_DOCUMENT`, `CAPEX_DOCUMENT`, `OTHER`) — `@Pattern("^[A-Z_]+$")`.
+- Download URL response: `{ url: string; expiresInSeconds: 300 }`.
+- `ScanEventResponse { id, status, scanner, scannerVersion, threatName, startedAt, finishedAt, detail }`.
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `id` | UUID | |
-| `requestNumber` | string | Human-readable business key (e.g. `REQ-2026-00123`) |
-| `title` | string | |
-| `expenseType` | `"OPEX" \| "CAPEX"` | |
-| `status` | enum string | Draft / Submitted / Returned / Approved / Rejected / Cancelled / … |
-| `totalAmount` | string (decimal) | Render with currency from `currencyId` |
-| `currencyId` | UUID | |
-| `requesterId` | UUID | |
-| `requesterName` | string | |
-| `departmentId` | UUID | |
-| `departmentName` | string | |
-| `submittedAt` | ISO instant \| null | null for drafts |
-| `lastUpdatedAt` | ISO instant | |
+### 4.9 Reporting DTOs
+- Dashboard filter: 13 explicit query params (`departmentId, branchId, categoryId, subcategoryId,
+  requesterId, expenseType, currency, status, from, to, search, lookbackDays`) on RPT-001.
+- Register filter (RPT-003) mirrors the dashboard filter plus `Pageable`; default sort
+  `submittedAt,desc`.
+- Export request: `ExportRequest { reportKey, filter: ReportFilter, format: "CSV"|"EXCEL" }`.
+  RPT-002 returns raw bytes (see §7).
 
-### 4.7 Expense request detail (returned by `GET /expense-requests/{id}`)
+## 5. Monetary numbers on the wire
 
-`RequestResponse` aggregates: `RequestSummary` fields + `items: ItemResponse[]`,
-`allocations: AllocationResponse[]`, `quotations: QuotationResponse[]`,
-`invoices: InvoiceResponse[]`, `opexDetail` / `capexDetail` / `staPayload` conditional on
-expense type, `budgetSummary`, `previousSummary` (for returned requests), `documents: DocumentReferencePayload[]`.
+Jackson's default BigDecimal serializer writes JSON **numbers** (e.g. `{"requestedAmount": 1234.56}`).
+The `@Digits(integer=15, fraction=4)` constraint caps precision. Clients MUST:
+- Parse with a decimal-aware library (`decimal.js-light`) to avoid binary floating-point error.
+- Send monetary values as either `number` (safe up to `Number.MAX_SAFE_INTEGER` for 4dp) or as a
+  JSON number produced by the decimal library; either is accepted because Jackson coerces to
+  BigDecimal. For amounts larger than 2^53 − 1 (≈ 90 trillion, which is implausible for EDAM),
+  a string is not an option; configure Jackson if needed in a future iteration.
 
-The frontend MUST render OPEX vs CAPEX vs STA (Straight Through Allowance) subforms conditionally.
+## 6. Idempotency endpoints & concurrency contract
 
-### 4.8 Approval case file (APL-003 `GET /approvals/tasks/{taskId}`)
+Endpoints annotated `@IdempotentOperation` (source `com.edam.common.api.IdempotencyOperation`,
+enforced by `IdempotencyAspect` + `IdempotencyService`):
 
-`ApprovalCaseFile` aggregates: `task: ApprovalTaskSummary`, `request: RequestResponse`,
-`stepProgress: StepProgress`, `taskProgress: TaskProgress`, `availableActions: ActionResponse[]`,
-`workflowEvents: WorkflowEventView[]`, `timeline: TimelineEntry[]`.
+- REQ-002 POST create, REQ-004 PUT update, REQ-006 POST cancel, REQ-007 POST submit,
+- APL-004 POST approve, APL-005 POST forward, APL-006 POST reject, APL-008 POST revert,
+- Integration execution submission (`IntegrationService.submitExecution`) for keyed calls (note: this is an internal service path; the HTTP-exposed idempotency set is exactly the 8 endpoints listed above).
 
-`ActionResponse` tells the frontend which buttons to render for the current approver
-(`approve`, `reject`, `forward`, `revert` are not always all available — e.g. revert is only
-offered to the task assignee on a task they previously approved in error).
+Client rules:
 
-### 4.9 Approval action requests
+- Send `Idempotency-Key: <uuidv4>` on every request to these endpoints. Reuse the SAME key
+  across retries of the same user gesture; generate a NEW key for new gestures.
+- Replays (identical key + identical body by the same actor) return the original response
+  body and HTTP status without re-running the business operation.
+- Same key with a different body returns HTTP 409 `EDAM-1004 IDEMPOTENCY_CONFLICT`.
+- Concurrent same-key submissions collapse to exactly one execution. The loser receives
+  either the original response (if the winner committed before the loser retried) or
+  HTTP 409 `EDAM-1005 IDEMPOTENCY_IN_PROGRESS` while the winner is still running. Clients
+  MUST treat 409/EDAM-1005 as a normal "retry later" state (reissue the same key after a
+  short backoff); do NOT surface it as an error toast.
+- HTTP 409 `EDAM-1006 IDEMPOTENCY_UNKNOWN_OUTCOME` means the original claim aged past the
+  stale-grace window without a recorded outcome; the user should reconcile out-of-band
+  (e.g. refresh the list view).
+- Collision handling uses nested `REQUIRES_NEW` transactions; duplicate-key errors from
+  PostgreSQL are caught OUTSIDE the nested transaction (after it rolls back cleanly), so
+  the outer transaction remains usable and returns the winner's record (PR #24 fix,
+  commit `92c7d5a`).
 
-All approval action endpoints (APL-004/005/006/008) accept a body with a `comment` field:
+## 7. Raw binary response (RPT-002 export)
 
-| Endpoint | Body type | Required fields |
-|----------|-----------|-----------------|
-| `POST /approvals/tasks/{taskId}/approve` | `ApproveRequest` | `comment?: string` |
-| `POST /approvals/tasks/{taskId}/reject` | `RejectRequest` | `comment: string` (mandatory reason) |
-| `POST /approvals/tasks/{taskId}/forward` | `ForwardRequest` | `targetUserId: UUID; comment?: string` |
-| `POST /approvals/tasks/{taskId}/revert` | `RevertRequest` | `comment: string` (mandatory reason) |
+RPT-002 is declared `public void export(...)` and writes directly to the HttpServletResponse
+— it is NOT wrapped in `ApiResponse`. Content handling:
 
-### 4.10 Export (RPT-002 `POST /reporting/expense-requests/export`)
-
-`ExportRequest`: `{ reportKey: string; filter: ReportFilter; format: "CSV" | "EXCEL" }`.
-Response: the raw file stream (not wrapped in ApiResponse) with:
-- CSV → `Content-Type: text/csv; charset=utf-8`
+- CSV → `Content-Type: text/csv; charset=UTF-8`, with UTF-8 BOM and formula-injection prefix
+  (`=+-@` stripped/prepended per RFC 4180).
 - XLSX → `Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
-- `Content-Disposition: attachment; filename="..."; filename*=UTF-8''...`
+  (SXSSF streaming).
+- `Content-Disposition: attachment; filename="expense-request-register.<csv|xlsx>"`.
+- Caller must use `response.blob()` / `response.arrayBuffer()`, not `.json()`.
+- Row cap: server enforces `EXPORT_ROW_LIMIT`; returns 400 `EDAM-1001` with a message naming
+  the matched count when exceeded.
 
-`ReportFilter` mirrors the on-screen filter panel: date range `from`/`to`, status[], expenseType[],
-departmentIds[], branchIds[], requesterIds[], currencyIds[], categoryIds[], minAmount/maxAmount.
-
-### 4.11 Public configuration (BRD public `GET /public/configuration`)
-
-`PublicConfigurationResponse` carries theme tokens, institution display name, logo URL, currency
-defaults, enabled feature flags, and password policy hints. It is the only `/api/v1` endpoint
-that returns UI-critical data without a session (so the login screen can be branded correctly).
-
-## 5. TypeScript type generation (REQUIRED — do NOT hand-write types)
-
-EDAM ships a complete SpringDoc OpenAPI 3.1 document at `/v3/api-docs`. The frontend must
-generate TypeScript types directly from it:
+## 8. TypeScript codegen (REQUIRED)
 
 ```bash
-# With the backend running on http://localhost:8080:
-npx openapi-typescript http://localhost:8080/v3/api-docs \
-  -o src/api/generated/schema.d.ts \
-  --alphabetize \
-  --export-type
-
-# Optional: also generate typed fetch clients (recommended for Phase 1):
-npx openapi-typescript-codegen --input http://localhost:8080/v3/api-docs \
-  --output src/api/generated \
-  --useOptions --useUnionTypes --client fetch
+npx openapi-typescript http://localhost:8080/v3/api-docs -o src/api/generated/schema.d.ts
 ```
+Do not hand-write DTOs. Regenerate on every backend pull; CI fails on diff. The generated
+schema module becomes the only imported type source for API payloads; cross-module DTO shapes
+in this H-file are a reference for humans, not the generated source.
 
-**Do not hand-transcribe DTOs.** This package intentionally shows only the 10 cross-cutting
-shapes above. Every per-screen DTO is sourced from SpringDoc to guarantee drift-free contracts.
+## 9. HTTP client wrapper requirements
 
-Regenerate types after every backend pull. CI must diff `schema.d.ts` against the backend
-OpenAPI doc and fail the build if they diverge.
-
-## 6. HTTP client contract for the frontend
-
-A single `apiFetch<T>(method, path, opts)` wrapper must:
-
-1. Prepend `VITE_API_BASE_URL` to paths that start with `/`.
-2. Attach `X-XSRF-TOKEN` header from the `XSRF-TOKEN` cookie for non-GET requests.
-3. Attach `Idempotency-Key: <uuidv4()>` on idempotency-annotated endpoints (list in H01 §4).
-4. Attach `Accept: application/json` and (for writes) `Content-Type: application/json`.
-5. Read response as JSON when `Content-Type` is `application/json`; for export endpoints, return
-   the `Response` object so the caller can trigger a download.
-6. Normalize errors: network failure, non-JSON 5xx, and envelope `success:false` all produce a
-   single typed `ApiError` with `{ code, message, correlationId, fieldErrors?, status }`.
-7. On 401 `UNAUTHENTICATED`, publish an `auth:expired` event and redirect to `/login` (except
-   for the login page itself).
-8. Attach `If-Match` header on updates when the loaded record has an `@Version` field (sent as
-   `etag` field in responses), so optimistic-lock conflicts return 409 `CONCURRENT_MODIFICATION`.
-
-## 7. Source evidence
-
-- Envelope shapes: `src/main/java/com/edam/common/api/ApiResponse.java`, `PageResponse.java`.
-- Error handling & status map: `src/main/java/com/edam/common/exception/GlobalExceptionHandler.java`,
-  `src/main/java/com/edam/common/api/ErrorCode.java`.
-- Auth DTOs: `src/main/java/com/edam/identity/dto/AuthDtos.java`.
-- Expense request DTOs: `src/main/java/com/edam/expenserequest/dto/ExpenseRequestDtos.java`.
-- Approval DTOs: `src/main/java/com/edam/workflow/dto/ApprovalDtos.java` (note package is
-  `workflow`, not `approval`).
-- Reporting DTOs & ExportFormat enum: `src/main/java/com/edam/reporting/dto/ReportingDtos.java`
-  (line 107: `public enum ExportFormat { CSV, EXCEL }`).
+Single `apiFetch<T>` wrapper must:
+1. Prepend `VITE_API_BASE_URL`.
+2. Attach `X-XSRF-TOKEN` from the `XSRF-TOKEN` cookie for non-GET requests.
+3. Attach `Idempotency-Key` on the endpoints listed in §6.
+4. Attach `Accept: application/json`; `Content-Type: application/json` for writes; no header
+   overrides for `multipart/form-data` (let the browser set `Content-Type` with boundary).
+5. Read responses by content-type: JSON → `ApiResponse<T>`; blob (octet-stream/csv/xlsx) →
+   return the raw `Response` for download handling.
+6. Normalize network / non-JSON 5xx / envelope `success:false` into `ApiError { code, message, correlationId, fieldErrors?, status }`.
+7. On 401 `EDAM-2001`, publish `auth:expired` and redirect to `/login?returnTo=`.
+8. Export endpoints must set `responseType: 'blob'` (axios) / equivalent so the body is not parsed as JSON.

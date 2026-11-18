@@ -1,272 +1,85 @@
 # H04 — Permissions, Navigation & Access Control
 
-## 1. Permission model
-
-EDAM uses **code-string permissions** (`<domain>:<action>`, e.g. `request:submit`,
-`approval:act`) plus **data scopes** (department/branch pairs that narrow where the permission
-applies). The backend enforces two layers:
-
-1. **Controller gate** (`@EdamPermission("…")`) — checks the user's session carries the code.
-2. **Service-layer scope check** (`DataScopeGuard`) — further filters or rejects based on
-   department/branch data scopes attached to the user.
-
-Important nuance: the controller annotation for `GET /expense-requests` and
-`GET /expense-requests/{id}` is `request:view-own`, but the service widens results for users
-holding `request:view-scope` or `request:view-all`. Holders of any of the three codes can reach
-the register; the service decides which rows they see. The frontend's "All Requests" nav entry
-should show for **any** of the three codes.
-
-Source: `com.edam.expenserequest.controller.ExpenseRequestController` (class Javadoc lines 51–55),
-`com.edam.common.security.RequirePermissionAspect`.
-
-## 2. Permission catalogue
-
-**Total:** 60 permission codes.
-
-
-### `approval:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `approval:act` | `APPROVAL_ACT` | Approve / reject / forward / revert an assigned approval task |
-| `approval:view` | `APPROVAL_VIEW` | View approval inbox and case files assigned to (or visible to) user |
-
-### `approval-limit:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `approval-limit:manage` | `APPROVAL_LIMIT_MANAGE` | Manage approval limits, exceeding-limit rules, recommending authorities |
-| `approval-limit:view` | `APPROVAL_LIMIT_VIEW` | View approval limits, exceeding-limit rules, recommending authorities |
-
-### `audit:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `audit:export` | `AUDIT_EXPORT` | Export audit log |
-| `audit:view` | `AUDIT_VIEW` | View audit log |
-
-### `committee:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `committee:manage` | `COMMITTEE_MANAGE` | Create, edit committees, levels, members |
-| `committee:view` | `COMMITTEE_VIEW` | View committees and their levels/members |
-
-### `configuration:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `configuration:manage` | `CONFIGURATION_MANAGE` | Edit branding, themes, settings, feature flags |
-| `configuration:view` | `CONFIGURATION_VIEW` | View branding, themes, settings, feature flags |
-
-### `currency:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `currency:manage` | `CURRENCY_MANAGE` | Activate/deactivate currencies, set exchange rates |
-| `currency:view` | `CURRENCY_VIEW` | View currencies and exchange rates |
-
-### `dashboard:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `dashboard:manage` | `DASHBOARD_MANAGE` | Configure dashboard widgets |
-
-### `data-scope:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `data-scope:manage` | `DATA_SCOPE_MANAGE` | Assign data scopes (department/branch) to users |
-
-### `delegation:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `delegation:manage` | `DELEGATION_MANAGE` | Create, edit delegation rules |
-| `delegation:view` | `DELEGATION_VIEW` | View delegation matrix |
-
-### `document:*` — 3 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `document:delete` | `DOCUMENT_DELETE` | Delete unattached or permitted documents |
-| `document:download` | `DOCUMENT_DOWNLOAD` | Download/view documents |
-| `document:upload` | `DOCUMENT_UPLOAD` | Upload documents and attach to requests |
-
-### `email-configuration:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `email-configuration:manage` | `EMAIL_CONFIGURATION_MANAGE` | Manage SMTP configuration and email settings |
-
-### `exceeding-limit:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `exceeding-limit:manage` | `EXCEEDING_LIMIT_MANAGE` | Manage exceeding-limit rules (subset of approval-limit:manage) |
-| `exceeding-limit:view` | `EXCEEDING_LIMIT_VIEW` | View exceeding-limit rules (subset of approval-limit:view) |
-
-### `expense-configuration:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `expense-configuration:manage` | `EXPENSE_CONFIGURATION_MANAGE` | Edit categories, subcategories, lookups, OPEX/CAPEX config |
-| `expense-configuration:view` | `EXPENSE_CONFIGURATION_VIEW` | View categories, subcategories, lookups, OPEX/CAPEX config |
-
-### `integration:*` — 4 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `integration:execute` | `INTEGRATION_EXECUTE` | Execute/trigger an integration run |
-| `integration:manage` | `INTEGRATION_MANAGE` | Create/edit integrations |
-| `integration:test` | `INTEGRATION_TEST` | Test an integration connection |
-| `integration:view` | `INTEGRATION_VIEW` | View configured integrations |
-
-### `notification:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `notification:view` | `NOTIFICATION_VIEW` | View in-app notification inbox |
-
-### `notification-template:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `notification-template:manage` | `NOTIFICATION_TEMPLATE_MANAGE` | Manage notification templates (email/in-app) |
-
-### `organization:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `organization:manage` | `ORGANIZATION_MANAGE` | Create, edit, retire departments/branches |
-| `organization:view` | `ORGANIZATION_VIEW` | View departments, branches, and org structure |
-
-### `recommending-authority:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `recommending-authority:manage` | `RECOMMENDING_AUTHORITY_MANAGE` | Manage recommending authorities (subset of approval-limit:manage) |
-| `recommending-authority:view` | `RECOMMENDING_AUTHORITY_VIEW` | View recommending authorities (subset of approval-limit:view) |
-
-### `report:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `report:export` | `REPORT_EXPORT` | Export register reports (CSV / XLSX) |
-| `report:view` | `REPORT_VIEW` | View reports, dashboard, widgets |
-
-### `request:*` — 9 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `request:cancel` | `REQUEST_CANCEL` | Cancel/withdraw a request before decision |
-| `request:create` | `REQUEST_CREATE` | Create new expense requests (draft) |
-| `request:edit` | `REQUEST_EDIT` | Edit editable (draft/returned) requests |
-| `request:export` | `REQUEST_EXPORT` | Export requests register (note: superseded by report:export for generic exports) |
-| `request:reverse` | `REQUEST_REVERSE` | Reverse a settled/paid request |
-| `request:submit` | `REQUEST_SUBMIT` | Submit a draft request for approval |
-| `request:view-all` | `REQUEST_VIEW_ALL` | View all requests across the institution (passes controller gate; service unfiltered) |
-| `request:view-own` | `REQUEST_VIEW_OWN` | View own requests (base gate — service widens for view-scope/view-all holders) |
-| `request:view-scope` | `REQUEST_VIEW_SCOPE` | View requests within own data scopes (passes controller gate; service filters) |
-
-### `role:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `role:manage` | `ROLE_MANAGE` | Create, edit, delete non-system roles |
-| `role:view` | `ROLE_VIEW` | View roles and their permissions |
-
-### `rule:*` — 3 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `rule:manage` | `RULE_MANAGE` | Create/edit business rules and rule sets |
-| `rule:publish` | `RULE_PUBLISH` | Publish business rules |
-| `rule:view` | `RULE_VIEW` | View business rules and rule sets |
-
-### `system:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `system:administer` | `SYSTEM_ADMINISTER` | Installation-wide administration (bootstrap, system info) |
-
-### `tax-authority:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `tax-authority:manage` | `TAX_AUTHORITY_MANAGE` | Create, edit, retire tax authorities |
-
-### `user:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `user:manage` | `USER_MANAGE` | Create, edit, deactivate users |
-| `user:view` | `USER_VIEW` | View user directory |
-
-### `user-role:*` — 1 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `user-role:assign` | `USER_ROLE_ASSIGN` | Assign roles to users |
-
-### `vendor:*` — 2 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `vendor:manage` | `VENDOR_MANAGE` | Create, edit, retire vendors |
-| `vendor:view` | `VENDOR_VIEW` | View vendor directory |
-
-### `workflow:*` — 3 permissions
-
-| Code | Java constant | Description |
-|------|---------------|-------------|
-| `workflow:manage` | `WORKFLOW_MANAGE` | Create/edit draft workflow definitions |
-| `workflow:publish` | `WORKFLOW_PUBLISH` | Publish workflow definitions |
-| `workflow:view` | `WORKFLOW_VIEW` | View workflow definitions, versions, states |
-
-## 3. Navigation → permission mapping
-
-Primary navigation entries and the permission gate each uses. An entry is shown if the user
-holds **any** of the listed permissions. Secondary/action buttons are described in H09 (screen
-inventory).
-
-| Nav section | Entry | Route | Show when user holds |
-|-------------|-------|-------|----------------------|
-| Workspace | Dashboard | `/app/dashboard` | always (authenticated) |
-| Workspace | My Requests | `/app/requests/mine` | `request:view-own` |
-| Workspace | All Requests | `/app/requests/all` | `request:view-own` or `request:view-scope` or `request:view-all` |
-| Workspace | New Request | `/app/requests/new` | `request:create` |
-| Workspace | Approval Inbox (with badge) | `/app/approvals` | `approval:view` |
-| Workspace | Notifications (with badge) | `/app/notifications` | `notification:view` |
-| Documents | Documents | `/app/documents` | `document:view` |
-| Reports | Dashboard & Widgets | `/app/reports/dashboard` | `report:view` |
-| Reports | Exports | `/app/reports/exports` | `report:export` |
-| Admin | Users | `/app/admin/users` | `user:view` |
-| Admin | Roles & Permissions | `/app/admin/roles` | `role:view` |
-| Admin | Organization | `/app/admin/organization` | `organization:view` |
-| Admin | Master Data (Currencies/Vendors/Tax/Exchange Rates) | `/app/admin/master-data` | `currency:view` or `vendor:view` or `tax-authority:manage` |
-| Admin | Expense Configuration | `/app/admin/expense-config` | `expense-configuration:view` |
-| Admin | Approval Limits | `/app/admin/approval-limits` | `approval-limit:view` |
-| Admin | Delegation | `/app/admin/delegation` | `delegation:view` |
-| Admin | Committees | `/app/admin/committees` | `committee:view` |
-| Admin | Workflow Configuration | `/app/admin/workflows` | `workflow:view` |
-| Admin | Business Rules | `/app/admin/rules` | `rule:view` |
-| Admin | Communication (SMTP / Templates / Events) | `/app/admin/communication` | `email-configuration:manage` or `notification-template:manage` |
-| Admin | Branding & Settings | `/app/admin/settings` | `configuration:view` |
-| Admin | Audit Log | `/app/admin/audit` | `audit:view` |
-| Admin | Integrations | `/app/admin/integrations` | `integration:view` |
+Two-layer enforcement: controller `@EdamPermission` (exact code match, handled by
+`RequirePermissionAspect`) plus service-level data-scope filters. The aspect does NOT infer a
+hierarchy — `request:view-scope` does NOT imply `request:view-own`. Roles that need to see
+wider sets MUST also carry `request:view-own`; this was wrong in initial seed data and is
+fixed by Flyway **V28** (D-09).
+
+## 1. Permission model for expense-request viewing
+
+| Code | Meaning | Typical role |
+|------|---------|--------------|
+| `request:view-own` | Controller gate. Service layer always lets requesters see their own requests; non-requesters see requests whose department/branch matches their data scopes (if any). | Every requester; also granted to every role that holds `request:view-scope` or `request:view-all` (post-V28). |
+| `request:view-scope` | Catalogue code. Controller gate is still `request:view-own`; if the role also holds `request:view-own`, the service widens results to matching scopes. | Department Head, Recommending Authority, Expense Committee Member |
+| `request:view-all` | Catalogue code. Controller gate is still `request:view-own`; service returns installation-wide results. | CEO, CFO, Head of Admin/GSD, Report Administrator, System Administrator |
+
+`RequirePermissionAspect` does exact-match only (source: `if (!principal.hasPermission(edamPermission.value()))`).
+Before V28, roles seeded with only `view-scope` or `view-all` received 403 at the controller.
+V28 grants `request:view-own` to every role that already holds one of the wider codes; service
+visibility is unchanged, so no privilege is broadened.
+
+## 2. Permission catalogue (60 codes)
+
+See `src/main/java/com/edam/common/security/Permissions.java`. Selected categories relevant
+to Phase 1:
+
+**Request / Approval:** `request:create`, `request:view-own`, `request:view-scope`,
+`request:view-all`, `request:edit`, `request:submit`, `request:cancel`, `request:reverse`,
+`request:export`, `approval:view`, `approval:act`.
+
+**Documents:** `document:upload`, `document:download`, `document:delete` (there is NO
+`document:view`; listing per-request uses `document:download`).
+
+**Notifications:** `notification:view`.
+
+**Reporting:** `report:view`, `report:export`, `dashboard:manage`.
+
+**Master / config lookups (used in Phase 1 forms):** `currency:view`, `vendor:view`,
+`expense-configuration:view`, `organization:view`. Note: tax-authority listing endpoint
+(`GET /master-data/tax-authorities`) requires `currency:view` (not a separate tax code).
+
+## 3. Navigation → permission (Phase 1)
+
+| Nav | Route | Show when user holds |
+|-----|-------|----------------------|
+| Dashboard | `/app/dashboard` | always (authenticated); widgets shown only if `report:view` |
+| My Requests | `/app/requests/mine` | `request:view-own` (every requester + all wider roles post-V28) |
+| All Requests | `/app/requests/all` | any of `request:view-own` / `view-scope` / `view-all` |
+| New Request | `/app/requests/new` | `request:create` |
+| Approval Inbox (with badge) | `/app/approvals` | `approval:view` |
+| Notifications (with badge) | `/app/notifications` | `notification:view` |
+| Documents | (tab inside request detail) | `document:download` (to view) / `document:upload` (to attach) |
+
+There is no standalone `/app/documents` or `/app/reports/exports` admin screen in Phase 1 —
+exports are launched from the All Requests register; documents are managed inside request
+detail.
 
 ## 4. UI gate rules
 
-1. **Hide (don't disable) actions the user can never perform** (they lack the permission code).
-2. **Disable (don't hide) actions the user can perform but not in this state** (e.g. Submit
-   while form invalid, or Approve when the task is not assigned to them) — add a tooltip.
-3. **Row-level action availability is server-driven.** For approval tasks, render buttons only
-   for actions listed in `ApprovalCaseFile.availableActions[]`. Never infer from status alone.
-4. **Empty vs. denied.** When a list returns 0 rows because of scope narrowing, show empty
-   state. When the user navigates to a route they lack the route-level permission for, render
-   `<AccessDenied/>` in the outlet — do not silently redirect.
-5. **Never rely solely on client-side hiding for security.** The backend enforces every gate;
-   the client gating is UX, not access control.
-6. **Permission hook** (`useHasPermission(code)`) reads from the auth store populated by
-   `/auth/me`. Refresh the store only on login/logout and explicit role edits.
+1. Hide (don't disable) actions the user lacks the permission code for.
+2. Disable (don't hide) actions the user can perform but not in this state; tooltip with reason.
+3. Row-level actions (Approve, etc.) render only when `availableActions[].available === true`
+   in the case-file response — never infer from status.
+4. Empty vs. denied: empty list when results are scoped to zero; `<AccessDenied/>` when the
+   route-level permission is missing.
+5. `useHasPermission(code)` reads from the auth store populated by `/auth/me`; refresh only on
+   login/logout.
+
+## 5. D-09 fix details (V28)
+
+`src/main/resources/db/migration/V28__grant_view_own_to_wider_view_roles.sql` does:
+
+1. `INSERT INTO role_permissions ... SELECT` for every role that currently holds
+   `request:view-scope` or `request:view-all`, granting `request:view-own`.
+2. `ON CONFLICT DO NOTHING` so roles that already hold `request:view-own` are unchanged.
+3. A PL/pgSQL assertion fails the migration if any role holds a widened view code without
+   `request:view-own` after the insert.
+
+Roles that receive the new grant (seeded in V12): DEPARTMENT_HEAD, RECOMMENDING_AUTHORITY,
+EXPENSE_COMMITTEE_MEMBER, CEO, CFO, HEAD_OF_ADMIN_GSD, REPORT_ADMINISTRATOR. SYSTEM_ADMINISTRATOR
+already holds `request:view-all` explicitly and REQUESTER/READ_ONLY already hold `request:view-own`.
+
+Service-layer `isVisible()` continues to apply requester/department/branch/installation checks,
+so a manager with `view-scope` still sees only department-scoped requests (no privilege
+escalation).
