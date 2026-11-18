@@ -1,0 +1,14 @@
+backend_commit_sha=620f7a795cc67a16e905115131f561bbd986af85
+workflow_run_sha=a1414ba98e3722062859a59a4dc0424c8ec3fb27
+workflow_run_id=44395699755
+workflow_run_url=https://github.com/Jhamankhatri/edam/actions/runs/44395699755
+source_url=http://localhost:18080/v3/api-docs
+http_status=200
+file_name=openapi-620f7a795cc67a16e905115131f561bbd986af85.json
+size_bytes=229310
+sha256=9533c5a5a9ce3044b2543cabaa7db09952b26c9e8581e08baf9889c33df2843d
+paths=164
+operations=208
+component_schemas=299
+security_schemes=0
+captured_from=live_Spring_Boot_WAR_started_in_war-package-smoke-test_job
