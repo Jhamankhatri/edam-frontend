@@ -244,8 +244,8 @@ Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audi
 - Pull request: **#3** — <https://github.com/Jhamankhatri/edam-frontend/pull/3>
 - PR title: `Phase 1 Step 1: foundation, authentication, and RBAC`
 - PR state: open; not merged or closed
-- Engineering audit code commit SHA: `__AUDIT_COMMIT_SHA__`
-- Remote CI status: `__CI_STATUS__`
+- Engineering audit code commit SHA: `c3d5186f053730e2f78d655115cc71a004d60041`
+- Remote CI status: `PASS — GitHub Actions `Frontend CI` runs 44374694217 (`push`) and 44374695685 (`pull_request`) both concluded `success` on this commit; `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 1m8s.`
 - No push to `main`, no merge, no backend commit/push, and no backend file modification.
 
 This report is updated by a subsequent docs-only commit after the audit code commit is pushed and its CI status is observed; PR #3 head is authoritative for the latest SHA.
@@ -270,9 +270,9 @@ Audit highlights:
 - Strict TypeScript: **0** explicit `any`, **0** `@ts-ignore`/`@ts-expect-error`, and **1** isolated network-boundary `result.data as T` cast. Runtime envelope, event-detail, and form field-path guards replaced unsafe assertions.
 - Architecture/performance: centralized route/navigation permissions, one shell badge observer, shared sign-out hook, shared envelope validator, route-level code splitting, four unused runtime dependencies removed, and dead files/exports removed.
 - Security/RBAC: session cookies only, CSRF before writes, `X-Installation-Token` only for bootstrap, no login `Idempotency-Key`, exactly eight idempotent business routes, backend authority, and no unauthorized content during initialization. All eight idempotent routes, privileged-header/storage restrictions, raw responses, and malformed envelopes now have tests.
-- CI: `.github/workflows/frontend-ci.yml` runs `npm ci`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` on PRs and feature-branch pushes; no expensive jobs. Remote CI status: `__CI_STATUS__`.
+- CI: `.github/workflows/frontend-ci.yml` runs `npm ci`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` on PRs and feature-branch pushes; no expensive jobs. Remote CI status: `PASS — GitHub Actions `Frontend CI` runs 44374694217 (`push`) and 44374695685 (`pull_request`) both concluded `success` on this commit; `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 1m8s.`.
 - Final local results: `npm ci` 649 packages; typecheck/lint exit 0; 8 files / 47 tests; build 1893 modules / 4.63s / `dist` 705K; responsive 27/27 dev and 27/27 preview; proxy HTTP 200 on both; login smoke PASS on both; `git diff --check` exit 0.
-- Audit code commit: `__AUDIT_COMMIT_SHA__`. PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged).
+- Audit code commit: `c3d5186f053730e2f78d655115cc71a004d60041`. PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged).
 - Strict acceptance keeps PR #3 unmerged until the Category 1 live-generated OpenAPI schema requirement is satisfied or separately approved as an exception. No live backend integration, production verification, full axe/screen-reader WCAG audit, or OpenAPI-generated schema is claimed.
 
 Work stops after this audit. No Step 2 or business-module implementation was started.
