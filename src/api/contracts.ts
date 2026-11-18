@@ -1,9 +1,14 @@
 /**
- * Cross-cutting Step-1 contract types transcribed from backend Java records at
- * Jhamankhatri/edam@620f7a795cc67a16e905115131f561bbd986af85.
+ * Cross-cutting Step-1 contract types, kept separate from the generated OpenAPI
+ * definitions in `src/api/generated/schema.d.ts` (backend commit
+ * 620f7a795cc67a16e905115131f561bbd986af85, artifact from Actions run 44395699755).
  *
- * H02 requires generated OpenAPI types from a live /v3/api-docs. That runtime is not available
- * in the frontend workspace; see docs/PHASE1_STEP1_CONTRACT_NOTES.md and `npm run types:generate`.
+ * The genuine OpenAPI 3.1 document emits no `required` or `nullable` metadata for
+ * response DTOs, so openapi-typescript marks every response field optional and
+ * non-nullable. These Step 1 types are transcribed from the exact backend Java
+ * records (which do return null for optional display fields) and are deliberately
+ * stricter than the generated response shapes. Nothing here is invented: see
+ * `docs/PHASE1_STEP1_CONTRACT_NOTES.md` §7 and §14.
  */
 
 export interface ApiEnvelope<T> {

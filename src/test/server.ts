@@ -256,7 +256,10 @@ const handlers = [
     }
     state.bootstrapCalls += 1;
     state.bootstrapped = true;
-    // Deliberately do not set state.currentUser: HTTP 201 does not create a session.
+    // Backend AuthController#bootstrap returns ResponseEntity.status(CREATED) at
+    // commit 620f7a7; the generated OpenAPI document declares only 200 for every
+    // operation, so the source (not the spec) is authoritative for this status.
+    // Deliberately do not set state.currentUser: bootstrap does not create a session.
     return HttpResponse.json(success(bootstrapResponse, path), { status: 201 });
   }),
 

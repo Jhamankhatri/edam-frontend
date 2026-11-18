@@ -14,6 +14,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  openapi-contract:
+    name: Pinned OpenAPI snapshot and generated types
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      # Verifies the SHA-256, byte size and provenance metadata of the checked-in
+      # snapshot. No Spring Boot runtime, PostgreSQL service or credentials are used.
+      - name: Verify pinned OpenAPI snapshot checksum
+        run: npm run types:checksum
+
+      # Regenerates src/api/generated/schema.d.ts from the pinned JSON with the
+      # locked openapi-typescript version and fails on any committed/uncommitted drift.
+      - name: Regenerate TypeScript definitions and fail on drift
+        run: npm run types:check
+
   quality-gates:
     name: Typecheck, lint, test and build
     runs-on: ubuntu-latest

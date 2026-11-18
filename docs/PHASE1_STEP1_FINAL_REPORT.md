@@ -216,19 +216,19 @@ A full automated axe contrast/tree audit, screen-reader pass, keyboard-only trav
 `docs/PHASE1_STEP1_CONTRACT_NOTES.md` records 12 exact discrepancies/decisions:
 
 1. Approved docs name backend PR #24 `38cedbc` while remote `main` is `620f7a…`; PR #25 was docs-only.
-2. H02 HTTP status mappings differ from `GlobalExceptionHandler.statusFor`; the client keys off `error.code`.
+2. H02 §3 HTTP status mappings: **resolved** with backend-source evidence — four stale statuses (`EDAM-3001`/`3004` → 422, `EDAM-5003` → 502, `EDAM-5001` → 409 or 503) and one earlier audit error (`EDAM-5005` → 400 is correct). The client still keys off `error.code`; see §18.
 3. H08 theme-token naming differs from `PublicConfigurationService`; the frontend maps prefixed/camel/kebab/snake aliases.
 4. H17 requires `X-Installation-Token` in CORS but `CorsConfig` omits it; same-origin proxy avoids a frontend workaround.
-5. H10 lookup paths differ from Appendix A/source; Step 1 calls no lookup endpoints.
+5. H10 lookup paths and permissions: **resolved** against the genuine pinned OpenAPI JSON and backend controllers; all five H10-only paths are absent, and nine canonical paths are locked in code and tests. Step 1 still calls no lookup endpoint; see §18.
 6. H04/H09/Appendix A dashboard wording conflicts; the stricter route permission is used.
-7. Required OpenAPI codegen from live `/v3/api-docs` is unavailable; `src/api/generated/schema.d.ts` is not produced.
+7. Required OpenAPI codegen: **resolved** — the genuine artifact from backend Actions run `44395699755` is pinned with a verified SHA-256, `src/api/generated/schema.d.ts` is generated from it, and CI fails on drift; see §18.
 8. `PasswordPolicyView.requireSpecial` publishes no character class; no regex is invented.
 9. H07 names `app/layout.tsx`; TanStack Router 1.160 requires `app/route.tsx`.
 10. H09 places `/change-password` in the app shell; Step 1 uses the restricted public security layout before mandatory password change.
 11. `PublicConfigurationResponse.activeThemeType` is Java `String`; TypeScript uses `string | null`.
 12. `document:view` is docs-only, not one of the 60 backend permission codes.
 
-Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audit, no production deployment, no business modules, no reporting/dashboard data, and no generated OpenAPI schema. The strict H02/H07/H17 conformance residuals with explicit gates are tabulated in `docs/PHASE1_STEP1_ENGINEERING_AUDIT.md` §12.1. `npm run types:generate` remains available for an environment with the documented backend runtime. Section 13 of `docs/PHASE1_STEP1_CONTRACT_NOTES.md` now classifies all 12 discrepancies; under a strict H02 reading, the missing generated OpenAPI schema is a **Category 1 must-resolve-before-PR-#3-merge** item. PR #3 therefore remains open and is not merged.
+Other limitations (unchanged): no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audit, no production deployment, no business modules, and no reporting/dashboard data. The strict H02/H07/H17 conformance residuals with explicit gates are tabulated in `docs/PHASE1_STEP1_ENGINEERING_AUDIT.md` §12.1 and §14. Section 13 of `docs/PHASE1_STEP1_CONTRACT_NOTES.md` classifies all 12 discrepancies; Category 1 (§7) and Category 2 (§2, §5) are now **cleared** with the genuine artifact and backend-source evidence, leaving Category 3/4 gates as recorded. PR #3 remains open and unmerged because the owner asked for review before any merge.
 
 ---
 
@@ -257,7 +257,7 @@ This report is maintained by docs-only commits after the audit code commit is pu
 
 **Phase 1 / Step 1 implementation is complete for review, and the strict engineering audit is complete.** All local quality gates were rerun after corrections: 47 tests, zero-warning lint/TypeScript, production build, 27/27 responsive checks on dev and preview, proxy 200s, and cookie-isolated login smoke on both servers. A lightweight CI workflow was added. The implementation intentionally stops here.
 
-PR #3 remains open and **must not be merged** until the strict Category 1 generated-OpenAPI-schema requirement is satisfied or a separately approved exception is recorded. Before Step 2, owners should also resolve status mapping and lookup paths; later-module and deployment/product decisions are classified in the contract notes. No decision was silently resolved by this audit.
+PR #3 remains open and unmerged. The strict Category 1 generated-OpenAPI-schema requirement and both Category 2 items were subsequently satisfied with the genuine checksum-verified artifact (see §18); no exception or downgrade was used. The owner still asked for review before any merge, so this report does not merge PR #3. Later-module and deployment/product decisions remain classified in the contract notes; no decision was silently resolved.
 
 ---
 
@@ -271,9 +271,107 @@ Audit highlights:
 - Strict TypeScript: **0** explicit `any`, **0** `@ts-ignore`/`@ts-expect-error`, and **1** isolated network-boundary `result.data as T` cast. Runtime envelope, event-detail, and form field-path guards replaced unsafe assertions.
 - Architecture/performance: centralized route/navigation permissions, one shell badge observer, shared sign-out hook, shared envelope validator, route-level code splitting, four unused runtime dependencies removed, and dead files/exports removed.
 - Security/RBAC: session cookies only, CSRF before writes, `X-Installation-Token` only for bootstrap, no login `Idempotency-Key`, exactly eight idempotent business routes, backend authority, and no unauthorized content during initialization. All eight idempotent routes, privileged-header/storage restrictions, raw responses, and malformed envelopes now have tests.
-- CI: `.github/workflows/frontend-ci.yml` runs `npm ci`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` on PRs and feature-branch pushes; no expensive jobs. Remote CI status: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
+- CI: `.github/workflows/frontend-ci.yml` runs `npm ci`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` on PRs and feature-branch pushes; §18 adds a second `openapi-contract` job (checksum + regeneration diff), still with no expensive backend/browser-matrix job. Remote CI status: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
 - Final local results: `npm ci` 649 packages; typecheck/lint exit 0; 8 files / 47 tests; build 1893 modules / 4.63s / `dist` 705K; responsive 27/27 dev and 27/27 preview; proxy HTTP 200 on both; login smoke PASS on both; `git diff --check` exit 0.
 - Audit code commit: `c3d5186f053730e2f78d655115cc71a004d60041`; CI finalization commit: `5f579f95acb3f5940d4bbaed8a32bf63be0b1d82`. PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged).
-- Strict acceptance keeps PR #3 unmerged until the Category 1 live-generated OpenAPI schema requirement is satisfied or separately approved as an exception. No live backend integration, production verification, full axe/screen-reader WCAG audit, or OpenAPI-generated schema is claimed.
+- Strict acceptance kept PR #3 unmerged until the Category 1 generated-OpenAPI-schema requirement was satisfied or separately approved as an exception. §18 records the genuine-artifact resolution that cleared it without an exception; PR #3 is still unmerged pending review. No live backend integration, production verification, or full axe/screen-reader WCAG audit is claimed.
 
 Work stops after this audit. No Step 2 or business-module implementation was started.
+
+---
+
+## 18. Genuine OpenAPI artifact, Category 1/2 resolution, and final verification (2026-11-18)
+
+This section is the final report for the resumed PR #3 task. The 19 approved
+`docs/Frontend Handover/` Markdown documents remain byte-for-byte unchanged.
+
+### 1. Artifact download and checksum evidence
+
+The exact `gh run download 44395699755 --repo Jhamankhatri/edam --name
+openapi-620f7a795cc67a16e905115131f561bbd986af85 --dir ./openapi-spec` failed from the sandbox with
+Azure `EOF`/`SSL_ERROR_SYSCALL` (only GitHub/npm/PyPI hosts are allowlisted). It was executed
+successfully inside a temporary GitHub-hosted workflow in the frontend repository, which verified
+the checksum before committing the two files; that temporary workflow was then deleted.
+
+- `openapi-spec/openapi-620f7a795cc67a16e905115131f561bbd986af85.json` — `229310` bytes
+- SHA-256 `9533c5a5a9ce3044b2543cabaa7db09952b26c9e8581e08baf9889c33df2843d` — `sha256sum -c` **OK**
+- `openapi-spec/openapi-620f7a795cc67a16e905115131f561bbd986af85.meta.txt` — `580` bytes, records
+  backend commit, run id, HTTP 200, size, SHA-256, path/operation/schema counts
+- Artifact id `14472210141`, ZIP `25622` bytes, war-smoke job/check-run `135126464210`
+
+### 2. Backend commit associated with the spec
+
+`620f7a795cc67a16e905115131f561bbd986af85`. The capture ran in backend Actions run `44395699755`
+(`headSha` `a1414ba98e3722062859a59a4dc0424c8ec3fb27`) from a live Spring Boot WAR at
+`http://localhost:18080/v3/api-docs`. Backend PR #26 is merged; backend `main` is
+`2835eb55d6595a56d43cabb5eb83370b5ca2b2b2` and changed only `.github/workflows/ci.yml`, so the API
+contract for this snapshot is unchanged.
+
+### 3. Generated schema file and statistics
+
+`src/api/generated/schema.d.ts` — `11377` lines / `340588` bytes, generated solely by
+`npm run types:generate` (`openapi-typescript@7.13.0`) from the pinned JSON. The source spec has
+OpenAPI 3.1.0, 164 paths, 208 operations, 299 schemas, 0 security schemes, 79 request bodies and
+233 parameters. Every operation declares only HTTP 200; response DTO schemas have no `required` or
+`nullable` metadata, so generated response fields are optional/non-nullable and the stricter
+Step 1 cross-cutting contracts in `src/api/contracts.ts` remain separate. A second generation was
+byte-identical; no definition was hand-written or simplified.
+
+### 4. CI consistency-check implementation
+
+- `scripts/verify-openapi-snapshot.mjs` + `npm run types:checksum`: verifies byte size, SHA-256 and
+  metadata provenance without network access.
+- `package.json` `types:generate`: checksum → `openapi-typescript` on the pinned JSON →
+  `scripts/annotate-openapi-schema.mjs` (stable provenance header).
+- `npm run types:check`: regenerate + `git diff --exit-code`; fails on any drift.
+- `.github/workflows/frontend-ci.yml` `openapi-contract` job runs `npm ci`, `types:checksum` and
+  `types:check` on every push/PR. No production backend, database, Docker, credentials, or secrets.
+- `docs/PHASE1_STEP1_CONTRACT_NOTES.md` §14 documents how to update the pinned snapshot after a
+  backend API change; filenames, metadata and the generated header all identify backend commit
+  `620f7a795cc67a16e905115131f561bbd986af85`.
+
+### 5. Category 2 resolution
+
+**2A (H02 §3):** the pinned spec declares only 200 responses, so `GlobalExceptionHandler.statusFor`
+and its persistence handlers at `620f7a7` are authoritative. `EDAM-3001`/`EDAM-3004` → 422,
+`EDAM-5003` → 502, `EDAM-5001` → 409 or 503; `EDAM-5005` → 400 was an earlier audit error, not a
+backend discrepancy. `src/api/error-status.ts` centralizes the source-derived table and the 403
+permission codes; `src/api/errors.ts` now uses them, removing a duplicated inline set. H02 is
+unchanged.
+
+**2B (H10):** all five H10-only lookup paths are absent from the genuine spec. The nine canonical
+paths (`/expense-configuration/{request-types,categories,natures}`, `/workflows`,
+`/master-data/{currencies,vendors,tax-authorities}`, `/organization/{departments,branches,units/tree}`)
+with their real query parameters, response shapes and distinct permission codes are recorded in
+`CANONICAL_LOOKUP_ENDPOINTS` and proven by compile-time and runtime contract tests. H10's blanket
+permission claims are also wrong (workflow lookups need `workflow:view`; vendors need `vendor:view`).
+H10 and Appendix A are unchanged; no H10 path is encoded in any Step 1 screen.
+
+### 6. Tests, typecheck, lint and build
+
+`types:checksum` OK; `types:generate` OK and idempotent; `types:check` OK; `npm run typecheck` exit 0;
+`npm run lint` exit 0 (zero warnings); `npm test` **9 files / 55 tests** (8 new contract tests);
+`npm run build` exit 0 (1893 modules / 5.07s / 29 files / `dist` 705K); responsive 27/27 on dev and
+preview with 201 controls / 15 forms; proxy HTTP 200 on both; Puppeteer login smoke PASS on both;
+`git diff --check` exit 0. GitHub Actions results, changed files and commit SHAs are recorded in
+§18.7/§18.8 below.
+
+### 7. Changed files and commit SHA
+
+_Recorded after the final push._
+
+### 8. PR #3 status and CI
+
+_Recorded after the remote CI runs complete._
+
+### 9. Remaining blockers and engineering-audit classification
+
+**No Category 1 or Category 2 blocker remains.** PR #3 is open, unmerged, and awaiting owner review
+by instruction — not by an unresolved gate. Category 3 gates (H08 naming, password special-character
+class, `activeThemeType`, `document:view`) and Category 4 decisions (baseline hash, CORS installation
+token, dashboard permission conflict, Router layout filename, mandatory password-change layout)
+remain exactly as classified in `docs/PHASE1_STEP1_CONTRACT_NOTES.md` §13 and
+`docs/PHASE1_STEP1_ENGINEERING_AUDIT.md` §12/§14. No live frontend/backend integration, valid
+sandbox `/v3/api-docs`, production verification, or full axe/screen-reader WCAG audit is claimed.
+PR #3 is not merged; no Step 2/business modules, backend modification, `main` push, or new PR
+occurred.

@@ -13,6 +13,30 @@ export const ENDPOINTS = {
   notificationsUnreadCount: '/notifications/unread-count',
 } as const;
 
+/**
+ * Spec-verified canonical lookup paths for Step 2 form filters. H10's "Lookup
+ * endpoints used by forms" section names `/configuration/*`, `/workflows/active`
+ * and `/organization/departments/tree`; none of those paths exists in the pinned
+ * OpenAPI document from backend commit 620f7a795cc67a16e905115131f561bbd986af85.
+ *
+ * These constants are deliberately relative to `/api/v1`, matching `ENDPOINTS`,
+ * and are verified against the generated `paths` type and the pinned JSON in
+ * `src/api/openapi-contract.test.ts`. No Step 1 screen calls them; they exist so
+ * later modules cannot silently reintroduce the H10 paths.
+ */
+export const CANONICAL_LOOKUP_ENDPOINTS = {
+  requestTypes: '/expense-configuration/request-types',
+  expenseCategories: '/expense-configuration/categories',
+  expenseNatures: '/expense-configuration/natures',
+  workflowDefinitions: '/workflows',
+  currencies: '/master-data/currencies',
+  vendors: '/master-data/vendors',
+  taxAuthorities: '/master-data/tax-authorities',
+  departments: '/organization/departments',
+  organizationUnitTree: '/organization/units/tree',
+  branches: '/organization/branches',
+} as const;
+
 interface IdempotentRoute {
   method: 'POST' | 'PUT';
   pattern: RegExp;

@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "routes:generate": "tsr generate",
-    "types:generate": "openapi-typescript http://localhost:8080/v3/api-docs -o src/api/generated/schema.d.ts",
+    "types:generate": "npm run types:checksum && openapi-typescript ./openapi-spec/openapi-620f7a795cc67a16e905115131f561bbd986af85.json -o src/api/generated/schema.d.ts && node scripts/annotate-openapi-schema.mjs",
+    "types:checksum": "node scripts/verify-openapi-snapshot.mjs",
+    "types:check": "npm run types:generate && git diff --exit-code -- src/api/generated/schema.d.ts",
     "typecheck": "npm run routes:generate && tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
     "test": "vitest run",

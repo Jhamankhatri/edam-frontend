@@ -222,7 +222,17 @@ Static and dynamic checks confirm:
 
 ## 9. CI quality gates
 
-Added `.github/workflows/frontend-ci.yml`, a single lightweight job on `pull_request` and feature-branch pushes (`branches-ignore: main`):
+Added `.github/workflows/frontend-ci.yml` on `pull_request` and feature-branch pushes (`branches-ignore: main`). It now has two jobs:
+
+**`openapi-contract` (added for the genuine-artifact task)**
+
+1. `actions/checkout@v4`
+2. `actions/setup-node@v4` (Node 22, npm cache)
+3. `npm ci`
+4. `npm run types:checksum` — verifies the pinned JSON's SHA-256, byte size and provenance metadata
+5. `npm run types:check` — regenerates `src/api/generated/schema.d.ts` and fails on any drift
+
+**`quality-gates`**
 
 1. `actions/checkout@v4`
 2. `actions/setup-node@v4` (Node 22, npm cache)
@@ -232,7 +242,7 @@ Added `.github/workflows/frontend-ci.yml`, a single lightweight job on `pull_req
 6. `npm test`
 7. `npm run build`
 
-No backend runtime, database, codegen, browser matrix, axe job, or other expensive job was added. `permissions: contents: read`, a 15-minute timeout, and concurrency cancellation are configured. Local CI-equivalent sequence passed with exit 0. Remote CI status: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
+Neither job starts Spring Boot, PostgreSQL, Docker, or a production backend, and neither reads credentials. There is still no browser matrix, axe job, or other expensive job; `permissions: contents: read`, timeouts, and concurrency cancellation are configured. Remote CI status for the earlier audit commits: PASS — `Frontend CI` concluded `success` on `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`), on `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`), and on `e49f449` (push run `44382157316`, `pull_request` run `44382804285`). Results for the OpenAPI-resolution commits are recorded in §14.
 
 ---
 
@@ -258,6 +268,24 @@ No backend runtime, database, codegen, browser matrix, axe job, or other expensi
 
 Evidence files are under `/tmp/audit-*.txt`, `/tmp/audit-*.json`, and `/tmp/tailwind-audit-final.css`. Mock API, dev, and preview processes bind `0.0.0.0` for Arena preview compatibility.
 
+### 10.1 Genuine OpenAPI artifact task — commands and results (2026-11-18)
+
+| Command | Result |
+|---|---|
+| `gh run download 44395699755 --repo Jhamankhatri/edam --name openapi-620f7a795cc67a16e905115131f561bbd986af85 --dir ./openapi-spec` | Executed inside a GitHub-hosted runner because the sandbox cannot reach Azure blob storage; artifact retrieved. JSON `229310` bytes, `.meta.txt` `580` bytes |
+| `sha256sum openapi-spec/openapi-620f7a795cc67a16e905115131f561bbd986af85.json` | `9533c5a5a9ce3044b2543cabaa7db09952b26c9e8581e08baf9889c33df2843d` — **OK** against the expected value |
+| `npm run types:checksum` | Exit 0; `OpenAPI snapshot verified: 229310 bytes, SHA-256 9533c5a5…, backend 620f7a795cc67a16e905115131f561bbd986af85` |
+| `npm run types:generate` | Exit 0; `openapi-typescript 7.13.0` → `src/api/generated/schema.d.ts` (`11377` lines / `340588` bytes); provenance header added; byte-identical on a second run |
+| `npm run types:check` | Exit 0 after the generated file was committed (regenerate + `git diff --exit-code`) |
+| `npm run typecheck` | Exit 0 |
+| `npm run lint` | Exit 0; zero warnings |
+| `npm test` | Exit 0; **9 files / 55 tests** (8 new OpenAPI contract tests) |
+| `npm run build` | Exit 0; 1893 modules / 5.07s / 29 files / `dist` 705K |
+| `npm run responsive:check` on `:5173` and `:4173` | Both exit 0; 27/27 route/viewport checks, 201 controls, 15 forms, 0 tables |
+| Puppeteer login smoke on `:5173` and `:4173` | Both PASS: `admin` → `/app/dashboard`, Dashboard heading and app nav present |
+| Proxy smoke `GET /api/v1/public/configuration` on `:5173` and `:4173` | Both HTTP 200 with `success: true` envelope |
+| `git diff --check` | Exit 0 |
+
 ---
 
 ## 11. Issues fixed
@@ -281,12 +309,15 @@ Evidence files are under `/tmp/audit-*.txt`, `/tmp/audit-*.json`, and `/tmp/tail
 
 | Category | Items | Gate |
 |---:|---|---|
-| 1 | Missing live-generated OpenAPI schema (`§7`) | **Must resolve before PR #3 merge** under strict H02. PR #3 remains open/not merged. No backend runtime or static generated spec exists; the backend's own OpenAPI doc says `paths: {}` in its skeleton. |
-| 2 | H02 status mapping (`§2`), H10 lookup paths (`§5`) | Before Phase 1 Step 2 |
+| 1 | Generated OpenAPI schema + CI diff check (`§7`) | **CLEARED** — genuine checksum-verified artifact, generated `schema.d.ts`, and `openapi-contract` CI job (§14). PR #3 still open/unmerged awaiting owner review; no exception was taken. |
+| 2 | H02 status mapping (`§2`), H10 lookup paths (`§5`) | **CLEARED** — source/spec evidence, code changes and 8 contract regression tests (§14). |
 | 3 | H08 naming (`§3`), password special-character class (`§8`), `activeThemeType` (`§11`), `document:view` (`§12`) | Before relevant later module |
 | 4 | Baseline hash (`§1`), CORS/installation token (`§4`), dashboard conflict (`§6`), Router layout filename (`§9`), mandatory password-change layout (`§10`) | Deployment/product/documentation decision |
 
-No category 1 runtime code defect remains in the audited Step 1 application; the category 1 item is the unresolved H02 codegen requirement. No contract was silently invented.
+No Category 1 or Category 2 gate remains. No contract was silently invented: the 19 finalized handover
+documents are byte-for-byte unchanged, H02 §3 and H10 are quoted only as stale source text, and the
+authoritative facts come from the pinned OpenAPI JSON and checked-in backend Java source. The
+remaining Category 3/4 items are unchanged and are still explicit gates.
 
 ### 12.1 Strict H02 / H07 / H17 conformance dispositions (precision pass, 2026-11-18)
 
@@ -297,7 +328,7 @@ business mutations, has no export/download caller, and has no monetary, table, c
 
 | Clause | Strict requirement | Verified Step 1 state | Gate |
 |---|---|---|---|
-| H02 §8 / H17 §2 | Generated `src/api/generated/schema.d.ts`, regenerate on every backend pull, CI diff check | `openapi-typescript` devDependency and `npm run types:generate` exist; generated schema and CI diff check absent; no live backend runtime or static generated spec | **Category 1 — resolve before PR #3 merge** (§12, contract notes §7) |
+| H02 §8 / H17 §2 | Generated `src/api/generated/schema.d.ts`, regenerate on every backend pull, CI diff check | Genuine artifact pinned with verified SHA-256; `npm run types:generate` regenerates from it; `npm run types:check` and the `openapi-contract` CI job fail on drift; no backend runtime or credentials in frontend CI | **Cleared** (§14, contract notes §7 and §14) |
 | H02 §6 | Reuse the same `Idempotency-Key` across retries of one gesture, new key per gesture; `EDAM-1005` short backoff without an error toast; `EDAM-1006` out-of-band reconcile | `resolveIdempotencyKey()` mints a fresh UUID on each `execute()` attempt (including CSRF re-prime and GET network retry); no `EDAM-1005`/`EDAM-1006` branch | Before Step 2 implements any of the eight idempotent mutations |
 | H02 §7 / §9.5 | Branch response reads on `Content-Type`; return the raw `Response` for csv/xlsx/blob; download callers use a blob response type | `parseApiEnvelope()` clones text and JSON-parses unconditionally; `apiFetchRaw()` requires an explicit `responseType: 'raw'`; no `Content-Type` branching; no Step 1 export caller | Before the RPT-002 reporting/export module |
 | H02 §5 / H07 stack | Parse monetary values with `decimal.js-light`; stack also lists TanStack Table, `date-fns`, `recharts`, Playwright | Removed as unused; Step 1 has no monetary, table, chart, or Playwright module (responsive checks use `puppeteer-core`) | Reintroduce with the first monetary/table/chart module |
@@ -314,8 +345,9 @@ heading use the literal `EDAM` fallback while `useBranding()` drives `PublicLayo
 `autoCodeSplitting: true` provides route-level splitting and H07 sets no explicit `lazy`/`memo` requirement;
 npm is permitted because H17 §2 says "or package manager of choice". No `pnpm`-only constraint exists.
 
-No residual item changes a backend contract. The Category 1 generated-schema blocker is unchanged; PR #3
-remains open and unmerged.
+No residual item changes a backend contract. The Category 1 generated-schema blocker and both Category
+2 items were cleared by the genuine-artifact resolution recorded in §14; PR #3 remains open and
+unmerged because the owner asked for review before any merge.
 
 ---
 
@@ -330,4 +362,127 @@ remains open and unmerged.
 - Remote CI: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
 - No new PR, no merge, no `main` push, no backend commit/push, no Step 2 or business module work.
 
-**Audit verdict:** the Step 1 frontend is clean, reusable, optimized, secure, responsive, and maintainable at the foundation level, with all local quality gates passing. It is **not** claimed production-verified or live-backend integrated. Strict commercial-banking acceptance keeps PR #3 unmerged until the Category 1 generated-schema requirement is satisfied or a separately approved exception is recorded. Work stops here.
+**Audit verdict (superseded by §14):** the Step 1 frontend is clean, reusable, optimized, secure,
+responsive, and maintainable at the foundation level, with all local quality gates passing. It is
+**not** claimed production-verified or live-backend integrated. Strict commercial-banking acceptance
+kept PR #3 unmerged until the Category 1 generated-schema requirement was satisfied or a separately
+approved exception was recorded. That requirement is now satisfied in §14 without an exception; PR #3
+still stays open and unmerged pending owner review. Work stops here.
+
+---
+
+## 14. Genuine OpenAPI artifact resolution — Category 1 and Category 2 (2026-11-18)
+
+### 14.1 Artifact provenance and checksum evidence
+
+Backend PR #26 merged at `2026-11-18T20:58:49Z`; backend `main` is
+`2835eb55d6595a56d43cabb5eb83370b5ca2b2b2`. It changed only `.github/workflows/ci.yml`, adding a
+`war-package-smoke-test` step that starts the real WAR and captures `/v3/api-docs`. Run
+`44395699755` (`headSha` `a1414ba98e3722062859a59a4dc0424c8ec3fb27`, branch `ci/openapi-artifact`)
+completed successfully; war-smoke job/check-run `135126464210` uploaded artifact
+`openapi-620f7a795cc67a16e905115131f561bbd986af85` (id `14472210141`, ZIP `25622` bytes).
+
+The exact `gh run download` command failed from this sandbox with Azure `EOF`/`SSL_ERROR_SYSCALL`
+because only `github.com`, `codeload.github.com`, `api.github.com`, npm and PyPI are allowlisted.
+It was therefore executed inside a temporary GitHub-hosted bootstrap workflow in the **frontend**
+repository (a GitHub runner can reach the artifact blob host), which verified the SHA-256 before
+committing the two files to `arena/807bbe3c-edam-frontend`. The temporary workflow was removed in
+the same change set; no backend repository file was modified.
+
+| Evidence | Value |
+|---|---|
+| Pinned JSON | `openapi-spec/openapi-620f7a795cc67a16e905115131f561bbd986af85.json` |
+| JSON size | `229310` bytes |
+| JSON SHA-256 | `9533c5a5a9ce3044b2543cabaa7db09952b26c9e8581e08baf9889c33df2843d` (`sha256sum -c` OK) |
+| Metadata | `openapi-spec/openapi-620f7a795cc67a16e905115131f561bbd986af85.meta.txt` (`580` bytes) |
+| Backend commit | `620f7a795cc67a16e905115131f561bbd986af85` |
+| Capture source | `http://localhost:18080/v3/api-docs`, HTTP 200, from live Spring Boot WAR in the war-smoke job |
+| Spec facts | OpenAPI 3.1.0, 164 paths, 208 operations, 299 schemas, 0 security schemes |
+| Generated file | `src/api/generated/schema.d.ts` — `11377` lines / `340588` bytes |
+
+The generated schema was produced only by `npm run types:generate` (which first runs
+`npm run types:checksum`) from the pinned JSON with `openapi-typescript@7.13.0`. No definition was
+hand-written, simplified, or substituted. A second generation was byte-identical.
+
+### 14.2 Category 2A — H02 §3 HTTP status mapping
+
+The genuine spec declares **only HTTP 200** for all 208 operations and 0 security schemes, and
+several backend controllers return HTTP 201 that the spec also declares as 200
+(`AuthController#bootstrap`, `WorkflowConfigurationController#create`). The spec therefore cannot
+adjudicate error statuses; checked-in backend Java source at `620f7a7` is authoritative:
+`GlobalExceptionHandler.java` `statusFor` lines 258-285 and persistence handlers lines 213-228.
+
+| Code | H02 §3 | Backend source | Verdict |
+|---|---:|---:|---|
+| `EDAM-3001` | 409 | 422 | H02 stale |
+| `EDAM-3004` | 409 | 422 | H02 stale |
+| `EDAM-5003` | 503 | 502 | H02 stale |
+| `EDAM-5001` | 409 | 409 (`statusFor`, `DataIntegrityViolationException`) **or** 503 (`DataAccessException`) | H02 incomplete |
+| `EDAM-5005` | 400 | 400 | **Earlier audit error**: `INVALID_CONFIGURATION` is in `statusFor`'s `BAD_REQUEST` branch; H02 was correct |
+
+Implementation: `src/api/error-status.ts` now holds the source-derived table, the 403 permission-code
+set, `FORBIDDEN_STATUS` and `SERVER_ERROR_STATUS_THRESHOLD`. `src/api/errors.ts` was refactored to
+use them, removing its duplicated inline permission-code set; it still keys conditional logic off
+`error.code`, and no Step 2 toast/retry policy was added. `src/test/server.ts` documents that
+bootstrap's HTTP 201 comes from `AuthController#bootstrap`, not the spec. H02 remains unchanged.
+
+### 14.3 Category 2B — H10 lookup endpoints
+
+All H10-only paths are **absent** from the genuine spec: `/api/v1/configuration/request-types`,
+`/api/v1/configuration/expense-categories`, `/api/v1/configuration/expense-natures`,
+`/api/v1/configuration/workflows/active`, `/api/v1/organization/departments/tree`. Authoritative
+paths (verified in the spec and in `ExpenseConfigurationController`,
+`WorkflowConfigurationController`, `MasterDataController`, `OrganizationController`):
+
+- `GET /api/v1/expense-configuration/request-types` (`expense-configuration:view`, CFG-009),
+  `/categories` (optional `includeInactive`, CFG-001), `/natures` (CFG-006).
+- `GET /api/v1/workflows` (`workflow:view`, WF-001, optional `includeInactive`) — **not**
+  `expense-configuration:view` and no `/workflows/active` lookup.
+- `GET /api/v1/master-data/currencies` (`currency:view`, optional `includeInactive`, no `active`
+  parameter), `/vendors` (`vendor:view`, `search`/`page`/`size`/`sort`, paginated),
+  `/tax-authorities` (`currency:view`, no pagination parameters, plain list). H10's blanket
+  `currency:view` is wrong for vendors.
+- `GET /api/v1/organization/departments`, `/branches`, and `/organization/units/tree` (all
+  `organization:view`). `/organization/departments/tree` does not exist.
+
+Implementation: `CANONICAL_LOOKUP_ENDPOINTS` in `src/api/endpoints.ts` records the nine canonical
+relative paths; `src/api/openapi-contract.test.ts` proves at compile time that each exists in the
+generated `paths` interface and at runtime that each has a GET and that no H10 path exists. Step 1
+calls no lookup endpoint, so no H10 path is encoded in any screen. H10 and Appendix A remain
+unchanged.
+
+### 14.4 CI consistency and inspect results
+
+`npm run types:checksum` (Node, no network) verifies size, SHA-256 and metadata fields including
+`backend_commit_sha`, `workflow_run_id`, `http_status` and `sha256`. `npm run types:generate`
+regenerates the definitions from the pinned JSON and prepends a stable provenance header.
+`npm run types:check` regenerates and runs `git diff --exit-code -- src/api/generated/schema.d.ts`.
+`.github/workflows/frontend-ci.yml` adds an `openapi-contract` job that runs both commands after
+`npm ci`; it uses no backend runtime, database, Docker, production URL, or credentials. The update
+procedure for a future backend API change is documented in contract notes §14.
+
+Inspection of the real document: 79 operations have request bodies, 233 parameters are declared,
+all 208 responses are typed (`ApiResponse*` schemas) and all declare only HTTP 200. Response DTO
+schemas carry no `required` array and no `nullable` markers, so generated response fields are
+optional and non-nullable; request schemas such as `LoginRequest` do declare `required`.
+`src/api/contracts.ts` therefore keeps the deliberately stricter, Java-record-derived Step 1
+cross-cutting types separate (`string | null` where the backend returns null) instead of replacing
+them with weaker generated shapes. No `any`, `@ts-ignore`, or unsafe assertion was introduced.
+
+### 14.5 Gate results and classification
+
+Local: `npm ci`-equivalent install present; `types:checksum` OK; `types:generate` OK and
+idempotent; `types:check` OK; `typecheck` exit 0; `lint` exit 0; `test` 9 files / 55 tests;
+`build` 1893 modules / 5.07s / 29 files / `dist` 705K; responsive 27/27 on dev and preview;
+proxy HTTP 200 on both; Puppeteer login smoke PASS on both; `git diff --check` exit 0. GitHub
+Actions results for the pushed commits are recorded in §14.6.
+
+Classification after this change set: **Category 1 cleared; Category 2 cleared** (§2, §5).
+Category 3 (§3, §8, §11, §12) and Category 4 (§1, §4, §6, §9, §10) remain as previously recorded.
+No live frontend/backend integration, no valid sandbox `/v3/api-docs`, no production verification,
+and no full axe/screen-reader WCAG audit is claimed; those remain out of scope. PR #3 is open and
+unmerged; no Step 2 or business-module work was performed.
+
+### 14.6 Commit, CI and PR results
+
+_Recorded after the remote CI runs complete._

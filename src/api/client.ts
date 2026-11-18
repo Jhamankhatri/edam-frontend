@@ -150,8 +150,10 @@ export async function apiFetch<T>(options: ApiRequestOptions): Promise<T> {
   if (result instanceof Response) {
     throw new ApiError({ code: NON_JSON_ERROR_CODE, message: 'Unexpected raw response.', status: 0 });
   }
-  // Single network-boundary cast: `openapi-typescript` output is not available in this
-  // frontend-only workspace, so service functions declare the payload type explicitly.
+  // Single network-boundary cast: the shared envelope parser deliberately exposes
+  // `data` as `unknown`; service functions declare the payload type explicitly from
+  // the Step 1 contracts in `contracts.ts`. The generated `schema.d.ts` supplies the
+  // authoritative backend operation/DTO shapes for the CI consistency check.
   return result.data as T;
 }
 
