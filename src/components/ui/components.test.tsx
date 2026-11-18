@@ -10,7 +10,11 @@ import { Input } from './input';
 import { PasswordInput } from './password-input';
 import { SelectField } from './select';
 import { Skeleton } from './skeleton';
+import { Surface } from './surface';
 import { Table, TableWrapper } from './table';
+import { AmbientCanvas } from '@/components/brand/AmbientCanvas';
+import { DataVizFrame } from '@/components/data/DataVizFrame';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 describe('reusable design-system components', () => {
   it('renders accessible buttons with loading and disabled states', () => {
@@ -78,6 +82,59 @@ describe('reusable design-system components', () => {
     const wrapper = container.firstElementChild;
     expect(wrapper).toHaveClass('overflow-x-auto', 'max-w-full');
     expect(screen.getByRole('table')).toHaveClass('min-w-table');
+  });
+
+  it('exposes token-driven surface variants and a static ambient canvas', () => {
+    const { container } = render(
+      <>
+        <Surface data-testid="surface" variant="raised" padding="md" interactive />
+        <AmbientCanvas />
+      </>,
+    );
+    expect(screen.getByTestId('surface')).toHaveClass('surface-layered', 'p-5', 'sm:p-6');
+    expect(screen.getByTestId('surface')).toHaveClass('hover:shadow-elevated');
+    expect(container.querySelector('[aria-hidden="true"]')).toBeInTheDocument();
+  });
+
+  it('renders a single accessible page heading with status and metadata', () => {
+    render(
+      <PageHeader
+        eyebrow="EDAM workspace"
+        title="Dashboard"
+        description="Foundation only."
+        status={<span>Foundation ready</span>}
+        meta={<span>RPT-001</span>}
+      />,
+    );
+    expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeInTheDocument();
+    expect(screen.getByText('Foundation ready')).toBeInTheDocument();
+    expect(screen.getByText('RPT-001')).toBeInTheDocument();
+  });
+
+  it('keeps chart foundations explicitly empty and screen-reader described', () => {
+    render(<DataVizFrame />);
+    expect(screen.getByRole('img', { name: /No business data is displayed/ })).toBeInTheDocument();
+    expect(screen.getByText('Awaiting live module data')).toBeInTheDocument();
+  });
+
+  it('associates hints and nested controls with form descriptions', () => {
+    const { unmount } = render(
+      <FormField id="token" label="Installation token" hint="Provided out of band.">
+        <Input id="token" />
+      </FormField>,
+    );
+    expect(screen.getByLabelText('Installation token')).toHaveAttribute('aria-describedby', 'token-hint');
+    unmount();
+
+    render(
+      <FormField id="email" label="Work email" error="Enter a valid email.">
+        <div className="relative">
+          <Input id="email" />
+        </div>
+      </FormField>,
+    );
+    expect(screen.getByLabelText('Work email')).toHaveAttribute('aria-describedby', 'email-error');
+    expect(screen.getByLabelText('Work email')).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('renders select and confirmation dialog actions as functional controls', async () => {

@@ -17,7 +17,7 @@ export function Topbar({ badges }: { badges: ShellBadges }) {
 
   return (
     <TooltipProvider delayDuration={200}>
-      <header className="sticky top-0 z-30 flex h-16 w-full max-w-full items-center gap-2 border-b border-border bg-topbar px-3 backdrop-blur sm:gap-4 sm:px-5">
+      <header className="sticky top-0 z-30 flex h-16 w-full max-w-full items-center gap-2 border-b border-line bg-topbar px-3 shadow-soft sm:gap-4 sm:px-5">
         <MobileNav badges={badges} />
         <div className="min-w-0 flex-1">
           <Breadcrumbs meta={meta} className="hidden sm:block" />
@@ -28,7 +28,7 @@ export function Topbar({ badges }: { badges: ShellBadges }) {
         {canViewNotifications && (
           <Link
             to="/app/notifications"
-            className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-muted-foreground shadow-soft transition-colors duration-150 hover:bg-state-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label={badge ? `Notifications, ${badge} unread` : 'Notifications'}
           >
             <Bell aria-hidden="true" className="h-4.5 w-4.5" />

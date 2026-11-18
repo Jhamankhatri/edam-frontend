@@ -28,6 +28,8 @@ const tokenAliases: Record<string, readonly string[]> = {
   warning: ['--warning'],
   info: ['--info'],
   error: ['--destructive'],
+  danger: ['--destructive'],
+  information: ['--info'],
   radius: ['--radius'],
   text: ['--foreground'],
   heading: ['--foreground'],
@@ -35,6 +37,13 @@ const tokenAliases: Record<string, readonly string[]> = {
   navText: ['--primary-foreground'],
   buttonPrimary: ['--primary'],
   buttonPrimaryText: ['--primary-foreground'],
+  // Extended EDAM brand anchors. These are optional keys in the same
+  // `themeTokens` map; semantic `--ds-*` tokens derive from them.
+  brandInk: ['--brand-ink'],
+  brandGold: ['--brand-gold'],
+  brandTeal: ['--brand-teal'],
+  accentWarm: ['--brand-gold'],
+  canvas: ['--background'],
 };
 
 function normalizeTokenKey(key: string): string | null {

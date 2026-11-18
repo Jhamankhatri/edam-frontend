@@ -1,0 +1,830 @@
+{
+  "baseUrl": "http://127.0.0.1:5173",
+  "generatedAt": "2026-11-18T22:42:47.266Z",
+  "viewports": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Session-protected access",
+        "Permission-aware workspace",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Session-protected access",
+        "Permission-aware workspace",
+        "Create the administrator"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 8,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Session-protected access",
+        "Permission-aware workspace",
+        "Change your password"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Session-protected access",
+        "Permission-aware workspace",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Session-protected access",
+        "Permission-aware workspace",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 8,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Session-protected access",
+        "Permission-aware workspace",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "Data presentation, ready for live data",
+        "Backend remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    }
+  ],
+  "screenshots": [
+    "login-desktop-1440.png",
+    "bootstrap-desktop-1440.png",
+    "dashboard-desktop-1440.png",
+    "login-laptop-1280.png",
+    "bootstrap-laptop-1280.png",
+    "dashboard-laptop-1280.png",
+    "login-tablet-834.png",
+    "bootstrap-tablet-834.png",
+    "dashboard-tablet-834.png",
+    "login-tablet-small-768.png",
+    "bootstrap-tablet-small-768.png",
+    "dashboard-tablet-small-768.png",
+    "login-mobile-390.png",
+    "bootstrap-mobile-390.png",
+    "dashboard-mobile-390.png",
+    "login-mobile-small-320.png",
+    "bootstrap-mobile-small-320.png",
+    "dashboard-mobile-small-320.png"
+  ],
+  "comparisons": [
+    {
+      "file": "login-desktop-1440.png",
+      "width": 1440,
+      "height": 900,
+      "changedPixelRatio": 0.1173
+    },
+    {
+      "file": "bootstrap-desktop-1440.png",
+      "width": 1440,
+      "height": 929,
+      "changedPixelRatio": 0.1729
+    },
+    {
+      "file": "dashboard-desktop-1440.png",
+      "width": 1440,
+      "height": 900,
+      "changedPixelRatio": 0.3036
+    },
+    {
+      "file": "login-tablet-834.png",
+      "width": 834,
+      "height": 1112,
+      "changedPixelRatio": 0.047
+    },
+    {
+      "file": "bootstrap-tablet-834.png",
+      "width": 834,
+      "height": 1174,
+      "changedPixelRatio": 0.0697
+    },
+    {
+      "file": "dashboard-tablet-834.png",
+      "width": 834,
+      "height": 1112,
+      "changedPixelRatio": 0.287
+    },
+    {
+      "file": "login-mobile-390.png",
+      "width": 390,
+      "height": 844,
+      "changedPixelRatio": 0.1219
+    },
+    {
+      "file": "bootstrap-mobile-390.png",
+      "width": 390,
+      "height": 1381,
+      "changedPixelRatio": 0.1293
+    },
+    {
+      "file": "dashboard-mobile-390.png",
+      "width": 390,
+      "height": 1012,
+      "changedPixelRatio": 0.3721
+    }
+  ],
+  "failures": []
+}

@@ -15,16 +15,18 @@
   }
 
   body {
-    @apply bg-background font-sans text-foreground antialiased;
+    @apply bg-canvas font-sans text-foreground antialiased;
     min-width: 320px;
     overflow-x: hidden;
     text-rendering: optimizeLegibility;
   }
 
+  /* Headings inherit their surface's text colour. Forcing --foreground here
+     made brand-panel headlines dark-on-navy; the panel now owns its own ink. */
   h1,
   h2,
   h3 {
-    @apply text-foreground;
+    color: inherit;
     text-wrap: balance;
   }
 
@@ -33,17 +35,18 @@
   }
 
   ::selection {
-    background: var(--brand-gold);
-    color: var(--brand-ink);
+    background: var(--ds-color-accent);
+    color: var(--ds-color-accent-foreground);
   }
 
   :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
+    outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
+    outline-offset: var(--ds-focus-ring-offset);
   }
 }
 
 @layer components {
+  /* ---- Typographic recipes ------------------------------------------------ */
   .eyebrow-wide {
     @apply text-xs font-semibold uppercase tracking-eyebrow-wide;
   }
@@ -60,14 +63,29 @@
     @apply text-2xs font-semibold uppercase tracking-brand;
   }
 
+  /* ---- Layered surfaces --------------------------------------------------- */
+  /* Opaque, high-contrast layered cards: a hairline, a top highlight and a
+     three-part elevation. No heavy backdrop blur, no glass dependency. */
   .auth-card,
-  .glass-card {
-    background: var(--glass-surface);
-    backdrop-filter: blur(18px);
+  .glass-card,
+  .elevated-card,
+  .surface-layered {
+    border: var(--ds-border-width) solid var(--ds-color-line);
+    border-radius: var(--ds-radius-2xl);
+    background: var(--ds-gradient-surface);
+    box-shadow: var(--ds-shadow-layered);
   }
 
   .auth-card {
-    @apply rounded-2xl border border-brand-panel-glass-border p-5 shadow-elevated sm:p-7;
+    @apply p-5 sm:p-7;
+  }
+
+  .glass-card {
+    @apply rounded-2xl;
+  }
+
+  .elevated-card {
+    @apply rounded-2xl;
   }
 
   .auth-eyebrow {
@@ -86,35 +104,31 @@
     @apply flex h-12 w-12 items-center justify-center rounded-2xl;
   }
 
-  .glass-card {
-    @apply rounded-2xl border border-brand-panel-glass-border shadow-elevated;
-  }
-
+  /* ---- Background treatments --------------------------------------------- */
   .auth-canvas {
-    background:
-      radial-gradient(circle at 12% 18%, var(--auth-canvas-glow-primary), transparent 28rem),
-      radial-gradient(circle at 88% 82%, var(--auth-canvas-glow-gold), transparent 26rem),
-      linear-gradient(145deg, var(--auth-canvas-start) 0%, var(--auth-canvas-mid) 48%, var(--auth-canvas-end) 100%);
+    background: var(--ds-gradient-auth);
   }
 
   .auth-brand-panel {
-    background:
-      radial-gradient(circle at 78% 18%, var(--brand-panel-glow-gold), transparent 19rem),
-      linear-gradient(145deg, var(--brand-ink) 0%, var(--brand-navy) 58%, var(--brand-panel-end) 100%);
+    color: var(--ds-color-on-brand);
+    background: var(--ds-gradient-brand);
   }
 
   .bank-grid {
     background-image:
-      linear-gradient(var(--brand-panel-grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--brand-panel-grid-line) 1px, transparent 1px);
+      linear-gradient(var(--ds-grid-on-brand-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ds-grid-on-brand-line) 1px, transparent 1px);
     background-size: 42px 42px;
-    mask-image: linear-gradient(to bottom, var(--brand-panel-grid-mask), transparent 88%);
+    mask-image: linear-gradient(to bottom, var(--ds-grid-on-brand-mask), transparent 88%);
   }
 
-  .elevated-card {
-    @apply rounded-2xl border border-brand-panel-glass-border bg-card shadow-elevated;
+  .page-canvas {
+    background:
+      radial-gradient(circle at 100% 0%, var(--ds-glow-primary), transparent 32rem),
+      var(--ds-color-canvas);
   }
 
+  /* ---- Loading / scrollbars ------------------------------------------------ */
   .skeleton-shimmer {
     position: relative;
     overflow: hidden;
@@ -124,14 +138,14 @@
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, var(--skeleton-highlight), transparent);
+    background: linear-gradient(90deg, transparent, var(--ds-skeleton-highlight), transparent);
     content: '';
-    animation: shimmer 1.6s infinite;
+    animation: shimmer var(--ds-duration-shimmer) linear infinite;
   }
 
   .scrollbar-subtle {
     scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
+    scrollbar-color: var(--ds-scrollbar-thumb) transparent;
   }
 
   .scrollbar-subtle::-webkit-scrollbar {
@@ -140,13 +154,14 @@
   }
 
   .scrollbar-subtle::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-thumb-soft);
-    border-radius: 999px;
+    background-color: var(--ds-scrollbar-thumb-soft);
+    border-radius: var(--ds-radius-pill);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Required to override component-level Tailwind animation and transition utilities. */
+  /* Required to override component-level Tailwind animation and transition
+     utilities, including purposeful loading shimmer and entrance movement. */
   *,
   *::before,
   *::after {

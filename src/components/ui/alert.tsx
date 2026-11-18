@@ -3,18 +3,21 @@ import { AlertCircle, CheckCircle2, Info, TriangleAlert } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
-const alertVariants = cva('relative flex w-full items-start gap-3 rounded-xl border p-4 text-sm', {
-  variants: {
-    variant: {
-      default: 'border-border bg-card text-foreground',
-      info: 'border-status-info-border bg-status-info-surface text-foreground',
-      success: 'border-status-success-border bg-status-success-surface text-foreground',
-      warning: 'border-status-warning-border bg-status-warning-surface text-foreground',
-      destructive: 'border-status-destructive-border bg-status-destructive-surface text-foreground',
+const alertVariants = cva(
+  'relative flex w-full items-start gap-3 rounded-2xl border p-4 text-sm shadow-soft',
+  {
+    variants: {
+      variant: {
+        default: 'border-line bg-surface-gradient text-foreground',
+        info: 'border-status-info-border bg-status-info-surface text-foreground',
+        success: 'border-status-success-border bg-status-success-surface text-foreground',
+        warning: 'border-status-warning-border bg-status-warning-surface text-foreground',
+        destructive: 'border-status-destructive-border bg-status-destructive-surface text-foreground',
+      },
     },
+    defaultVariants: { variant: 'default' },
   },
-  defaultVariants: { variant: 'default' },
-});
+);
 
 const icons = {
   default: Info,
@@ -24,15 +27,24 @@ const icons = {
   destructive: AlertCircle,
 } as const;
 
+const iconTones = {
+  default: 'text-muted-foreground',
+  info: 'text-info',
+  success: 'text-success',
+  warning: 'text-warning',
+  destructive: 'text-destructive',
+} as const;
+
 export interface AlertProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof alertVariants> {}
 
 export function Alert({ className, variant = 'default', children, ...props }: AlertProps) {
-  const Icon = icons[variant ?? 'default'];
+  const key = variant ?? 'default';
+  const Icon = icons[key];
   return (
     <div role="alert" className={cn(alertVariants({ variant }), className)} {...props}>
-      <Icon aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+      <Icon aria-hidden="true" className={cn('mt-0.5 h-4 w-4 shrink-0', iconTones[key])} />
       <div className="min-w-0">{children}</div>
     </div>
   );

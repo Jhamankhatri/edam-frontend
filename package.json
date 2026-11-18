@@ -17,6 +17,8 @@
     "build": "npm run routes:generate && tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "responsive:check": "node scripts/responsive-check.mjs",
+    "check:design": "node scripts/design-system-check.mjs",
+    "visual:audit": "node scripts/visual-audit.mjs",
     "contracts:permissions": "node scripts/generate-permission-codes.mjs",
     "predev": "npm run routes:generate",
     "pretest": "npm run routes:generate"
