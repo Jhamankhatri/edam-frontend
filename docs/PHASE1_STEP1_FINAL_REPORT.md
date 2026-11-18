@@ -228,7 +228,7 @@ A full automated axe contrast/tree audit, screen-reader pass, keyboard-only trav
 11. `PublicConfigurationResponse.activeThemeType` is Java `String`; TypeScript uses `string | null`.
 12. `document:view` is docs-only, not one of the 60 backend permission codes.
 
-Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audit, no production deployment, no business modules, no reporting/dashboard data, and no generated OpenAPI schema. `npm run types:generate` remains available for an environment with the documented backend runtime. Section 13 of `docs/PHASE1_STEP1_CONTRACT_NOTES.md` now classifies all 12 discrepancies; under a strict H02 reading, the missing generated OpenAPI schema is a **Category 1 must-resolve-before-PR-#3-merge** item. PR #3 therefore remains open and is not merged.
+Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audit, no production deployment, no business modules, no reporting/dashboard data, and no generated OpenAPI schema. The strict H02/H07/H17 conformance residuals with explicit gates are tabulated in `docs/PHASE1_STEP1_ENGINEERING_AUDIT.md` §12.1. `npm run types:generate` remains available for an environment with the documented backend runtime. Section 13 of `docs/PHASE1_STEP1_CONTRACT_NOTES.md` now classifies all 12 discrepancies; under a strict H02 reading, the missing generated OpenAPI schema is a **Category 1 must-resolve-before-PR-#3-merge** item. PR #3 therefore remains open and is not merged.
 
 ---
 
@@ -245,10 +245,11 @@ Other limitations: no live Spring Boot/PostgreSQL E2E run, no full WCAG/axe audi
 - PR title: `Phase 1 Step 1: foundation, authentication, and RBAC`
 - PR state: open; not merged or closed
 - Engineering audit code commit SHA: `c3d5186f053730e2f78d655115cc71a004d60041`
-- Remote CI status: `PASS — GitHub Actions `Frontend CI` runs 44374694217 (`push`) and 44374695685 (`pull_request`) both concluded `success` on this commit; `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 1m8s.`
+- CI finalization / report commit SHA: `5f579f95acb3f5940d4bbaed8a32bf63be0b1d82`
+- Remote CI status: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
 - No push to `main`, no merge, no backend commit/push, and no backend file modification.
 
-This report is updated by a subsequent docs-only commit after the audit code commit is pushed and its CI status is observed; PR #3 head is authoritative for the latest SHA.
+This report is maintained by docs-only commits after the audit code commit is pushed and its CI status is observed; PR #3 head and `gh pr checks 3` are authoritative for the latest SHA and CI status.
 
 ---
 
@@ -262,7 +263,7 @@ PR #3 remains open and **must not be merged** until the strict Category 1 genera
 
 ## 17. Strict engineering audit addendum (2026-11-18)
 
-A separate `docs/PHASE1_STEP1_ENGINEERING_AUDIT.md` records the full strict audit: 99 application `.ts/.tsx/.css` files reviewed, inline-CSS and design-token results, architecture, TypeScript, performance, UI/UX, security/RBAC, CI, fixed/deferred issues, commands, and evidence.
+A separate `docs/PHASE1_STEP1_ENGINEERING_AUDIT.md` records the full strict audit: all 99 application `.ts/.tsx/.css` files read end to end as a regenerated 6,687-line / 233,328-byte corpus (seven contiguous chunks), covering inline-CSS and design-token results, architecture, TypeScript, performance, UI/UX, security/RBAC, CI, fixed/deferred issues, commands, and evidence. The review is static and source-level, not live-backend, production, full WCAG/axe, screen-reader, or OpenAPI-generated-schema verification; §12.1 tabulates the strict H02/H07/H17 residuals with explicit gates.
 
 Audit highlights:
 
@@ -270,9 +271,9 @@ Audit highlights:
 - Strict TypeScript: **0** explicit `any`, **0** `@ts-ignore`/`@ts-expect-error`, and **1** isolated network-boundary `result.data as T` cast. Runtime envelope, event-detail, and form field-path guards replaced unsafe assertions.
 - Architecture/performance: centralized route/navigation permissions, one shell badge observer, shared sign-out hook, shared envelope validator, route-level code splitting, four unused runtime dependencies removed, and dead files/exports removed.
 - Security/RBAC: session cookies only, CSRF before writes, `X-Installation-Token` only for bootstrap, no login `Idempotency-Key`, exactly eight idempotent business routes, backend authority, and no unauthorized content during initialization. All eight idempotent routes, privileged-header/storage restrictions, raw responses, and malformed envelopes now have tests.
-- CI: `.github/workflows/frontend-ci.yml` runs `npm ci`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` on PRs and feature-branch pushes; no expensive jobs. Remote CI status: `PASS — GitHub Actions `Frontend CI` runs 44374694217 (`push`) and 44374695685 (`pull_request`) both concluded `success` on this commit; `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 1m8s.`.
+- CI: `.github/workflows/frontend-ci.yml` runs `npm ci`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` on PRs and feature-branch pushes; no expensive jobs. Remote CI status: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
 - Final local results: `npm ci` 649 packages; typecheck/lint exit 0; 8 files / 47 tests; build 1893 modules / 4.63s / `dist` 705K; responsive 27/27 dev and 27/27 preview; proxy HTTP 200 on both; login smoke PASS on both; `git diff --check` exit 0.
-- Audit code commit: `c3d5186f053730e2f78d655115cc71a004d60041`. PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged).
+- Audit code commit: `c3d5186f053730e2f78d655115cc71a004d60041`; CI finalization commit: `5f579f95acb3f5940d4bbaed8a32bf63be0b1d82`. PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged).
 - Strict acceptance keeps PR #3 unmerged until the Category 1 live-generated OpenAPI schema requirement is satisfied or separately approved as an exception. No live backend integration, production verification, full axe/screen-reader WCAG audit, or OpenAPI-generated schema is claimed.
 
 Work stops after this audit. No Step 2 or business-module implementation was started.

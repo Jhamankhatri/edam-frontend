@@ -5,7 +5,8 @@
 **Base:** `37c0a02f79728ea4a95a88b3952b864fb81b7309`
 **PR #3:** <https://github.com/Jhamankhatri/edam-frontend/pull/3>
 **Audit code commit:** `c3d5186f053730e2f78d655115cc71a004d60041`
-**Report note:** this report is finalized in a subsequent docs-only commit; PR #3 head is authoritative for the latest SHA.
+**CI finalization commit:** `5f579f95acb3f5940d4bbaed8a32bf63be0b1d82`
+**Report note:** maintained by docs-only commits; PR #3 head and `gh pr checks 3` are authoritative for the latest SHA and CI status.
 
 ---
 
@@ -20,6 +21,8 @@ The backend repository at `/tmp/edam-backend-readonly` (`main 620f7a795cc67a16e9
 ## 2. Files audited
 
 A static inventory plus full-source review covered **99 application files**: 34 `.ts`, 63 `.tsx`, and 2 `.css` (97 under `src/` plus `vite.config.ts` and `tailwind.config.ts`). Root configuration, `index.html`, `.env.example`, PostCSS/ESLint/tsconfig, `package.json`, and scripts were also inspected for configuration and security consistency. `src/routeTree.gen.ts` is generator-owned; it retains `@ts-nocheck` and `as any` from TanStack Router and is excluded from ESLint.
+
+**Review method and precise scope.** The regenerated current-source corpus (`/tmp/audit-source-current.txt`, 99 file markers, 6,687 lines / 233,328 bytes) was read end to end across seven contiguous chunks, in addition to targeted reads of root configuration, `index.html`, the built CSS bundle, the 19 handover docs, the read-only backend sources, and GitHub PR/CI metadata. This is a **static, source-level audit of the Step 1 working tree**; it is **not** live-backend, production, full WCAG/axe, screen-reader, or OpenAPI-generated-schema verification. Those boundaries are unchanged from §1 and §12, and the residual strict-conformance items are tabulated in §12.1.
 
 <details>
 <summary>Complete application file inventory</summary>
@@ -229,7 +232,7 @@ Added `.github/workflows/frontend-ci.yml`, a single lightweight job on `pull_req
 6. `npm test`
 7. `npm run build`
 
-No backend runtime, database, codegen, browser matrix, axe job, or other expensive job was added. `permissions: contents: read`, a 15-minute timeout, and concurrency cancellation are configured. Local CI-equivalent sequence passed with exit 0. Remote CI status: `PASS — GitHub Actions `Frontend CI` runs 44374694217 (`push`) and 44374695685 (`pull_request`) both concluded `success` on this commit; `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 1m8s.`.
+No backend runtime, database, codegen, browser matrix, axe job, or other expensive job was added. `permissions: contents: read`, a 15-minute timeout, and concurrency cancellation are configured. Local CI-equivalent sequence passed with exit 0. Remote CI status: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
 
 ---
 
@@ -285,6 +288,35 @@ Evidence files are under `/tmp/audit-*.txt`, `/tmp/audit-*.json`, and `/tmp/tail
 
 No category 1 runtime code defect remains in the audited Step 1 application; the category 1 item is the unresolved H02 codegen requirement. No contract was silently invented.
 
+### 12.1 Strict H02 / H07 / H17 conformance dispositions (precision pass, 2026-11-18)
+
+The full 99-file corpus read was checked against strict handover clauses. This table records every **verified**
+residual with an explicit gate, and also records items checked and cleared, so the audit does not imply
+unqualified compliance. No item below is a Step 1 runtime defect: Step 1 calls none of the eight idempotent
+business mutations, has no export/download caller, and has no monetary, table, chart, or Playwright-E2E module.
+
+| Clause | Strict requirement | Verified Step 1 state | Gate |
+|---|---|---|---|
+| H02 §8 / H17 §2 | Generated `src/api/generated/schema.d.ts`, regenerate on every backend pull, CI diff check | `openapi-typescript` devDependency and `npm run types:generate` exist; generated schema and CI diff check absent; no live backend runtime or static generated spec | **Category 1 — resolve before PR #3 merge** (§12, contract notes §7) |
+| H02 §6 | Reuse the same `Idempotency-Key` across retries of one gesture, new key per gesture; `EDAM-1005` short backoff without an error toast; `EDAM-1006` out-of-band reconcile | `resolveIdempotencyKey()` mints a fresh UUID on each `execute()` attempt (including CSRF re-prime and GET network retry); no `EDAM-1005`/`EDAM-1006` branch | Before Step 2 implements any of the eight idempotent mutations |
+| H02 §7 / §9.5 | Branch response reads on `Content-Type`; return the raw `Response` for csv/xlsx/blob; download callers use a blob response type | `parseApiEnvelope()` clones text and JSON-parses unconditionally; `apiFetchRaw()` requires an explicit `responseType: 'raw'`; no `Content-Type` branching; no Step 1 export caller | Before the RPT-002 reporting/export module |
+| H02 §5 / H07 stack | Parse monetary values with `decimal.js-light`; stack also lists TanStack Table, `date-fns`, `recharts`, Playwright | Removed as unused; Step 1 has no monetary, table, chart, or Playwright module (responsive checks use `puppeteer-core`) | Reintroduce with the first monetary/table/chart module |
+| H07 data-flow | All server state through TanStack Query; hover preload; prefetch shell loaders; root-route loader calls `/auth/me`; CSP without `unsafe-eval` | `QueryClientProvider` is wired and badge queries use React Query, but bootstrap uses `AuthProvider` + `Promise.allSettled` direct service calls; no hover preload/prefetch loader; no CSP header in frontend source (H17 §4 assigns CSP/CORS to Nginx/backend) | Before a Step 2 bootstrap refactor and the H14 Phase 4 performance pass |
+| H17 §2–§4 | `pnpm` (or "package manager of choice"); proxy `credentials: 'include'`; same-origin Nginx; CORS/CSP headers | npm with pinned `packageManager: npm@10.9.8` (explicitly permitted by H17); Vite proxy uses `changeOrigin: true` and the client sends `credentials: 'include'`; no Nginx/CORS/CSP config in the frontend package | Deployment/hardening before production |
+
+**Minor consistency residual (not a strict clause):** `MobileNav`'s drawer title, `BrandMark`, and the login
+heading use the literal `EDAM` fallback while `useBranding()` drives `PublicLayout`/`Sidebar` and
+`applyPublicBranding` drives title/meta; `LoginForm` uses inline typography utilities rather than the shared
+`.auth-description` class. Gate: before the theming/branding module (contract notes §3, Category 3).
+
+**Checked and cleared (not deviations):** `bg-brand-panel-subtle`, `text-brand-panel-quiet`, and the custom
+`tracking-*` letter-spacings are defined in `tailwind.config.ts` and emitted in the production CSS bundle;
+`autoCodeSplitting: true` provides route-level splitting and H07 sets no explicit `lazy`/`memo` requirement;
+npm is permitted because H17 §2 says "or package manager of choice". No `pnpm`-only constraint exists.
+
+No residual item changes a backend contract. The Category 1 generated-schema blocker is unchanged; PR #3
+remains open and unmerged.
+
 ---
 
 ## 13. Commit, PR, and stop condition
@@ -293,8 +325,9 @@ No category 1 runtime code defect remains in the audited Step 1 application; the
 - Status: `pr_open`
 - Base: `37c0a02f79728ea4a95a88b3952b864fb81b7309`
 - Audit code commit: `c3d5186f053730e2f78d655115cc71a004d60041`
+- CI finalization commit: `5f579f95acb3f5940d4bbaed8a32bf63be0b1d82`
 - PR #3: <https://github.com/Jhamankhatri/edam-frontend/pull/3> (open, not merged)
-- Remote CI: `PASS — GitHub Actions `Frontend CI` runs 44374694217 (`push`) and 44374695685 (`pull_request`) both concluded `success` on this commit; `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 1m8s.`
+- Remote CI: PASS — GitHub Actions `Frontend CI` concluded `success` on audit code commit `c3d5186` (push run `44374694217`, `pull_request` run `44374695685`) and on docs finalization commit `5f579f9` (push run `44375076663`, `pull_request` run `44375087451`); `gh pr checks 3` reports `Typecheck, lint, test and build` pass in 37s.
 - No new PR, no merge, no `main` push, no backend commit/push, no Step 2 or business module work.
 
 **Audit verdict:** the Step 1 frontend is clean, reusable, optimized, secure, responsive, and maintainable at the foundation level, with all local quality gates passing. It is **not** claimed production-verified or live-backend integrated. Strict commercial-banking acceptance keeps PR #3 unmerged until the Category 1 generated-schema requirement is satisfied or a separately approved exception is recorded. Work stops here.
