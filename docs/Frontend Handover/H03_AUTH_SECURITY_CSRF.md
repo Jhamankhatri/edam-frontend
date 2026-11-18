@@ -1,43 +1,52 @@
 # H03 — Authentication, Sessions, CSRF, Bootstrap
 
-EDAM uses **server-side Spring Security sessions with CSRF double-submit cookies**. No JWTs, no
-local-storage tokens. The frontend is a pure cookie client.
+Session model: server-side Spring Security sessions, `JSESSIONID` HttpOnly cookie, CSRF
+double-submit cookie. No JWT, no localStorage tokens.
 
 ## 1. Session lifecycle
 
-| Event | API call | Cookies set / cleared | Frontend state |
-|-------|----------|-----------------------|----------------|
-| App boot | `GET /api/v1/auth/me` (AUTH-008) | Session & CSRF cookies already present if valid | Hydrate auth store; if 401 → anonymous state |
-| Anonymous user visits app | `GET /api/v1/auth/installation` (AUTH-005) then `GET /api/v1/auth/csrf` (AUTH-003) | `XSRF-TOKEN` set; no `JSESSIONID` | Show login or bootstrap depending on `bootstrapped` flag |
-| Login | `POST /api/v1/auth/login` (AUTH-006) | `JSESSIONID` + rotated `XSRF-TOKEN` (HttpOnly, SameSite=Lax) | Decode `CurrentUserResponse` → auth store |
-| Logout | `POST /api/v1/auth/logout` (AUTH-007) | `JSESSIONID` cleared; `XSRF-TOKEN` rotated | Clear auth store → `/login` |
-| Session expires | Any call returning 401 `UNAUTHENTICATED` | Browser still has stale cookies until next `/csrf` call | Publish `auth:expired`, clear store, redirect to `/login?returnTo=<path>` |
-| Must-change-password | On `GET /auth/me`, `mustChangePassword: true` | — | Force redirect to `/change-password` until flag clears |
-| Forgot password | `POST /api/v1/auth/forgot-password` (AUTH-004) | — | Always show "If that email exists…" to avoid enumeration |
-| Reset password | `POST /api/v1/auth/reset-password` (AUTH-009) with `?token=` from email | — | On success → login screen with "Password updated" toast |
+| Event | API | Cookies | Frontend |
+|-------|-----|---------|----------|
+| App boot | `GET /auth/me` (AUTH-008). If 401 → anonymous state. | Reuses existing `JSESSIONID`. | Hydrate auth store; if 401 → treat as anonymous. |
+| CSRF priming | `GET /auth/csrf` (AUTH-003) BEFORE first write. | Explicitly sets/rotates `XSRF-TOKEN` cookie. | Read cookie after response resolves. |
+| Login | `POST /auth/login` (AUTH-006) with `Idempotency-Key`, body `{username, password}`. | Sets `JSESSIONID` (HttpOnly, SameSite=Lax) and rotates `XSRF-TOKEN`. | Store `CurrentUserResponse`, call `/auth/csrf` or re-read cookie. |
+| Logout | `POST /auth/logout` (AUTH-007). No body. | Invalidates `JSESSIONID`; `XSRF-TOKEN` rotated. | Clear QueryClient and auth store; navigate `/login`. |
+| Session expires | Any call returning 401 `EDAM-2001`. | Cookies may still be present. | Publish `auth:expired`, clear store, redirect `/login?returnTo=`. |
+| Must-change-password | `GET /auth/me` returns `mustChangePassword:true`. | — | Force redirect `/change-password`. |
+| Forgot password | `POST /auth/forgot-password` (AUTH-004). Always returns the same `NeutralResponse`. | — | Show constant message (no enumeration). |
+| Reset password | `POST /auth/reset-password` (AUTH-009) with `{token, newPassword}`. | — | On success → `/login` with toast. |
+| Change password | `POST /auth/change-password` (AUTH-002). | — | Return to previous screen. |
+| Installation status | `GET /auth/installation` (AUTH-005). | None required. | If `!bootstrapped` → `/bootstrap`. |
+| Bootstrap | `POST /auth/bootstrap` (AUTH-001) with `X-Installation-Token` header, body `BootstrapRequest`. | Does NOT set session cookie. | On 201, show "Administrator created — please sign in" → navigate `/login`. |
 
-## 2. CSRF (double-submit cookie)
+## 2. Bootstrap flow detail (D-23)
 
-Configuration source: `com.edam.config.SecurityConfig` line 185:
+Bootstrap returns **201 Created** with `BootstrapResponse { userId, username, displayName, roles, bootstrappedAt }`.
+Unlike login, the bootstrap endpoint does NOT call `securityContextRepository.saveContext(...)`,
+so no session is established and no `JSESSIONID` is issued. The UI MUST prompt the administrator
+to sign in explicitly after bootstrap. This separation is by design: the installation token is
+a setup credential, not a user credential.
+
+## 3. CSRF double-submit cookie
+
+Source: `SecurityConfig.csrfTokenRepository()`:
 ```java
-http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
+CookieCsrfTokenRepository.withHttpOnlyFalse()
 ```
 
-This means:
+- Cookie name: **`XSRF-TOKEN`**; readable by JS (not HttpOnly).
+- Request header: **`X-XSRF-TOKEN`** on every POST/PUT/PATCH/DELETE.
+- The cookie is set (persisted) by Spring's CsrfFilter on the first non-GET request OR when
+  explicitly loaded and saved. **IMPORTANT:** because Spring 6 uses deferred CSRF tokens, a GET
+  request alone does NOT necessarily materialise the cookie. The client MUST call
+  `GET /auth/csrf` (which reads the `_csrf` attribute and calls `csrfTokenRepository.saveToken`)
+  before its first write; this is the only way to guarantee the cookie is present.
+- Cookie is rotated on login and logout. After login success, either re-call `/auth/csrf` or
+  re-read `document.cookie` before the next write.
+- If a write returns 403 without a permission-denied code (i.e. raw Spring CSRF failure),
+  refetch `/auth/csrf` and retry the request once (stale token after rotation).
 
-- Cookie name: **`XSRF-TOKEN`** (set on every GET that hits the filter chain, including `/auth/csrf`).
-- Request header name: **`X-XSRF-TOKEN`**.
-- The cookie is **not** HttpOnly so JavaScript can read it; HttpOnly+SameSite protection lives
-  on the `JSESSIONID` cookie.
-- All state-changing requests (`POST`, `PUT`, `PATCH`, `DELETE`) MUST send the header.
-- The cookie is **rotated** on login and logout. After login, re-read the cookie before issuing
-  any further writes (the TanStack Query `onSuccess` of the login mutation should refetch
-  `/auth/csrf` once, or simply re-read `document.cookie`).
-- GET, HEAD, OPTIONS do not require CSRF.
-- CSRF failure returns 403 `ACCESS_DENIED`. If the frontend sees a 403 that is not a genuine
-  permission denial, the recovery is: refetch `GET /auth/csrf`, wait one tick, retry once.
-
-Cookie parsing helper (TypeScript):
+Cookie reader:
 ```ts
 function readCsrfCookie(): string | null {
   const m = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
@@ -45,58 +54,45 @@ function readCsrfCookie(): string | null {
 }
 ```
 
-## 3. Bootstrap (one-time installation)
+## 4. Bootstrap header
 
-Before the first user exists, the backend exposes `GET /api/v1/auth/installation` (public) which returns `{ bootstrapped, bootstrappedAt }`.
+Header name: **`X-Installation-Token`** (one-time installation token). This is the ONLY place
+the installation token is accepted; never put it in the URL body, localStorage, or logs.
 
-- If `bootstrapped === false` on app boot → redirect to `/bootstrap`.
-- The bootstrap form posts to `POST /api/v1/auth/bootstrap` and **must** send the one-time token
-  provided by the server operator (via env/config) in the header:
+## 5. Public vs. authenticated endpoints
 
-  ```
-  X-Installation-Token: <token>
-  ```
+Per `SecurityConfig.publicMatchers` at `securityFilterChain`:
 
-  ⚠️ **The correct header name is `X-Installation-Token`** (source: `AuthController.java:196`).
-  Earlier drafts used `X-EDAM-Bootstrap-Token` — that is wrong and will be rejected with 401.
+Public (no session required):
+- `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/csrf`,
+  `GET /api/v1/auth/installation`, `POST /api/v1/auth/bootstrap`,
+  `POST /api/v1/auth/forgot-password`, `POST /api/v1/auth/reset-password`,
+  `GET /api/v1/public/configuration`,
+  `/error`, `/v3/api-docs/**`, `/swagger-ui*`, `/actuator/health[/…]`, `/actuator/info`.
 
-- On success (200, `BootstrapResponse`), the user is logged in as the installation admin; route
-  to `/` and continue normal boot.
-- If the endpoint returns `INSTALLATION_ALREADY_COMPLETED` (422), the boot was raced or the
-  token was used twice → redirect to `/login`.
+Authenticated (any logged-in user, no specific permission):
+- `GET /api/v1/auth/me`, `POST /api/v1/auth/change-password`.
 
-## 4. `/api/v1/system/info` is NOT public
+**`GET /api/v1/system/info` (SYS-001) is authenticated (deny-by-default at the filter chain).**
+The method is annotated `@PublicEndpoint` but that annotation is documentation-only (enforced
+by an architecture test, not by the filter chain); the SecurityConfig `publicMatchers` list
+does not include `/api/v1/system/info`, so unauthenticated access receives 401.
 
-`GET /api/v1/system/info` (SYS-001) returns version/build metadata but is **deny-by-default** —
-it requires an authenticated session. Do not call it from the public login/boot screens; call it
-after the user is authenticated (e.g. on the post-login settings screen) or gate it with a
-permission-appropriate admin page. Source: `SecurityConfig.publicMatchers()` does NOT include it.
+## 6. Route auth matrix
 
-## 5. `GET /api/v1/public/configuration` is the only public config source
-
-Use it on the login screen to load branding, theme tokens, feature flags, and the password
-policy preview. It does NOT require CSRF or a session. Response type: `PublicConfigurationResponse`.
-
-## 6. Route-level auth matrix
-
-| Route group | Required state | Redirect if unmet |
-|-------------|----------------|-------------------|
+| Route group | Required state | Redirect |
+|-------------|----------------|----------|
 | `/login`, `/forgot-password`, `/reset-password`, `/bootstrap` | anonymous | If logged in → `/` |
 | `/change-password` | authenticated with `mustChangePassword=true` | `/` if flag false |
-| `/app/*` (all app routes) | authenticated + `mustChangePassword=false` | `/login?returnTo=` (or `/change-password`) |
-| Admin routes (`/app/admin/*`) | authenticated + relevant permission | `<AccessDenied/>` in-slot (do not redirect away) |
+| `/app/*` | authenticated + `mustChangePassword=false` | `/login?returnTo=` or `/change-password` |
+| Admin routes | authenticated + route permission | `<AccessDenied/>` in outlet (no silent redirect) |
 
-## 7. Security hardening for the frontend
+## 7. Security hardening
 
-- **Never** store the session token in localStorage/sessionStorage. Cookies are the only store.
-- **Never** send credentials to third-party origins; enforce `VITE_API_BASE_URL` same-origin via
-  proxy in dev and same-origin deployment in prod.
-- Set `credentials: 'include'` on every fetch (TanStack Query `defaultOptions.credentials`).
-- On logout, call `/auth/logout` AND clear in-memory caches (QueryClient.clear(), navigate away,
-  wipe local non-sensitive UI state like open modals — but do NOT touch cookies).
-- CSP (set by backend or reverse proxy): `default-src 'self'`; `img-src 'self' data:; script-src
-  'self'; style-src 'self' 'unsafe-inline'` (required for Tailwind runtime or shadcn CSS-in-JS if
-  any is used). Avoid `unsafe-eval`.
-- The frontend must **never** echo the `correlationId` into UI except on 5xx errors; do not
-  expose raw error stacks.
-- The `/auth/csrf` endpoint can be called anonymously but is rate-limited; do not poll it.
+- `credentials: 'include'` globally; no `Authorization` header.
+- Never persist tokens in localStorage/sessionStorage.
+- Same-origin deployment strongly recommended (Vite proxy dev, Nginx proxy prod); CORS needed
+  only for cross-origin and must `allowCredentials(true)` (see H17).
+- CSP (see H17) must block `unsafe-eval`; Tailwind requires `style-src 'self' 'unsafe-inline'`.
+- The frontend must never echo stack traces, raw server error messages, or the installation
+  token into the UI.
