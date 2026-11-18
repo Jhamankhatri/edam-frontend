@@ -219,7 +219,7 @@ A full automated axe contrast/tree audit, screen-reader pass, keyboard-only trav
 2. H02 §3 HTTP status mappings: **resolved** with backend-source evidence — four stale statuses (`EDAM-3001`/`3004` → 422, `EDAM-5003` → 502, `EDAM-5001` → 409 or 503) and one earlier audit error (`EDAM-5005` → 400 is correct). The client still keys off `error.code`; see §18.
 3. H08 theme-token naming differs from `PublicConfigurationService`; the frontend maps prefixed/camel/kebab/snake aliases.
 4. H17 requires `X-Installation-Token` in CORS but `CorsConfig` omits it; same-origin proxy avoids a frontend workaround.
-5. H10 lookup paths and permissions: **resolved** against the genuine pinned OpenAPI JSON and backend controllers; all five H10-only paths are absent, and nine canonical paths are locked in code and tests. Step 1 still calls no lookup endpoint; see §18.
+5. H10 lookup paths and permissions: **resolved** against the genuine pinned OpenAPI JSON and backend controllers; all five H10-only paths are absent, and ten canonical paths are locked in code and tests. Step 1 still calls no lookup endpoint; see §18.
 6. H04/H09/Appendix A dashboard wording conflicts; the stricter route permission is used.
 7. Required OpenAPI codegen: **resolved** — the genuine artifact from backend Actions run `44395699755` is pinned with a verified SHA-256, `src/api/generated/schema.d.ts` is generated from it, and CI fails on drift; see §18.
 8. `PasswordPolicyView.requireSpecial` publishes no character class; no regex is invented.
@@ -342,7 +342,7 @@ backend discrepancy. `src/api/error-status.ts` centralizes the source-derived ta
 permission codes; `src/api/errors.ts` now uses them, removing a duplicated inline set. H02 is
 unchanged.
 
-**2B (H10):** all five H10-only lookup paths are absent from the genuine spec. The nine canonical
+**2B (H10):** all five H10-only lookup paths are absent from the genuine spec. The ten canonical
 paths (`/expense-configuration/{request-types,categories,natures}`, `/workflows`,
 `/master-data/{currencies,vendors,tax-authorities}`, `/organization/{departments,branches,units/tree}`)
 with their real query parameters, response shapes and distinct permission codes are recorded in

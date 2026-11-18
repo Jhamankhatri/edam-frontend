@@ -446,11 +446,12 @@ paths (verified in the spec and in `ExpenseConfigurationController`,
 - `GET /api/v1/organization/departments`, `/branches`, and `/organization/units/tree` (all
   `organization:view`). `/organization/departments/tree` does not exist.
 
-Implementation: `CANONICAL_LOOKUP_ENDPOINTS` in `src/api/endpoints.ts` records the nine canonical
-relative paths; `src/api/openapi-contract.test.ts` proves at compile time that each exists in the
-generated `paths` interface and at runtime that each has a GET and that no H10 path exists. Step 1
-calls no lookup endpoint, so no H10 path is encoded in any screen. H10 and Appendix A remain
-unchanged.
+Implementation: `CANONICAL_LOOKUP_ENDPOINTS` in `src/api/endpoints.ts` records the ten canonical
+relative paths (the authoritative paths listed above plus `/organization/departments`).
+`src/api/openapi-contract.test.ts` asserts the exact ten-entry list, proves at compile time that
+each exists in the generated `paths` interface, and proves at runtime that each has a GET and that
+no H10 path exists. Step 1 calls no lookup endpoint, so no H10 path is encoded in any screen.
+H10 and Appendix A remain unchanged.
 
 ### 14.4 CI consistency and inspect results
 

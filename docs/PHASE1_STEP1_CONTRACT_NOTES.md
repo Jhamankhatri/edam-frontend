@@ -81,9 +81,12 @@ five H10-only paths exists in the spec: `/api/v1/configuration/request-types`,
 
 H10's blanket permissions are also wrong: the four config/workflow lookups do not all require
 `expense-configuration:view`, and the three master-data lookups do not all require `currency:view`.
-The canonical paths are recorded in `src/api/endpoints.ts` as `CANONICAL_LOOKUP_ENDPOINTS`, proven
-against the generated `paths` interface at compile time and against the pinned JSON at test time.
-Step 1 calls no lookup endpoint, so no H10 path is encoded in any screen.
+The table above maps every H10 lookup reference to its authoritative path.
+`CANONICAL_LOOKUP_ENDPOINTS` in `src/api/endpoints.ts` contains **ten** entries: the authoritative
+paths in the table plus `/api/v1/organization/departments`, which H10 does not list separately but
+which the genuine spec exposes and Step 2 forms need. All ten are proven against the generated
+`paths` interface at compile time and against the pinned JSON at test time. Step 1 calls no lookup
+endpoint, so no H10 path is encoded in any screen.
 
 ## 6. Dashboard route wording
 
@@ -173,7 +176,7 @@ Categories are strict gates, not severity scores. No backend contract is invente
 | §2 | H02 §3 HTTP status mapping. | 2 | **Resolved.** Four stale statuses (`EDAM-3001`/`3004` → 422, `EDAM-5003` → 502, `EDAM-5001` → 409 or 503) are recorded from `GlobalExceptionHandler.statusFor`; `EDAM-5005` → 400 was an earlier audit error, not a backend discrepancy. The pinned spec declares only 200 responses, so source is authoritative. `src/api/error-status.ts` centralizes the 403 permission classification and is covered by tests. H02 itself is unchanged. |
 | §3 | H08 theme-token naming differs from `PublicConfigurationService` camelCase/kebab/snake/prefixed keys. | 3 | `src/lib/theme.ts` maps all documented aliases safely and retains H08 fallbacks. Choose a canonical naming convention before the later theming/branding module; no Step 1 behavior changes. |
 | §4 | H17 requires `X-Installation-Token` in CORS; backend `CorsConfig` omits it. | 4 | Same-origin deployment and Vite proxy avoid preflight. Cross-origin bootstrap requires a backend CORS change; the backend is READ-ONLY in this audit and no frontend workaround was added. |
-| §5 | H10 lookup paths and permissions differ from Appendix A/source. | 2 | **Resolved.** All five H10-only paths are absent from the genuine spec; the nine canonical paths, real query parameters, response shapes and distinct permission codes are recorded in §5 and `CANONICAL_LOOKUP_ENDPOINTS`. Compile-time and runtime contract tests lock them. No H10 path is encoded in Step 1 screens; H10/Appendix A are unchanged. |
+| §5 | H10 lookup paths and permissions differ from Appendix A/source. | 2 | **Resolved.** All five H10-only paths are absent from the genuine spec; the ten canonical paths, real query parameters, response shapes and distinct permission codes are recorded in §5 and `CANONICAL_LOOKUP_ENDPOINTS`. Compile-time and runtime contract tests lock them. No H10 path is encoded in Step 1 screens; H10/Appendix A are unchanged. |
 | §6 | H04/H09/Appendix A dashboard permission conflict. | 4 | Product/owner decision. Step 1 preserves H04 nav visibility to authenticated users and the stricter H09/Appendix A `report:view` route rule; it calls no dashboard API. If Step 2 implements dashboard widgets, this decision becomes a Step 2 implementation gate. |
 | §7 | H02 §8 / H17 require generated OpenAPI types and a CI diff check. | 1 | **Resolved.** The genuine, checksum-verified artifact from backend run `44395699755` is pinned with provenance metadata; `npm run types:generate` produces `src/api/generated/schema.d.ts`; `npm run types:check` and the `openapi-contract` CI job regenerate and fail on drift. No production backend or credentials run in frontend CI. PR #3 remains open and unmerged awaiting review, but the Category 1 gate is cleared. |
 | §8 | `PasswordPolicyView.requireSpecial` publishes no accepted character class. | 3 | Step 1 displays the policy and relies on server `EDAM-2008 WEAK_PASSWORD`; no regex was invented. Resolve before a later password-policy/validation module. |

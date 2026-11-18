@@ -158,8 +158,26 @@ describe('Category 2A — H02 HTTP status mapping', () => {
 });
 
 describe('Category 2B — H10 lookup endpoints', () => {
+  it('defines exactly the ten canonical lookup paths', () => {
+    expect(Object.values(CANONICAL_LOOKUP_ENDPOINTS)).toEqual([
+      '/expense-configuration/request-types',
+      '/expense-configuration/categories',
+      '/expense-configuration/natures',
+      '/workflows',
+      '/master-data/currencies',
+      '/master-data/vendors',
+      '/master-data/tax-authorities',
+      '/organization/departments',
+      '/organization/units/tree',
+      '/organization/branches',
+    ]);
+    expect(Object.keys(CANONICAL_LOOKUP_ENDPOINTS)).toHaveLength(10);
+  });
+
   it('contains every canonical lookup path with a GET operation', () => {
-    for (const relative of Object.values(CANONICAL_LOOKUP_ENDPOINTS)) {
+    const relativePaths = Object.values(CANONICAL_LOOKUP_ENDPOINTS);
+    expect(relativePaths).toHaveLength(10);
+    for (const relative of relativePaths) {
       const path = `/api/v1${relative}`;
       expect(specPaths).toContain(path);
       expect(operationAt(doc, path, 'get')).toBeDefined();
