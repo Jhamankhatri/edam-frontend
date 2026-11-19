@@ -41,18 +41,17 @@ export function ForgotPasswordForm({ onSubmit }: { onSubmit: (values: ForgotPass
 
   return (
     <section className="auth-card motion-safe:animate-fade-up">
-      <div className="mb-6">
-        <p className="flex items-center gap-2 auth-eyebrow">
-          <Mail aria-hidden="true" className="h-4 w-4" />
-          Account recovery
-        </p>
-        <h2 className="mt-2 font-display text-2xl font-semibold">Reset your password</h2>
+      <header>
+        <p className="auth-eyebrow"><Mail aria-hidden="true" className="h-3.5 w-3.5" />Account recovery</p>
+        <h2 className="auth-title">Reset your password</h2>
         <p className="auth-description">
           EDAM returns the same response whether or not an address is registered.
         </p>
-      </div>
+      </header>
 
-      <form className="space-y-4" onSubmit={submit} noValidate>
+      <div className="ledger-rule my-6" />
+
+      <form className="space-y-5" onSubmit={submit} noValidate>
         {submitError && (
           <Alert variant="destructive"><AlertDescription>{submitError}</AlertDescription></Alert>
         )}

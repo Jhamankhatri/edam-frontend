@@ -1,0 +1,904 @@
+{
+  "baseUrl": "http://127.0.0.1:5173",
+  "generatedAt": "2026-11-19T04:12:19.115Z",
+  "preview": {
+    "mode": "development-only",
+    "watermark": "DEVELOPMENT PREVIEW · Mock session · no live backend data · not institutional information",
+    "note": "Identity, organization, approval and notification values in these screenshots are synthetic values injected by scripts/visual-audit.mjs through intercepted API envelopes. The application renders only /auth/me, /public/configuration and documented badge endpoint data at runtime. No live Spring Boot backend or production deployment is used.",
+    "values": {
+      "user": "Preview Session",
+      "email": "preview.session@example.invalid",
+      "organization": "Preview Institution",
+      "approvalCount": 3,
+      "notificationUnreadCount": 2,
+      "source": "intercepted development envelopes in scripts/visual-audit.mjs"
+    }
+  },
+  "comparisonBaseline": "PR #4 committed screenshots",
+  "viewports": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Create the administrator"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 8,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Change your password"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 8,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    }
+  ],
+  "screenshots": [
+    "login-desktop-1440.png",
+    "bootstrap-desktop-1440.png",
+    "dashboard-desktop-1440.png",
+    "login-laptop-1280.png",
+    "bootstrap-laptop-1280.png",
+    "dashboard-laptop-1280.png",
+    "login-tablet-834.png",
+    "bootstrap-tablet-834.png",
+    "dashboard-tablet-834.png",
+    "login-tablet-small-768.png",
+    "bootstrap-tablet-small-768.png",
+    "dashboard-tablet-small-768.png",
+    "login-mobile-390.png",
+    "bootstrap-mobile-390.png",
+    "dashboard-mobile-390.png",
+    "login-mobile-small-320.png",
+    "bootstrap-mobile-small-320.png",
+    "dashboard-mobile-small-320.png"
+  ],
+  "comparisons": [
+    {
+      "file": "login-desktop-1440.png",
+      "width": 1440,
+      "height": 900,
+      "changedPixelRatio": 0.8812
+    },
+    {
+      "file": "bootstrap-desktop-1440.png",
+      "width": 1440,
+      "height": 934,
+      "changedPixelRatio": 0.8753
+    },
+    {
+      "file": "dashboard-desktop-1440.png",
+      "width": 1440,
+      "height": 908,
+      "changedPixelRatio": 0.8072
+    },
+    {
+      "file": "login-laptop-1280.png",
+      "width": 1280,
+      "height": 800,
+      "changedPixelRatio": 0.8358
+    },
+    {
+      "file": "bootstrap-laptop-1280.png",
+      "width": 1280,
+      "height": 934,
+      "changedPixelRatio": 0.8657
+    },
+    {
+      "file": "dashboard-laptop-1280.png",
+      "width": 1280,
+      "height": 931,
+      "changedPixelRatio": 0.8112
+    },
+    {
+      "file": "login-tablet-834.png",
+      "width": 834,
+      "height": 1112,
+      "changedPixelRatio": 0.704
+    },
+    {
+      "file": "bootstrap-tablet-834.png",
+      "width": 834,
+      "height": 1182,
+      "changedPixelRatio": 0.7105
+    },
+    {
+      "file": "dashboard-tablet-834.png",
+      "width": 834,
+      "height": 1264,
+      "changedPixelRatio": 0.7544
+    },
+    {
+      "file": "login-tablet-small-768.png",
+      "width": 768,
+      "height": 1024,
+      "changedPixelRatio": 0.7216
+    },
+    {
+      "file": "bootstrap-tablet-small-768.png",
+      "width": 768,
+      "height": 1182,
+      "changedPixelRatio": 0.7181
+    },
+    {
+      "file": "dashboard-tablet-small-768.png",
+      "width": 768,
+      "height": 1310,
+      "changedPixelRatio": 0.7403
+    },
+    {
+      "file": "login-mobile-390.png",
+      "width": 390,
+      "height": 844,
+      "changedPixelRatio": 0.771
+    },
+    {
+      "file": "bootstrap-mobile-390.png",
+      "width": 390,
+      "height": 1392,
+      "changedPixelRatio": 0.7649
+    },
+    {
+      "file": "dashboard-mobile-390.png",
+      "width": 390,
+      "height": 1634,
+      "changedPixelRatio": 0.7341
+    },
+    {
+      "file": "login-mobile-small-320.png",
+      "width": 320,
+      "height": 889,
+      "changedPixelRatio": 0.7962
+    },
+    {
+      "file": "bootstrap-mobile-small-320.png",
+      "width": 320,
+      "height": 1502,
+      "changedPixelRatio": 0.7923
+    },
+    {
+      "file": "dashboard-mobile-small-320.png",
+      "width": 320,
+      "height": 1777,
+      "changedPixelRatio": 0.7453
+    }
+  ],
+  "failures": []
+}

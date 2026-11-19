@@ -11,7 +11,6 @@ function ApprovalCaseFoundation() {
         icon={Gavel}
         title="Approval Case"
         description={`Foundation for the server-authoritative case file and availableActions UI. Route reference: ${taskId}.`}
-        endpointGroup="APL-003 / APL-004…008"
       />
     </RequirePermission>
   );

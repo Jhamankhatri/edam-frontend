@@ -55,18 +55,17 @@ export function ResetPasswordForm({ token, onSubmit }: ResetPasswordFormProps) {
 
   return (
     <section className="auth-card motion-safe:animate-fade-up">
-      <div className="mb-6">
-        <p className="flex items-center gap-2 auth-eyebrow">
-          <KeyRound aria-hidden="true" className="h-4 w-4" />
-          Choose a new password
-        </p>
-        <h2 className="mt-2 font-display text-2xl font-semibold">Set your password</h2>
+      <header>
+        <p className="auth-eyebrow"><KeyRound aria-hidden="true" className="h-3.5 w-3.5" />Choose a new password</p>
+        <h2 className="auth-title">Set your password</h2>
         <p className="auth-description">
           The backend validates the reset token and password policy.
         </p>
-      </div>
+      </header>
 
-      <form className="space-y-4" onSubmit={submit} noValidate>
+      <div className="ledger-rule my-6" />
+
+      <form className="space-y-5" onSubmit={submit} noValidate>
         {submitError && (
           <Alert variant="destructive"><AlertDescription>{submitError}</AlertDescription></Alert>
         )}

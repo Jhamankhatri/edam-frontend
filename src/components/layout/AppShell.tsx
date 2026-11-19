@@ -11,8 +11,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const badges = useShellBadges();
 
   return (
-    <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-background">
-      <aside className={cn('hidden shrink-0 transition-all duration-200 lg:block', collapsed ? 'w-20' : 'w-72')}>
+    <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-canvas">
+      <aside className={cn('hidden shrink-0 transition-all duration-240 ease-standard lg:block', collapsed ? 'w-20' : 'w-72')}>
         <div className={cn('fixed inset-y-0 left-0 z-40', collapsed ? 'w-20' : 'w-72')}>
           <Sidebar
             collapsed={collapsed}
@@ -23,8 +23,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar badges={badges} />
-        <main className="min-w-0 flex-1 px-3 py-5 sm:px-5 lg:px-7 xl:px-9">
-          <div className="mx-auto w-full max-w-shell">{children}</div>
+        <main className="page-canvas min-w-0 flex-1 px-3 py-5 sm:px-5 lg:px-7 lg:py-7 xl:px-9">
+          <div className="mx-auto w-full max-w-content">{children}</div>
         </main>
       </div>
     </div>

@@ -11,7 +11,6 @@ function RequestDetailFoundation() {
         icon={FileText}
         title="Request Detail"
         description={`Foundation for summary, items, timeline, and per-request documents. Route reference: ${id}.`}
-        endpointGroup="REQ-003 / REQ-005 / DOC-002"
       />
     </RequirePermission>
   );

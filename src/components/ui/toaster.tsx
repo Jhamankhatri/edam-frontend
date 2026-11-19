@@ -9,9 +9,9 @@ export function Toaster() {
       closeButton
       toastOptions={{
         classNames: {
-          toast: 'rounded-xl border border-border shadow-elevated',
-          title: 'text-sm font-semibold',
-          description: 'text-sm',
+          toast: 'rounded-xl border border-line bg-surface-gradient shadow-layered',
+          title: 'text-sm font-semibold text-foreground',
+          description: 'text-sm text-muted-foreground',
         },
       }}
     />

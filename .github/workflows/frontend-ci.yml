@@ -66,6 +66,9 @@ jobs:
       - name: ESLint (zero warnings)
         run: npm run lint
 
+      - name: Design-system token governance
+        run: npm run check:design
+
       - name: Unit and flow tests
         run: npm test
 

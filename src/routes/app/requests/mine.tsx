@@ -10,7 +10,6 @@ function MyRequestsFoundation() {
         icon={Files}
         title="My Requests"
         description="Foundation for the requester's own list, filtering, and scoped actions. Future data comes only from the documented request endpoint."
-        endpointGroup="REQ-001 · request:view-own"
       />
     </RequirePermission>
   );

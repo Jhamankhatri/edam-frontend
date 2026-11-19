@@ -79,18 +79,17 @@ export function ChangePasswordForm({ policy, onSubmit }: ChangePasswordFormProps
 
   return (
     <section className="auth-card motion-safe:animate-fade-up">
-      <div className="mb-6">
-        <p className="flex items-center gap-2 auth-eyebrow">
-          <ShieldCheck aria-hidden="true" className="h-4 w-4" />
-          Security verification
-        </p>
-        <h2 className="mt-2 font-display text-2xl font-semibold">Change your password</h2>
+      <header>
+        <p className="auth-eyebrow"><ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" />Security verification</p>
+        <h2 className="auth-title">Change your password</h2>
         <p className="auth-description">
           A password change is required before the workspace can be accessed.
         </p>
-      </div>
+      </header>
 
-      <form className="space-y-4" onSubmit={submit} noValidate>
+      <div className="ledger-rule my-6" />
+
+      <form className="space-y-5" onSubmit={submit} noValidate>
         {submitError && (
           <Alert variant="destructive"><AlertDescription>{submitError}</AlertDescription></Alert>
         )}

@@ -23,7 +23,7 @@ export function ErrorState({
         <AlertTitle>{title}</AlertTitle>
         <AlertDescription>{description}</AlertDescription>
         {correlationId && (
-          <AlertDescription className="mt-2 font-mono text-xs">Support reference: {correlationId}</AlertDescription>
+          <AlertDescription className="mt-2 font-numeric text-xs">Support reference: {correlationId}</AlertDescription>
         )}
         {onRetry && (
           <Button variant="outline" className="mt-4" onClick={onRetry}>

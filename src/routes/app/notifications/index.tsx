@@ -10,7 +10,6 @@ function NotificationsFoundation() {
         icon={Bell}
         title="Notifications"
         description="Foundation for the notification inbox and unread badge. The shell already polls the documented unread-count endpoint only when authorized."
-        endpointGroup="NTF-001…004 · notification:view"
       />
     </RequirePermission>
   );

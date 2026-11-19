@@ -11,18 +11,19 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
+/** Predictable, token-driven variants shared by every action in the product. */
 export const buttonVariants = cva(
-  'inline-flex min-h-10 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 active:translate-y-px',
+  'inline-flex min-h-10 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition-[transform,box-shadow,background-color,color,filter] duration-150 ease-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-[var(--ds-state-disabled-opacity)] active:translate-y-px',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow-soft hover:brightness-95',
-        secondary: 'bg-secondary text-secondary-foreground hover:brightness-95',
-        outline: 'border border-border bg-card text-foreground hover:bg-muted',
-        ghost: 'text-foreground hover:bg-muted',
-        destructive: 'bg-destructive text-destructive-foreground hover:brightness-95',
+        default: 'bg-primary-gradient text-primary-foreground shadow-soft hover:shadow-elevated hover:brightness-105 active:shadow-pressed',
+        secondary: 'bg-secondary text-secondary-foreground shadow-soft hover:bg-state-selected hover:shadow-elevated active:shadow-pressed',
+        outline: 'border border-line-strong bg-surface text-foreground shadow-soft hover:border-line-strong hover:bg-state-hover hover:shadow-elevated active:shadow-pressed',
+        ghost: 'text-foreground hover:bg-state-hover active:bg-state-active',
+        destructive: 'bg-destructive text-destructive-foreground shadow-soft hover:brightness-95 active:shadow-pressed',
         link: 'text-primary underline-offset-4 hover:underline',
-        gold: 'bg-brand-gold text-brand-ink shadow-soft hover:brightness-95',
+        gold: 'bg-accent-warm text-accent-warm-foreground shadow-soft hover:brightness-105 hover:shadow-elevated active:shadow-pressed',
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import type { ShellBadges } from '@/hooks/useShellBadges';
+import { useBranding } from '@/hooks/useBranding';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -13,6 +14,7 @@ import { Sidebar } from './Sidebar';
 
 export function MobileNav({ badges }: { badges: ShellBadges }) {
   const [open, setOpen] = useState(false);
+  const branding = useBranding();
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -22,12 +24,12 @@ export function MobileNav({ badges }: { badges: ShellBadges }) {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerTitle className="px-5 pb-1 pt-5 font-display text-xl font-semibold">EDAM</DrawerTitle>
-        <DrawerDescription className="px-5 pb-4 text-xs text-brand-panel-muted">
-          Permission-aware navigation
+        <DrawerTitle className="px-5 pb-1 pt-5 font-display text-2xl font-semibold tracking-display">{branding.appName}</DrawerTitle>
+        <DrawerDescription className="px-5 pb-4 font-numeric text-2xs uppercase tracking-eyebrow-wide text-on-brand-muted">
+          Workspace register
         </DrawerDescription>
         <div className="min-h-0 flex-1">
-          <Sidebar compactHeader badges={badges} onNavigate={() => setOpen(false)} />
+          <Sidebar badges={badges} onNavigate={() => setOpen(false)} />
         </div>
       </DrawerContent>
     </Drawer>

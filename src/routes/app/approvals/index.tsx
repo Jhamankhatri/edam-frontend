@@ -10,7 +10,6 @@ function ApprovalsFoundation() {
         icon={ClipboardCheck}
         title="Approval Inbox"
         description="Foundation for assigned tasks and the 60-second approved-count poll. Task actions remain deferred to the approval module."
-        endpointGroup="APL-001 / APL-002 · approval:view"
       />
     </RequirePermission>
   );

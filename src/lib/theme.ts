@@ -4,7 +4,7 @@ const appliedProperties = new Set<string>();
 const unsafeValue = /[;{}<>]/;
 // Bootstrap fallback used only when neither public configuration nor CSS custom
 // properties are available. Runtime branding remains isolated to this module.
-const FALLBACK_BRAND_NAVY = '#0b1f3a';
+const FALLBACK_BRAND_NAVY = '#0d211c';
 
 const tokenAliases: Record<string, readonly string[]> = {
   background: ['--background'],
@@ -28,6 +28,8 @@ const tokenAliases: Record<string, readonly string[]> = {
   warning: ['--warning'],
   info: ['--info'],
   error: ['--destructive'],
+  danger: ['--destructive'],
+  information: ['--info'],
   radius: ['--radius'],
   text: ['--foreground'],
   heading: ['--foreground'],
@@ -35,6 +37,13 @@ const tokenAliases: Record<string, readonly string[]> = {
   navText: ['--primary-foreground'],
   buttonPrimary: ['--primary'],
   buttonPrimaryText: ['--primary-foreground'],
+  // Extended EDAM brand anchors. These are optional keys in the same
+  // `themeTokens` map; semantic `--ds-*` tokens derive from them.
+  brandInk: ['--brand-ink'],
+  brandGold: ['--brand-gold'],
+  brandTeal: ['--brand-teal'],
+  accentWarm: ['--brand-gold'],
+  canvas: ['--background'],
 };
 
 function normalizeTokenKey(key: string): string | null {

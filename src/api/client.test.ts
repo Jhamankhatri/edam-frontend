@@ -85,9 +85,9 @@ describe('API client, CSRF and error envelope', () => {
     setBootstrapped(false);
     const result = await bootstrapInstallation(INSTALLATION_TOKEN, {
       username: 'admin',
-      firstName: 'Avery',
-      lastName: 'Morgan',
-      email: 'avery.morgan@example.invalid',
+      firstName: 'Preview',
+      lastName: 'Session',
+      email: 'preview.session@example.invalid',
       password: TEST_PASSWORD,
     });
 

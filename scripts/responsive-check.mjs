@@ -48,10 +48,13 @@ const permissions = [
   'notification:view',
 ];
 
+// Development-only mock envelopes. Identity, organization and count values are
+// synthetic and exist solely to exercise responsive/permission rendering; no
+// live backend or production data is used.
 const publicConfiguration = {
   applicationName: 'EDAM',
-  organizationDisplayName: 'Example Institution',
-  organizationName: 'Example Institution',
+  organizationDisplayName: 'Preview Institution',
+  organizationName: 'Preview Institution',
   supportEmail: 'support@example.invalid',
   logoAssetId: null,
   faviconAssetId: null,
@@ -61,7 +64,7 @@ const publicConfiguration = {
   defaultCurrencyCode: 'PKR',
   activeThemeName: 'Institution Light',
   activeThemeType: 'LIGHT',
-  themeTokens: { primary: '#1e5fd6' },
+  themeTokens: {},  // use the re-art-directed CSS stock fallback
 };
 
 function currentUser(mustChangePassword) {
@@ -69,8 +72,8 @@ function currentUser(mustChangePassword) {
     userId: '00000000-0000-0000-0000-000000000001',
     username: 'admin',
     employeeCode: 'EMP-001',
-    displayName: 'Avery Morgan',
-    email: 'avery.morgan@example.invalid',
+    displayName: 'Preview Session',
+    email: 'preview.session@example.invalid',
     designation: 'Institution Administrator',
     departmentId: null,
     departmentName: null,
@@ -504,6 +507,7 @@ function attachMockApi(page, route, observability) {
             { 'Set-Cookie': 'XSRF-TOKEN=responsive-check-csrf; Path=/; SameSite=Lax' },
           );
           return;
+        // Synthetic preview counts (development-only), not institutional data.
         case '/api/v1/approvals/count':
           await respond(request, 200, envelopeSuccess(3, path));
           return;

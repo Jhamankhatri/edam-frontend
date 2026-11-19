@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 export function TableWrapper({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('scrollbar-subtle w-full max-w-full overflow-x-auto rounded-xl border border-border', className)}
+      className={cn('scrollbar-subtle w-full max-w-full overflow-x-auto rounded-2xl border border-line bg-surface shadow-soft', className)}
       {...props}
     />
   );
@@ -19,7 +19,7 @@ Table.displayName = 'Table';
 
 export const TableHeader = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <thead ref={ref} className={cn('bg-muted', className)} {...props} />
+    <thead ref={ref} className={cn('bg-surface-subtle', className)} {...props} />
   ),
 );
 TableHeader.displayName = 'TableHeader';
@@ -33,7 +33,7 @@ TableBody.displayName = 'TableBody';
 
 export const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
-    <tr ref={ref} className={cn('border-b border-border transition-colors hover:bg-muted', className)} {...props} />
+    <tr ref={ref} className={cn('border-b border-line-soft transition-colors duration-150 hover:bg-state-hover', className)} {...props} />
   ),
 );
 TableRow.displayName = 'TableRow';
