@@ -105,6 +105,12 @@
     @apply flex h-12 w-12 items-center justify-center rounded-lg border border-line-accent bg-surface-subtle text-primary;
   }
 
+  /* Dialogs stay inside a 320 px viewport without a product-level inline style. */
+  .dialog-content {
+    width: calc(100vw - 2rem);
+    max-width: var(--ds-layout-dialog);
+  }
+
   .form-section-label {
     @apply flex items-center gap-3 font-numeric text-2xs font-semibold uppercase tracking-eyebrow text-muted-foreground;
   }

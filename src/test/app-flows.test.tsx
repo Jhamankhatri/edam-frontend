@@ -103,7 +103,9 @@ describe('Step 1 route and screen flows', () => {
     expect(await screen.findByRole('heading', { name: 'Sign in to EDAM' })).toBeInTheDocument();
     await waitFor(() => expect(router.state.location.pathname).toBe('/login'));
     expect(router.state.location.search).toMatchObject({
-      returnTo: '/app/requests/mine?foo=bar',
+      // Step 2 validates typed register search defaults before the auth guard
+      // builds a safe returnTo; the unrelated query parameter is preserved.
+      returnTo: '/app/requests/mine?foo=bar&page=0&size=20',
     });
   });
 

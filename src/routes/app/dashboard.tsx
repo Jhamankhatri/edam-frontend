@@ -1,18 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { LayoutDashboard } from 'lucide-react';
 import { RequirePermission } from '@/auth/guards';
-import { ModulePlaceholder } from '@/components/feedback/ModulePlaceholder';
+import { DashboardPage } from '@/features/dashboard/pages/DashboardPage';
 
-function DashboardFoundation() {
+function DashboardRoute() {
   return (
     <RequirePermission>
-      <ModulePlaceholder
-        icon={LayoutDashboard}
-        title="Dashboard"
-        description="Permission-gated foundation for KPIs, distributions, and trends. No business metrics are simulated before the reporting module is implemented."
-      />
+      <DashboardPage />
     </RequirePermission>
   );
 }
 
-export const Route = createFileRoute('/app/dashboard')({ component: DashboardFoundation });
+export const Route = createFileRoute('/app/dashboard')({ component: DashboardRoute });

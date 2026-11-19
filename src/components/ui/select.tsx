@@ -88,6 +88,9 @@ export interface SelectFieldProps {
   options: readonly { value: string; label: string }[];
   disabled?: boolean;
   'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean;
 }
 
 export function SelectField({
@@ -98,10 +101,21 @@ export function SelectField({
   options,
   disabled,
   'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
 }: SelectFieldProps) {
   return (
-    <Select value={value} onValueChange={onValueChange} disabled={disabled}>
-      <SelectTrigger id={id} aria-label={ariaLabel}>
+    // Always pass a string so Radix remains controlled for the component's
+    // entire lifetime; an empty value intentionally shows the placeholder.
+    <Select value={value ?? ''} onValueChange={onValueChange} disabled={disabled}>
+      <SelectTrigger
+        id={id}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy ?? (ariaLabel || !id ? undefined : `${id}-label`)}
+        aria-describedby={ariaDescribedBy}
+        aria-invalid={ariaInvalid || undefined}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

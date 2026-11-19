@@ -1,0 +1,719 @@
+{
+  "baseUrl": "http://127.0.0.1:5173",
+  "generatedAt": "2026-11-19T06:43:22.407Z",
+  "browser": {
+    "name": "Chromium headless shell (@sparticuz/chromium)",
+    "executablePath": "/tmp/chromium"
+  },
+  "mockApi": "Handover-shaped session, configuration, dashboard, request, lookup, activity and badge envelopes intercepted in-browser; no live backend required.",
+  "preview": "Step 2 request, dashboard, lookup and activity values in these screenshots are synthetic, development-only values injected by scripts/step2-preview-api.mjs through intercepted API envelopes. They are not institutional information. No live Spring Boot backend, PostgreSQL database, file/document service or production deployment is used.",
+  "touchTargetPolicy": "Minimum 40×40 CSS px; 0.5px subpixel tolerance for transformed controls.",
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900,
+      "isMobile": false,
+      "hasTouch": false
+    },
+    {
+      "name": "tablet",
+      "width": 834,
+      "height": 1112,
+      "isMobile": false,
+      "hasTouch": true
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844,
+      "isMobile": true,
+      "hasTouch": true
+    }
+  ],
+  "totals": {
+    "checks": 44,
+    "passed": 44,
+    "failed": 0,
+    "failureDetails": 0,
+    "routes": 18,
+    "interactiveControlsInspected": 391,
+    "formsInspected": 17,
+    "tablesInspected": 3
+  },
+  "routeSummaries": [
+    {
+      "name": "Login",
+      "path": "/login",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 5,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 5,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 5,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        }
+      ]
+    },
+    {
+      "name": "Bootstrap",
+      "path": "/bootstrap",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 7,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 7,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 3,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        }
+      ]
+    },
+    {
+      "name": "Forgot password",
+      "path": "/forgot-password",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 4,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 3,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 3,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        }
+      ]
+    },
+    {
+      "name": "Reset password",
+      "path": "/reset-password?token=responsive-check-token",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 7,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 6,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 6,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        }
+      ]
+    },
+    {
+      "name": "Change password",
+      "path": "/change-password",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 7,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 7,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": false,
+          "primaryNavVisible": false
+        }
+      ]
+    },
+    {
+      "name": "Approval Inbox",
+      "path": "/app/approvals",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 10,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "path": "/app/notifications",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 10,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "dashboard",
+      "path": "/app/dashboard",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 10,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 1,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "my-requests",
+      "path": "/app/requests/mine?page=0&size=20",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 18,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 1,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "all-requests",
+      "path": "/app/requests/all?page=0&size=20",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 18,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 1,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "new-request",
+      "path": "/app/requests/new",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 19,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "request-detail",
+      "path": "/app/requests/00000000-0000-0000-0000-000000000101",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 13,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "edit-request",
+      "path": "/app/requests/00000000-0000-0000-0000-000000000104/edit",
+      "passed": 3,
+      "total": 3,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 18,
+          "smallTargets": 0,
+          "formCount": 1,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "tablet",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        },
+        {
+          "name": "mobile",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 8,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": false,
+          "mobileNavVisible": true,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "dashboard-empty",
+      "path": "/app/dashboard?empty=1",
+      "passed": 1,
+      "total": 1,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 11,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "dashboard-error",
+      "path": "/app/dashboard?error=1",
+      "passed": 1,
+      "total": 1,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 11,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "dashboard-denied",
+      "path": "/app/dashboard?denied=1",
+      "passed": 1,
+      "total": 1,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 11,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "my-requests-empty",
+      "path": "/app/requests/mine?empty=1&page=0&size=20",
+      "passed": 1,
+      "total": 1,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 18,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        }
+      ]
+    },
+    {
+      "name": "request-activity-error",
+      "path": "/app/requests/00000000-0000-0000-0000-000000000101?activityError=1",
+      "passed": 1,
+      "total": 1,
+      "viewports": [
+        {
+          "name": "desktop",
+          "status": "passed",
+          "overflow": 0,
+          "interactiveCount": 13,
+          "smallTargets": 0,
+          "formCount": 0,
+          "tableCount": 0,
+          "desktopSidebarVisible": true,
+          "mobileNavVisible": false,
+          "primaryNavVisible": true
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

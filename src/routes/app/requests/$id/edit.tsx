@@ -1,18 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { PenLine } from 'lucide-react';
 import { RequirePermission } from '@/auth/guards';
-import { ModulePlaceholder } from '@/components/feedback/ModulePlaceholder';
+import { EditRequestPage } from '@/features/requests/pages/EditRequestPage';
 
-function EditRequestFoundation() {
+function EditRequestRoute() {
+  const { id } = Route.useParams();
   return (
     <RequirePermission>
-      <ModulePlaceholder
-        icon={PenLine}
-        title="Edit Request"
-        description="Foundation for the guarded edit workflow, server field errors, and concurrency handling. No optimistic state changes are introduced yet."
-      />
+      <EditRequestPage id={id} />
     </RequirePermission>
   );
 }
 
-export const Route = createFileRoute('/app/requests/$id/edit')({ component: EditRequestFoundation });
+export const Route = createFileRoute('/app/requests/$id/edit')({ component: EditRequestRoute });

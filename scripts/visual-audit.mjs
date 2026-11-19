@@ -7,10 +7,11 @@
  * focus visibility / text contrast / reduced-motion behaviour, and optionally
  * compares captured screenshots against an earlier baseline directory.
  *
- * API responses are intercepted in the browser with handover-shaped envelopes;
- * no Spring Boot backend, database or credentials are required. This is a
- * layout, accessibility and visual-difference check, not a full WCAG/axe audit
- * or live backend integration test.
+ * API responses are intercepted in the browser with handover-shaped envelopes,
+ * including Step 2 dashboard, request, lookup and activity data; no Spring Boot
+ * backend, database or credentials are required. This is a layout, accessibility
+ * and visual-difference check, not a full WCAG/axe audit or live backend
+ * integration test.
  */
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -19,6 +20,12 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import chromium, { inflate, setupLambdaEnvironment } from '@sparticuz/chromium';
+import {
+  step2MockResponse,
+  step2Permissions,
+  step2PreviewNote,
+  step2VisualRoutes,
+} from './step2-preview-api.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -48,10 +55,7 @@ const viewports = [
 const captureViewports = new Set(argumentValue('capture', 'desktop,tablet,mobile').split(','));
 const auditViewports = viewports.filter((viewport) => !args.includes('--capture-only') || captureViewports.has(viewport.name));
 
-const permissions = [
-  'report:view', 'request:view-own', 'request:view-scope', 'request:view-all',
-  'request:create', 'request:edit', 'approval:view', 'notification:view',
-];
+const permissions = step2Permissions;
 
 const publicConfiguration = {
   applicationName: 'EDAM',
@@ -69,7 +73,7 @@ const publicConfiguration = {
   themeTokens: {},  // use the re-art-directed CSS stock fallback
 };
 
-function currentUser(mustChangePassword = false) {
+function currentUser(mustChangePassword = false, permissionsOverride) {
   return {
     userId: '00000000-0000-0000-0000-000000000001',
     username: 'admin',
@@ -82,7 +86,7 @@ function currentUser(mustChangePassword = false) {
     branchId: null,
     branchName: null,
     roles: [],
-    permissions,
+    permissions: permissionsOverride ?? permissions,
     dataScopes: [],
     installationScope: true,
     mustChangePassword,
@@ -99,15 +103,15 @@ const routes = [
   { name: 'login', path: '/login', heading: 'Sign in to EDAM', authenticated: false, capture: true },
   { name: 'bootstrap', path: '/bootstrap', heading: 'Create the administrator', authenticated: false, bootstrapped: false, capture: true },
   { name: 'change-password', path: '/change-password', heading: 'Change your password', authenticated: true, mustChangePassword: true, capture: false },
-  { name: 'dashboard', path: '/app/dashboard', heading: 'Dashboard', authenticated: true, capture: true },
   { name: 'notifications', path: '/app/notifications', heading: 'Notifications', authenticated: true, capture: false },
+  ...step2VisualRoutes,
 ];
 
 function envelopeSuccess(data, path) {
   return { success: true, data, error: null, fieldErrors: null, correlationId: 'visual-audit', path, timestamp: new Date().toISOString() };
 }
-function envelopeFailure(code, message, path) {
-  return { success: false, data: null, error: { code, message }, fieldErrors: null, correlationId: 'visual-audit', path, timestamp: new Date().toISOString() };
+function envelopeFailure(code, message, path, fieldErrors) {
+  return { success: false, data: null, error: { code, message }, fieldErrors: fieldErrors ?? null, correlationId: 'visual-audit', path, timestamp: new Date().toISOString() };
 }
 
 async function prepareChromium() {
@@ -128,14 +132,16 @@ async function prepareChromium() {
 const previewMetadata = {
   mode: 'development-only',
   watermark: 'DEVELOPMENT PREVIEW · Mock session · no live backend data · not institutional information',
-  note: 'Identity, organization, approval and notification values in these screenshots are synthetic values injected by scripts/visual-audit.mjs through intercepted API envelopes. The application renders only /auth/me, /public/configuration and documented badge endpoint data at runtime. No live Spring Boot backend or production deployment is used.',
+  note: `${step2PreviewNote} Identity, organization, approval and notification values are likewise synthetic and injected by scripts/visual-audit.mjs through intercepted API envelopes.`,
   values: {
     user: 'Preview Session',
     email: 'preview.session@example.invalid',
     organization: 'Preview Institution',
     approvalCount: 3,
     notificationUnreadCount: 2,
-    source: 'intercepted development envelopes in scripts/visual-audit.mjs',
+    requestReference: 'ER-PREVIEW-001',
+    dashboardBaseCurrency: 'PKR',
+    source: 'intercepted development envelopes in scripts/step2-preview-api.mjs and scripts/visual-audit.mjs',
   },
 };
 
@@ -176,7 +182,9 @@ async function addPreviewWatermark(page) {
 }
 
 function attachMockApi(page, route) {
-  const user = route.authenticated ? currentUser(route.mustChangePassword) : null;
+  const user = route.authenticated
+    ? currentUser(route.mustChangePassword, route.permissionsOverride)
+    : null;
   const respond = (request, status, payload, extraHeaders = {}) =>
     request.respond({
       status,
@@ -213,7 +221,17 @@ function attachMockApi(page, route) {
           ), { 'Set-Cookie': 'XSRF-TOKEN=visual-audit-csrf; Path=/; SameSite=Lax' });
         case '/api/v1/approvals/count': return respond(request, 200, envelopeSuccess(3, path));
         case '/api/v1/notifications/unread-count': return respond(request, 200, envelopeSuccess({ count: 2 }, path));
-        default: return respond(request, 200, envelopeSuccess(null, path));
+        default: {
+          const step2 = step2MockResponse({
+            url,
+            method: request.method(),
+            route,
+            envelopeSuccess,
+            envelopeFailure,
+          });
+          if (step2) return respond(request, step2.status, step2.payload);
+          return respond(request, 200, envelopeSuccess(null, path));
+        }
       }
     })().catch(() => request.abort().catch(() => undefined));
   });
@@ -347,6 +365,7 @@ async function main() {
 
   for (const viewport of auditViewports) {
     for (const route of routes) {
+      if (route.viewports && !route.viewports.includes(viewport.name)) continue;
       const page = await browser.newPage();
       page.setDefaultTimeout(15_000);
       page.setDefaultNavigationTimeout(30_000);

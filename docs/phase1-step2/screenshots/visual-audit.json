@@ -1,0 +1,1600 @@
+{
+  "baseUrl": "http://127.0.0.1:5173",
+  "generatedAt": "2026-11-19T06:43:33.264Z",
+  "preview": {
+    "mode": "development-only",
+    "watermark": "DEVELOPMENT PREVIEW · Mock session · no live backend data · not institutional information",
+    "note": "Step 2 request, dashboard, lookup and activity values in these screenshots are synthetic, development-only values injected by scripts/step2-preview-api.mjs through intercepted API envelopes. They are not institutional information. No live Spring Boot backend, PostgreSQL database, file/document service or production deployment is used. Identity, organization, approval and notification values are likewise synthetic and injected by scripts/visual-audit.mjs through intercepted API envelopes.",
+    "values": {
+      "user": "Preview Session",
+      "email": "preview.session@example.invalid",
+      "organization": "Preview Institution",
+      "approvalCount": 3,
+      "notificationUnreadCount": 2,
+      "requestReference": "ER-PREVIEW-001",
+      "dashboardBaseCurrency": "PKR",
+      "source": "intercepted development envelopes in scripts/step2-preview-api.mjs and scripts/visual-audit.mjs"
+    }
+  },
+  "comparisonBaseline": null,
+  "viewports": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Create the administrator"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 8,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Change your password"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "1e-05s",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 16,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "my-requests",
+      "overflow": 0,
+      "interactiveCount": 18,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "My Requests",
+        "My Requests"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "all-requests",
+      "overflow": 0,
+      "interactiveCount": 18,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "All Requests",
+        "All Requests"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "new-request",
+      "overflow": 0,
+      "interactiveCount": 29,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "New Request",
+        "New Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "request-detail",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Request Detail",
+        "Request Details"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "edit-request",
+      "overflow": 0,
+      "interactiveCount": 28,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Edit Request",
+        "Edit Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "dashboard-empty",
+      "overflow": 0,
+      "interactiveCount": 16,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "dashboard-error",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register",
+        "Reporting dashboard unavailable"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "dashboard-denied",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Access denied"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "my-requests-empty",
+      "overflow": 0,
+      "interactiveCount": 18,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "My Requests",
+        "My Requests"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "route": "request-activity-error",
+      "overflow": 0,
+      "interactiveCount": 14,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Request Detail",
+        "Request Details",
+        "Activity unavailable"
+      ],
+      "reducedMotion": {
+        "sampleAnimationDuration": "none",
+        "compliant": true
+      },
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 8,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 10,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 16,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "my-requests",
+      "overflow": 0,
+      "interactiveCount": 18,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "My Requests",
+        "My Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "all-requests",
+      "overflow": 0,
+      "interactiveCount": 18,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "All Requests",
+        "All Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "new-request",
+      "overflow": 0,
+      "interactiveCount": 29,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "New Request",
+        "New Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "request-detail",
+      "overflow": 0,
+      "interactiveCount": 13,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Request Detail",
+        "Request Details"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "laptop",
+      "width": 1280,
+      "route": "edit-request",
+      "overflow": 0,
+      "interactiveCount": 28,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Edit Request",
+        "Edit Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 9,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "my-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "My Requests",
+        "My Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "all-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "All Requests",
+        "All Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "new-request",
+      "overflow": 0,
+      "interactiveCount": 22,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "New Request",
+        "New Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "request-detail",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Request Detail",
+        "Request Details"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 834,
+      "route": "edit-request",
+      "overflow": 0,
+      "interactiveCount": 21,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Edit Request",
+        "Edit Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 9,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "my-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "My Requests",
+        "My Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "all-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "All Requests",
+        "All Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "new-request",
+      "overflow": 0,
+      "interactiveCount": 22,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "New Request",
+        "New Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "request-detail",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Request Detail",
+        "Request Details"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "tablet-small",
+      "width": 768,
+      "route": "edit-request",
+      "overflow": 0,
+      "interactiveCount": 21,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Edit Request",
+        "Edit Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 9,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "my-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "My Requests",
+        "My Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "all-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "All Requests",
+        "All Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "new-request",
+      "overflow": 0,
+      "interactiveCount": 22,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "New Request",
+        "New Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "request-detail",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Request Detail",
+        "Request Details"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "route": "edit-request",
+      "overflow": 0,
+      "interactiveCount": 21,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Edit Request",
+        "Edit Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "login",
+      "overflow": 0,
+      "interactiveCount": 5,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Expense governance, composed with confidence.",
+        "Sign in to EDAM"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "bootstrap",
+      "overflow": 0,
+      "interactiveCount": 12,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "Begin with a trusted administrator.",
+        "Create the administrator"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "change-password",
+      "overflow": 0,
+      "interactiveCount": 7,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
+      },
+      "animatedElements": 1,
+      "headingText": [
+        "One final step before your workspace.",
+        "Change your password"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "notifications",
+      "overflow": 0,
+      "interactiveCount": 3,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Notifications",
+        "Notifications",
+        "A governed workspace, ready for what comes next.",
+        "Route and permission guard",
+        "API layer ready",
+        "Implementation intentionally deferred",
+        "A ledger, awaiting its first entry."
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "dashboard",
+      "overflow": 0,
+      "interactiveCount": 9,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Dashboard",
+        "Dashboard",
+        "Institutional reporting register"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "my-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "My Requests",
+        "My Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "all-requests",
+      "overflow": 0,
+      "interactiveCount": 11,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "All Requests",
+        "All Requests"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "new-request",
+      "overflow": 0,
+      "interactiveCount": 22,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "New Request",
+        "New Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "request-detail",
+      "overflow": 0,
+      "interactiveCount": 6,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Request Detail",
+        "Request Details"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    },
+    {
+      "viewport": "mobile-small",
+      "width": 320,
+      "route": "edit-request",
+      "overflow": 0,
+      "interactiveCount": 21,
+      "smallTargets": 0,
+      "unnamedInteractives": 0,
+      "contrastAudit": "npm run check:design (19 token pairs, all >= 4.5:1)",
+      "focusVisible": {
+        "outlineWidth": "2px",
+        "outlineStyle": "solid",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+      },
+      "animatedElements": 0,
+      "headingText": [
+        "Edit Request",
+        "Edit Request",
+        "Server validation remains authoritative"
+      ],
+      "reducedMotion": null,
+      "runtimeErrors": []
+    }
+  ],
+  "screenshots": [
+    "login-desktop-1440.png",
+    "bootstrap-desktop-1440.png",
+    "dashboard-desktop-1440.png",
+    "my-requests-desktop-1440.png",
+    "all-requests-desktop-1440.png",
+    "new-request-desktop-1440.png",
+    "request-detail-desktop-1440.png",
+    "edit-request-desktop-1440.png",
+    "dashboard-empty-desktop-1440.png",
+    "dashboard-error-desktop-1440.png",
+    "dashboard-denied-desktop-1440.png",
+    "my-requests-empty-desktop-1440.png",
+    "request-activity-error-desktop-1440.png",
+    "login-tablet-834.png",
+    "bootstrap-tablet-834.png",
+    "dashboard-tablet-834.png",
+    "my-requests-tablet-834.png",
+    "all-requests-tablet-834.png",
+    "new-request-tablet-834.png",
+    "request-detail-tablet-834.png",
+    "edit-request-tablet-834.png",
+    "login-mobile-390.png",
+    "bootstrap-mobile-390.png",
+    "dashboard-mobile-390.png",
+    "my-requests-mobile-390.png",
+    "all-requests-mobile-390.png",
+    "new-request-mobile-390.png",
+    "request-detail-mobile-390.png",
+    "edit-request-mobile-390.png"
+  ],
+  "comparisons": [],
+  "failures": []
+}
