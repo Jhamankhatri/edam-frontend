@@ -4,7 +4,7 @@ const appliedProperties = new Set<string>();
 const unsafeValue = /[;{}<>]/;
 // Bootstrap fallback used only when neither public configuration nor CSS custom
 // properties are available. Runtime branding remains isolated to this module.
-const FALLBACK_BRAND_NAVY = '#0b1f3a';
+const FALLBACK_BRAND_NAVY = '#0d211c';
 
 const tokenAliases: Record<string, readonly string[]> = {
   background: ['--background'],

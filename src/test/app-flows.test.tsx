@@ -66,10 +66,10 @@ describe('Step 1 route and screen flows', () => {
     await screen.findByRole('heading', { name: 'Create the administrator' });
 
     await user.type(screen.getByLabelText('Installation token'), INSTALLATION_TOKEN);
-    await user.type(screen.getByLabelText('First name'), 'Avery');
-    await user.type(screen.getByLabelText('Last name'), 'Morgan');
+    await user.type(screen.getByLabelText('First name'), 'Preview');
+    await user.type(screen.getByLabelText('Last name'), 'Session');
     await user.type(screen.getByLabelText('Username'), 'admin');
-    await user.type(screen.getByLabelText('Work email'), 'avery.morgan@example.invalid');
+    await user.type(screen.getByLabelText('Work email'), 'preview.session@example.invalid');
     await user.type(screen.getByLabelText('Initial password'), TEST_PASSWORD);
     await user.type(screen.getByLabelText('Confirm password'), TEST_PASSWORD);
     await user.click(screen.getByRole('button', { name: /complete installation/i }));

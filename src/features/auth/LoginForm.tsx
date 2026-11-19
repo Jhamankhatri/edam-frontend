@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowRight, Building2, LockKeyhole } from 'lucide-react';
+import { ArrowRight, Building2, LockKeyhole, ShieldCheck } from 'lucide-react';
 import type { LoginRequest } from '@/api/contracts';
 import { formatApiError } from '@/api/errors';
 import { FormField } from '@/components/forms/FormField';
@@ -50,13 +50,15 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
 
   return (
     <section className="auth-card motion-safe:animate-fade-up">
-      <div className="mb-6">
-        <p className="auth-eyebrow">Welcome back</p>
+      <header>
+        <p className="auth-eyebrow"><ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" />Secure channel / 01</p>
         <h2 className="auth-title">Sign in to EDAM</h2>
-        <p className="mt-1.5 text-sm text-muted-foreground">Use your institution credentials to continue.</p>
-      </div>
+        <p className="auth-description">Use your institution credentials to continue.</p>
+      </header>
 
-      <form className="space-y-4" onSubmit={submit} noValidate>
+      <div className="ledger-rule my-6" />
+
+      <form className="space-y-5" onSubmit={submit} noValidate>
         {submitError && (
           <Alert variant="destructive">
             <AlertDescription>{submitError}</AlertDescription>

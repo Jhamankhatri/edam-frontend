@@ -22,7 +22,7 @@ describe('AuthProvider initialization and session lifecycle', () => {
     expect(screen.queryByRole('heading', { name: 'Dashboard', level: 1 })).not.toBeInTheDocument();
 
     await waitFor(() => expect(screen.getByTestId('auth-status')).toHaveTextContent('authenticated'));
-    expect(screen.getByTestId('auth-user')).toHaveTextContent('Avery Morgan');
+    expect(screen.getByTestId('auth-user')).toHaveTextContent('Preview Session');
     expect(await screen.findByRole('heading', { name: 'Dashboard', level: 1 })).toBeInTheDocument();
     expect(router.state.location.pathname).toBe('/app/dashboard');
   });

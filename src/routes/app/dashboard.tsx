@@ -10,7 +10,6 @@ function DashboardFoundation() {
         icon={LayoutDashboard}
         title="Dashboard"
         description="Permission-gated foundation for KPIs, distributions, and trends. No business metrics are simulated before the reporting module is implemented."
-        endpointGroup="RPT-001 · report:view"
       />
     </RequirePermission>
   );

@@ -10,7 +10,6 @@ function NewRequestFoundation() {
         icon={FilePlus2}
         title="New Request"
         description="Foundation for the validated multi-section request form and documented lookup selectors. No lookup endpoints are invented in Step 1."
-        endpointGroup="REQ-002 · request:create"
       />
     </RequirePermission>
   );

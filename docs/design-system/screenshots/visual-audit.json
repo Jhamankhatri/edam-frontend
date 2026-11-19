@@ -1,6 +1,20 @@
 {
   "baseUrl": "http://127.0.0.1:5173",
-  "generatedAt": "2026-11-18T22:42:47.266Z",
+  "generatedAt": "2026-11-19T04:12:19.115Z",
+  "preview": {
+    "mode": "development-only",
+    "watermark": "DEVELOPMENT PREVIEW · Mock session · no live backend data · not institutional information",
+    "note": "Identity, organization, approval and notification values in these screenshots are synthetic values injected by scripts/visual-audit.mjs through intercepted API envelopes. The application renders only /auth/me, /public/configuration and documented badge endpoint data at runtime. No live Spring Boot backend or production deployment is used.",
+    "values": {
+      "user": "Preview Session",
+      "email": "preview.session@example.invalid",
+      "organization": "Preview Institution",
+      "approvalCount": 3,
+      "notificationUnreadCount": 2,
+      "source": "intercepted development envelopes in scripts/visual-audit.mjs"
+    }
+  },
+  "comparisonBaseline": "PR #4 committed screenshots",
   "viewports": [
     {
       "viewport": "desktop",
@@ -14,13 +28,14 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 1,
       "headingText": [
         "Expense governance, composed with confidence.",
-        "Session-protected access",
-        "Permission-aware workspace",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
         "Sign in to EDAM"
       ],
       "reducedMotion": {
@@ -41,13 +56,14 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 1,
       "headingText": [
         "Begin with a trusted administrator.",
-        "Session-protected access",
-        "Permission-aware workspace",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
         "Create the administrator"
       ],
       "reducedMotion": {
@@ -68,13 +84,14 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 1,
       "headingText": [
         "One final step before your workspace.",
-        "Session-protected access",
-        "Permission-aware workspace",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
         "Change your password"
       ],
       "reducedMotion": {
@@ -95,17 +112,17 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 0,
       "headingText": [
         "Dashboard",
         "Dashboard",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": {
         "sampleAnimationDuration": "none",
@@ -125,17 +142,17 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 0,
       "headingText": [
         "Notifications",
         "Notifications",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": {
         "sampleAnimationDuration": "none",
@@ -155,13 +172,14 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 1,
       "headingText": [
         "Expense governance, composed with confidence.",
-        "Session-protected access",
-        "Permission-aware workspace",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
         "Sign in to EDAM"
       ],
       "reducedMotion": null,
@@ -179,13 +197,14 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 1,
       "headingText": [
         "Begin with a trusted administrator.",
-        "Session-protected access",
-        "Permission-aware workspace",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
         "Create the administrator"
       ],
       "reducedMotion": null,
@@ -203,13 +222,14 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 1,
       "headingText": [
         "One final step before your workspace.",
-        "Session-protected access",
-        "Permission-aware workspace",
+        "Session integrity",
+        "Permission authority",
+        "Contract fidelity",
         "Change your password"
       ],
       "reducedMotion": null,
@@ -227,17 +247,17 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 0,
       "headingText": [
         "Dashboard",
         "Dashboard",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -254,17 +274,17 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(209, 160, 85) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        "boxShadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(169, 120, 60) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
       },
       "animatedElements": 0,
       "headingText": [
         "Notifications",
         "Notifications",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -281,7 +301,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -303,7 +323,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -325,7 +345,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -353,11 +373,11 @@
       "headingText": [
         "Dashboard",
         "Dashboard",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -380,11 +400,11 @@
       "headingText": [
         "Notifications",
         "Notifications",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -401,7 +421,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -423,7 +443,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -445,7 +465,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -473,11 +493,11 @@
       "headingText": [
         "Dashboard",
         "Dashboard",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -500,11 +520,11 @@
       "headingText": [
         "Notifications",
         "Notifications",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -521,7 +541,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -543,7 +563,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -565,7 +585,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -593,11 +613,11 @@
       "headingText": [
         "Dashboard",
         "Dashboard",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -620,11 +640,11 @@
       "headingText": [
         "Notifications",
         "Notifications",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -641,7 +661,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -663,7 +683,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -685,7 +705,7 @@
       "focusVisible": {
         "outlineWidth": "2px",
         "outlineStyle": "solid",
-        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(11, 18, 32, 0.04) 0px 1px 2px 0px, rgba(11, 18, 32, 0.06) 0px 8px 24px 0px"
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(18, 32, 28, 0.05) 0px 1px 2px 0px, rgba(18, 32, 28, 0.05) 0px 6px 18px 0px"
       },
       "animatedElements": 1,
       "headingText": [
@@ -713,11 +733,11 @@
       "headingText": [
         "Dashboard",
         "Dashboard",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -740,11 +760,11 @@
       "headingText": [
         "Notifications",
         "Notifications",
+        "A governed workspace, ready for what comes next.",
         "Route and permission guard",
         "API layer ready",
         "Implementation intentionally deferred",
-        "Data presentation, ready for live data",
-        "Backend remains authoritative"
+        "A ledger, awaiting its first entry."
       ],
       "reducedMotion": null,
       "runtimeErrors": []
@@ -775,55 +795,109 @@
       "file": "login-desktop-1440.png",
       "width": 1440,
       "height": 900,
-      "changedPixelRatio": 0.1173
+      "changedPixelRatio": 0.8812
     },
     {
       "file": "bootstrap-desktop-1440.png",
       "width": 1440,
-      "height": 929,
-      "changedPixelRatio": 0.1729
+      "height": 934,
+      "changedPixelRatio": 0.8753
     },
     {
       "file": "dashboard-desktop-1440.png",
       "width": 1440,
-      "height": 900,
-      "changedPixelRatio": 0.3036
+      "height": 908,
+      "changedPixelRatio": 0.8072
+    },
+    {
+      "file": "login-laptop-1280.png",
+      "width": 1280,
+      "height": 800,
+      "changedPixelRatio": 0.8358
+    },
+    {
+      "file": "bootstrap-laptop-1280.png",
+      "width": 1280,
+      "height": 934,
+      "changedPixelRatio": 0.8657
+    },
+    {
+      "file": "dashboard-laptop-1280.png",
+      "width": 1280,
+      "height": 931,
+      "changedPixelRatio": 0.8112
     },
     {
       "file": "login-tablet-834.png",
       "width": 834,
       "height": 1112,
-      "changedPixelRatio": 0.047
+      "changedPixelRatio": 0.704
     },
     {
       "file": "bootstrap-tablet-834.png",
       "width": 834,
-      "height": 1174,
-      "changedPixelRatio": 0.0697
+      "height": 1182,
+      "changedPixelRatio": 0.7105
     },
     {
       "file": "dashboard-tablet-834.png",
       "width": 834,
-      "height": 1112,
-      "changedPixelRatio": 0.287
+      "height": 1264,
+      "changedPixelRatio": 0.7544
+    },
+    {
+      "file": "login-tablet-small-768.png",
+      "width": 768,
+      "height": 1024,
+      "changedPixelRatio": 0.7216
+    },
+    {
+      "file": "bootstrap-tablet-small-768.png",
+      "width": 768,
+      "height": 1182,
+      "changedPixelRatio": 0.7181
+    },
+    {
+      "file": "dashboard-tablet-small-768.png",
+      "width": 768,
+      "height": 1310,
+      "changedPixelRatio": 0.7403
     },
     {
       "file": "login-mobile-390.png",
       "width": 390,
       "height": 844,
-      "changedPixelRatio": 0.1219
+      "changedPixelRatio": 0.771
     },
     {
       "file": "bootstrap-mobile-390.png",
       "width": 390,
-      "height": 1381,
-      "changedPixelRatio": 0.1293
+      "height": 1392,
+      "changedPixelRatio": 0.7649
     },
     {
       "file": "dashboard-mobile-390.png",
       "width": 390,
-      "height": 1012,
-      "changedPixelRatio": 0.3721
+      "height": 1634,
+      "changedPixelRatio": 0.7341
+    },
+    {
+      "file": "login-mobile-small-320.png",
+      "width": 320,
+      "height": 889,
+      "changedPixelRatio": 0.7962
+    },
+    {
+      "file": "bootstrap-mobile-small-320.png",
+      "width": 320,
+      "height": 1502,
+      "changedPixelRatio": 0.7923
+    },
+    {
+      "file": "dashboard-mobile-small-320.png",
+      "width": 320,
+      "height": 1777,
+      "changedPixelRatio": 0.7453
     }
   ],
   "failures": []

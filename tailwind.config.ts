@@ -73,6 +73,7 @@ const config: Config = {
           DEFAULT: 'var(--ds-color-line)',
           strong: 'var(--ds-color-line-strong)',
           soft: 'var(--ds-color-line-soft)',
+          accent: 'var(--ds-color-line-accent)',
           'on-brand': 'var(--ds-color-line-on-brand)',
         },
         ink: {
@@ -138,6 +139,7 @@ const config: Config = {
           4: 'var(--ds-chart-series-4)',
           5: 'var(--ds-chart-series-5)',
           grid: 'var(--ds-chart-grid)',
+          'grid-strong': 'var(--ds-chart-grid-strong)',
           axis: 'var(--ds-chart-axis)',
         },
       },
@@ -163,6 +165,7 @@ const config: Config = {
         '3xl': ['var(--ds-text-3xl)', { lineHeight: 'var(--ds-leading-3xl)' }],
         '4xl': ['var(--ds-text-4xl)', { lineHeight: 'var(--ds-leading-4xl)' }],
         '5xl': ['var(--ds-text-5xl)', { lineHeight: 'var(--ds-leading-5xl)' }],
+        '6xl': ['var(--ds-text-6xl)', { lineHeight: 'var(--ds-leading-6xl)' }],
       },
       fontWeight: {
         normal: 'var(--ds-weight-regular)',
@@ -172,6 +175,7 @@ const config: Config = {
       },
       letterSpacing: {
         tight: 'var(--ds-tracking-tight)',
+        display: 'var(--ds-tracking-display)',
         normal: 'var(--ds-tracking-normal)',
         wide: 'var(--ds-tracking-wide)',
         micro: 'var(--ds-tracking-micro)',
@@ -237,7 +241,7 @@ const config: Config = {
         content: 'var(--ds-layout-content-max)',
       },
       gridTemplateColumns: {
-        auth: 'minmax(0, 1.05fr) minmax(0, 0.95fr)',
+        auth: 'minmax(0, 0.9fr) minmax(0, 1.1fr)',
       },
       boxShadow: {
         soft: 'var(--ds-shadow-soft)',

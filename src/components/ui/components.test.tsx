@@ -102,19 +102,19 @@ describe('reusable design-system components', () => {
         eyebrow="EDAM workspace"
         title="Dashboard"
         description="Foundation only."
-        status={<span>Foundation ready</span>}
-        meta={<span>RPT-001</span>}
+        status={<span>Development preview</span>}
+        meta={<span>Foundation / 01</span>}
       />,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeInTheDocument();
-    expect(screen.getByText('Foundation ready')).toBeInTheDocument();
-    expect(screen.getByText('RPT-001')).toBeInTheDocument();
+    expect(screen.getByText('Development preview')).toBeInTheDocument();
+    expect(screen.getByText('Foundation / 01')).toBeInTheDocument();
   });
 
   it('keeps chart foundations explicitly empty and screen-reader described', () => {
     render(<DataVizFrame />);
-    expect(screen.getByRole('img', { name: /No business data is displayed/ })).toBeInTheDocument();
-    expect(screen.getByText('Awaiting live module data')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /No business data, dates or values are displayed/ })).toBeInTheDocument();
+    expect(screen.getByText(/No live data/i)).toBeInTheDocument();
   });
 
   it('associates hints and nested controls with form descriptions', () => {

@@ -13,9 +13,9 @@ interface PageHeaderProps {
 }
 
 /**
- * One page-title pattern for every current and future module. It owns the
- * heading hierarchy, the signature rule, status/metadata placement and the
- * responsive stacking; modules supply content, not layout.
+ * One editorial page-title pattern for every current and future module. Small
+ * monospace references, a serif title and a brass-ledger rule — no generic
+ * dashboard heading block.
  */
 export function PageHeader({
   title,
@@ -32,19 +32,19 @@ export function PageHeader({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0">
           {eyebrow && (
-            <p className="micro-label mb-3 flex items-center gap-2 text-primary">
-              <span aria-hidden="true" className="h-px w-6 bg-accent-warm" />
+            <p className="mb-3 flex items-center gap-2 font-numeric text-2xs font-semibold uppercase tracking-eyebrow-wide text-muted-foreground">
+              <span aria-hidden="true" className="h-px w-8 bg-line-accent" />
               {eyebrow}
             </p>
           )}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <h1 id={id} className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+            <h1 id={id} className="font-display text-3xl font-semibold tracking-display sm:text-4xl">
               {title}
             </h1>
             {status}
           </div>
           {description && (
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
               {description}
             </p>
           )}
@@ -56,7 +56,7 @@ export function PageHeader({
           </div>
         )}
       </div>
-      <div aria-hidden="true" className="mt-6 h-px w-full bg-gradient-to-r from-line via-line-strong to-transparent" />
+      <div aria-hidden="true" className="ledger-rule mt-6" />
     </header>
   );
 }

@@ -1,3 +1,4 @@
+import { AlertCircle } from 'lucide-react';
 import {
   Children,
   Fragment,
@@ -74,7 +75,8 @@ export function FormField({ id, label, error, hint, children, className }: FormF
         <p id={hintId} className="text-xs leading-relaxed text-muted-foreground">{hint}</p>
       )}
       {error && (
-        <p id={errorId} role="alert" className="text-xs font-medium text-destructive">
+        <p id={errorId} role="alert" className="flex items-start gap-1.5 border-l-2 border-l-destructive pl-2 text-xs font-medium text-destructive">
+          <AlertCircle aria-hidden="true" className="mt-px h-3.5 w-3.5 shrink-0" />
           {error}
         </p>
       )}

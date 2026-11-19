@@ -15,6 +15,7 @@ const badgeVariants = cva(
         destructive: 'border-status-destructive-border bg-status-destructive-surface text-destructive',
         info: 'border-status-info-border bg-status-info-surface text-info',
         muted: 'border-transparent bg-muted text-muted-foreground',
+        preview: 'rounded-md border-dashed border-line-strong bg-surface-subtle font-numeric text-2xs uppercase tracking-eyebrow-wide text-muted-foreground',
       },
     },
     defaultVariants: { variant: 'default' },

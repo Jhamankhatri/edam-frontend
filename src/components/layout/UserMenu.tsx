@@ -32,13 +32,13 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-11 gap-2 rounded-xl px-2 sm:px-3" aria-label="Open account menu">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-navy text-xs font-bold text-brand-panel-foreground">
+        <Button variant="ghost" className="h-11 gap-2 rounded-md px-2 sm:px-3" aria-label="Open account menu">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-line-accent bg-surface-subtle font-display text-sm font-semibold text-brand-ink">
             {initials(user.displayName)}
           </span>
           <span className="hidden min-w-0 text-left md:block">
             <span className="block max-w-36 truncate text-sm font-semibold leading-tight">{user.displayName}</span>
-            <span className="block max-w-36 truncate text-xs font-normal text-muted-foreground">{user.email}</span>
+            <span className="block max-w-36 truncate font-numeric text-2xs text-muted-foreground">{user.email}</span>
           </span>
           <ChevronDown aria-hidden="true" className="hidden h-4 w-4 opacity-60 md:block" />
         </Button>

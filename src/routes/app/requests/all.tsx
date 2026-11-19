@@ -10,7 +10,6 @@ function AllRequestsFoundation() {
         icon={ListFilter}
         title="All Requests"
         description="Foundation for the scoped register, filters, export entry point, and responsive table behavior. Backend data scope remains authoritative."
-        endpointGroup="REQ-001 / RPT-003"
       />
     </RequirePermission>
   );

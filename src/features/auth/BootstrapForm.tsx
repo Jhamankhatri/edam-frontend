@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { KeyRound, UserPlus } from 'lucide-react';
+import { ArrowRight, KeyRound, UserPlus } from 'lucide-react';
 import type { BootstrapRequest } from '@/api/contracts';
 import { formatApiError } from '@/api/errors';
 import { FormField } from '@/components/forms/FormField';
@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
+import { SectionLabel } from '@/components/ui/register';
 import { setServerFieldErrors } from '@/forms/server-errors';
 
 const bootstrapSchema = z
@@ -77,62 +78,92 @@ export function BootstrapForm({ onSubmit }: BootstrapFormProps) {
 
   return (
     <section className="auth-card motion-safe:animate-fade-up">
-      <div className="mb-6">
-        <p className="flex items-center gap-2 auth-eyebrow">
-          <KeyRound aria-hidden="true" className="h-4 w-4" />
-          First-run setup
-        </p>
+      <header>
+        <p className="auth-eyebrow"><KeyRound aria-hidden="true" className="h-3.5 w-3.5" />First-run setup</p>
         <h2 className="auth-title">Create the administrator</h2>
         <p className="auth-description">
           The installation token is sent only in the documented header. Bootstrap does not sign you in.
         </p>
-      </div>
+      </header>
 
-      <form className="space-y-4" onSubmit={submit} noValidate>
+      <div className="ledger-rule my-6" />
+
+      <form onSubmit={submit} noValidate>
         {submitError && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="mb-6 border-l-2 border-l-destructive">
             <AlertDescription>{submitError}</AlertDescription>
           </Alert>
         )}
 
-        <FormField id="installationToken" label="Installation token" error={errors.installationToken?.message} hint="Provided out of band by the deployment operator.">
-          <PasswordInput id="installationToken" autoComplete="off" spellCheck={false} invalid={Boolean(errors.installationToken)} {...register('installationToken')} />
-        </FormField>
+        <section aria-labelledby="bootstrap-credential">
+          <SectionLabel index="01" className="text-primary">
+            <span id="bootstrap-credential">Installation credential</span>
+          </SectionLabel>
+          <div className="mt-4">
+            <FormField id="installationToken" label="Installation token" error={errors.installationToken?.message} hint="Provided out of band by the deployment operator.">
+              <PasswordInput id="installationToken" autoComplete="off" spellCheck={false} invalid={Boolean(errors.installationToken)} {...register('installationToken')} />
+            </FormField>
+          </div>
+        </section>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormField id="firstName" label="First name" error={errors.firstName?.message}>
-            <Input id="firstName" autoComplete="given-name" invalid={Boolean(errors.firstName)} {...register('firstName')} />
-          </FormField>
-          <FormField id="lastName" label="Last name" error={errors.lastName?.message}>
-            <Input id="lastName" autoComplete="family-name" invalid={Boolean(errors.lastName)} {...register('lastName')} />
-          </FormField>
+        <div className="ledger-rule my-6" />
+
+        <section aria-labelledby="bootstrap-identity">
+          <SectionLabel index="02" className="text-primary">
+            <span id="bootstrap-identity">Administrator identity</span>
+          </SectionLabel>
+          <div className="mt-4 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormField id="firstName" label="First name" error={errors.firstName?.message}>
+                <Input id="firstName" autoComplete="given-name" invalid={Boolean(errors.firstName)} {...register('firstName')} />
+              </FormField>
+              <FormField id="lastName" label="Last name" error={errors.lastName?.message}>
+                <Input id="lastName" autoComplete="family-name" invalid={Boolean(errors.lastName)} {...register('lastName')} />
+              </FormField>
+            </div>
+            <FormField id="username" label="Username" error={errors.username?.message}>
+              <Input id="username" autoComplete="username" autoCapitalize="none" spellCheck={false} invalid={Boolean(errors.username)} {...register('username')} />
+            </FormField>
+            <FormField id="email" label="Work email" error={errors.email?.message}>
+              <Input id="email" type="email" autoComplete="email" invalid={Boolean(errors.email)} {...register('email')} />
+            </FormField>
+            <FormField id="employeeCode" label="Employee code" error={errors.employeeCode?.message} hint="Optional">
+              <Input id="employeeCode" autoComplete="off" invalid={Boolean(errors.employeeCode)} {...register('employeeCode')} />
+            </FormField>
+          </div>
+        </section>
+
+        <div className="ledger-rule my-6" />
+
+        <section aria-labelledby="bootstrap-access">
+          <SectionLabel index="03" className="text-primary">
+            <span id="bootstrap-access">Access credentials</span>
+          </SectionLabel>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <FormField id="password" label="Initial password" error={errors.password?.message}>
+              <PasswordInput id="password" autoComplete="new-password" invalid={Boolean(errors.password)} {...register('password')} />
+            </FormField>
+            <FormField id="confirmPassword" label="Confirm password" error={errors.confirmPassword?.message}>
+              <PasswordInput id="confirmPassword" autoComplete="new-password" invalid={Boolean(errors.confirmPassword)} {...register('confirmPassword')} />
+            </FormField>
+          </div>
+          <p className="mt-3 font-numeric text-2xs uppercase tracking-micro text-muted-foreground">
+            Backend password policy applies on submission
+          </p>
+        </section>
+
+        <div className="ledger-rule mt-7" />
+
+        <div className="mt-6">
+          <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
+            {!isSubmitting && <UserPlus aria-hidden="true" className="h-4 w-4" />}
+            {isSubmitting ? 'Creating administrator…' : 'Complete installation'}
+            {!isSubmitting && <ArrowRight aria-hidden="true" className="h-4 w-4" />}
+          </Button>
+          <p className="mt-3 text-center font-numeric text-2xs uppercase tracking-micro text-muted-foreground">
+            Step 01 of 01 · no session is created
+          </p>
         </div>
-
-        <FormField id="username" label="Username" error={errors.username?.message}>
-          <Input id="username" autoComplete="username" autoCapitalize="none" spellCheck={false} invalid={Boolean(errors.username)} {...register('username')} />
-        </FormField>
-
-        <FormField id="email" label="Work email" error={errors.email?.message}>
-          <Input id="email" type="email" autoComplete="email" invalid={Boolean(errors.email)} {...register('email')} />
-        </FormField>
-
-        <FormField id="employeeCode" label="Employee code" error={errors.employeeCode?.message} hint="Optional">
-          <Input id="employeeCode" autoComplete="off" invalid={Boolean(errors.employeeCode)} {...register('employeeCode')} />
-        </FormField>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FormField id="password" label="Initial password" error={errors.password?.message}>
-            <PasswordInput id="password" autoComplete="new-password" invalid={Boolean(errors.password)} {...register('password')} />
-          </FormField>
-          <FormField id="confirmPassword" label="Confirm password" error={errors.confirmPassword?.message}>
-            <PasswordInput id="confirmPassword" autoComplete="new-password" invalid={Boolean(errors.confirmPassword)} {...register('confirmPassword')} />
-          </FormField>
-        </div>
-
-        <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
-          <UserPlus aria-hidden="true" className="h-4 w-4" />
-          {isSubmitting ? 'Creating administrator…' : 'Complete installation'}
-        </Button>
       </form>
     </section>
   );

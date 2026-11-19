@@ -55,8 +55,8 @@ const permissions = [
 
 const publicConfiguration = {
   applicationName: 'EDAM',
-  organizationDisplayName: 'Example Institution',
-  organizationName: 'Example Institution',
+  organizationDisplayName: 'Preview Institution',
+  organizationName: 'Preview Institution',
   supportEmail: 'support@example.invalid',
   logoAssetId: null,
   faviconAssetId: null,
@@ -66,7 +66,7 @@ const publicConfiguration = {
   defaultCurrencyCode: 'PKR',
   activeThemeName: 'Institution Light',
   activeThemeType: 'LIGHT',
-  themeTokens: { primary: '#1e5fd6' },
+  themeTokens: {},  // use the re-art-directed CSS stock fallback
 };
 
 function currentUser(mustChangePassword = false) {
@@ -74,8 +74,8 @@ function currentUser(mustChangePassword = false) {
     userId: '00000000-0000-0000-0000-000000000001',
     username: 'admin',
     employeeCode: 'EMP-001',
-    displayName: 'Avery Morgan',
-    email: 'avery.morgan@example.invalid',
+    displayName: 'Preview Session',
+    email: 'preview.session@example.invalid',
     designation: 'Institution Administrator',
     departmentId: null,
     departmentName: null,
@@ -118,6 +118,61 @@ async function prepareChromium() {
   setupLambdaEnvironment(lambdaLibPath);
   chromium.setGraphicsMode = false;
   return chromium.executablePath();
+}
+
+/**
+ * Screenshots are development previews, never production evidence. Every
+ * identity, organization, count and status value below is a synthetic value
+ * injected through intercepted API envelopes; no live backend is contacted.
+ */
+const previewMetadata = {
+  mode: 'development-only',
+  watermark: 'DEVELOPMENT PREVIEW · Mock session · no live backend data · not institutional information',
+  note: 'Identity, organization, approval and notification values in these screenshots are synthetic values injected by scripts/visual-audit.mjs through intercepted API envelopes. The application renders only /auth/me, /public/configuration and documented badge endpoint data at runtime. No live Spring Boot backend or production deployment is used.',
+  values: {
+    user: 'Preview Session',
+    email: 'preview.session@example.invalid',
+    organization: 'Preview Institution',
+    approvalCount: 3,
+    notificationUnreadCount: 2,
+    source: 'intercepted development envelopes in scripts/visual-audit.mjs',
+  },
+};
+
+async function addPreviewWatermark(page) {
+  // A harness-injected top banner (not product code). Prepending guarantees it
+  // is visible in fullPage screenshots without overlaying content mid-page.
+  await page.addStyleTag({
+    content: `
+      [data-edam-preview-watermark] {
+        width: 100%; box-sizing: border-box;
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-2);
+        padding: var(--ds-space-2) var(--ds-space-4);
+        background: var(--ds-color-surface-subtle);
+        color: var(--ds-color-neutral-ink-muted);
+        border-bottom: var(--ds-border-width) solid var(--ds-color-line);
+        border-left: var(--ds-border-width-strong) solid var(--ds-color-line-accent);
+        font-family: var(--font-numeric);
+        font-size: var(--ds-text-2xs); line-height: var(--ds-leading-2xs);
+        text-transform: uppercase; letter-spacing: var(--ds-tracking-wide);
+      }
+      [data-edam-preview-watermark] strong {
+        color: var(--ds-color-neutral-ink); font-weight: var(--ds-weight-bold);
+      }
+    `,
+  });
+  await page.evaluate(() => {
+    if (document.querySelector('[data-edam-preview-watermark]')) return;
+    const strip = document.createElement('div');
+    strip.setAttribute('data-edam-preview-watermark', '');
+    strip.setAttribute('aria-hidden', 'true');
+    const heading = document.createElement('strong');
+    heading.textContent = 'Development preview';
+    const detail = document.createElement('span');
+    detail.textContent = 'Mock session · no live backend data · not institutional information';
+    strip.append(heading, detail);
+    document.body.prepend(strip);
+  });
 }
 
 function attachMockApi(page, route) {
@@ -278,7 +333,16 @@ async function main() {
     defaultViewport: { width: 1440, height: 900 },
   });
 
-  const report = { baseUrl, generatedAt: new Date().toISOString(), viewports: [], screenshots: [], comparisons: [], failures: [] };
+  const report = {
+    baseUrl,
+    generatedAt: new Date().toISOString(),
+    preview: previewMetadata,
+    comparisonBaseline: baselineDir ? 'PR #4 committed screenshots' : null,
+    viewports: [],
+    screenshots: [],
+    comparisons: [],
+    failures: [],
+  };
   const capturedFiles = [];
 
   for (const viewport of auditViewports) {
@@ -310,6 +374,7 @@ async function main() {
         // prefers-reduced-motion can restart entrance animations.
         if (captureViewports.has(viewport.name) && route.capture) {
           const file = `${route.name}-${viewport.name}-${viewport.width}.png`;
+          await addPreviewWatermark(page);
           await page.screenshot({ path: join(outDir, file), type: 'png', fullPage: true });
           capturedFiles.push(file);
           report.screenshots.push(file);
@@ -349,6 +414,7 @@ async function main() {
 
   await writeFile(join(outDir, 'visual-audit.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
   console.log(`Visual audit: ${report.viewports.length} route/viewport checks, ${report.screenshots.length} screenshots, ${report.failures.length} failures.`);
+  console.log(`Preview mode: ${previewMetadata.watermark}`);
   if (report.failures.length > 0) {
     for (const failure of report.failures) console.error(`FAIL ${failure}`);
     process.exitCode = 1;

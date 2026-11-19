@@ -38,8 +38,8 @@ export function currentUser(
     userId: '00000000-0000-0000-0000-000000000001',
     username: 'admin',
     employeeCode: 'EMP-001',
-    displayName: 'Avery Morgan',
-    email: 'avery.morgan@example.invalid',
+    displayName: 'Preview Session',
+    email: 'preview.session@example.invalid',
     designation: 'Institution Administrator',
     departmentId: null,
     departmentName: null,
@@ -58,8 +58,8 @@ export function currentUser(
 
 export const publicConfiguration: PublicConfigurationResponse = {
   applicationName: 'EDAM',
-  organizationDisplayName: 'Example Institution',
-  organizationName: 'Example Institution',
+  organizationDisplayName: 'Preview Institution',
+  organizationName: 'Preview Institution',
   supportEmail: 'support@example.invalid',
   logoAssetId: null,
   faviconAssetId: null,
@@ -80,7 +80,7 @@ export const bootstrappedStatus: InstallationStatusResponse = {
 export const bootstrapResponse: BootstrapResponse = {
   userId: '00000000-0000-0000-0000-000000000002',
   username: 'admin',
-  displayName: 'Avery Morgan',
+  displayName: 'Preview Session',
   roles: [],
   bootstrappedAt: '2026-11-18T10:00:00Z',
 };

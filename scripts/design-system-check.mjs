@@ -118,6 +118,10 @@ const inlineStyle = /style\s*=\s*\{\{/;
 const arbitraryValue = /-\[\s*\d+(?:\.\d+)?(?:px|rem|em|%|vh|vw|deg|s|ms)\b/;
 const heavyBlur = /backdrop-blur-(?:md|lg|xl|2xl|3xl)|backdrop-filter\s*:\s*blur/;
 const continuousDecor = /soft-float|animate-\[\s*.*infinite/;
+// No realistic identity, institution, endpoint-group or placeholder-status
+// literal may appear in product code. Preview values live only in test/harness
+// files and are explicitly labelled there.
+const sampleValue = /Avery Morgan|Example Institution|RPT-001|APL-001|NTF-001|Foundation ready|Commercial banking|endpointGroup/;
 const allowedColorFiles = new Set([
   'src/lib/theme.ts',           // last-resort runtime fallback for meta[theme-color]
   'src/test/fixtures.ts',       // test fixture of the backend contract
@@ -132,6 +136,7 @@ for (const file of sourceFiles) {
   if (arbitraryValue.test(text)) fail(`Arbitrary spacing/size value in ${relativePath}`);
   if (heavyBlur.test(text)) fail(`Excessive backdrop blur in ${relativePath}`);
   if (continuousDecor.test(text)) fail(`Continuous decorative animation in ${relativePath}`);
+  if (sampleValue.test(text)) fail(`Hardcoded sample/preview value in product code: ${relativePath}`);
 }
 if (continuousDecor.test(tailwind)) fail('Continuous decorative animation declared in Tailwind config');
 if (/backdrop-filter\s*:\s*blur/.test(styles)) fail('Excessive backdrop blur declared in component CSS');
