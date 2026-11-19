@@ -28,8 +28,17 @@ export interface ApiRequestOptions {
 
 const writeMethods = new Set<ApiMethod>(['POST', 'PUT', 'PATCH', 'DELETE']);
 
+/** H06: EDAM-1005 is a normal in-progress outcome, retried with the same key. */
+export const IDEMPOTENCY_IN_PROGRESS_CODE = 'EDAM-1005';
+export const IDEMPOTENCY_RETRY_DELAY_MS = 2_000;
+export const IDEMPOTENCY_MAX_RETRIES = 3;
+
 function isWrite(method: ApiMethod): boolean {
   return writeMethods.has(method);
+}
+
+export function createIdempotencyKey(): string {
+  return createUuidV4();
 }
 
 function createUuidV4(): string {
@@ -45,9 +54,16 @@ function createUuidV4(): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-function resolveIdempotencyKey(options: ApiRequestOptions): string | undefined {
-  if (options.idempotencyKey) return options.idempotencyKey;
-  return isIdempotentEndpoint(options.method, options.path) ? createUuidV4() : undefined;
+/**
+ * Resolve an auto-generated idempotency key exactly once per apiFetch gesture.
+ * CSRF and EDAM-1005 retries then reuse the same explicit key; callers may also
+ * supply a gesture key from a form/action so corrections can be distinguished
+ * from safe retries.
+ */
+function withResolvedIdempotencyKey(options: ApiRequestOptions): ApiRequestOptions {
+  if (options.idempotencyKey || !isWrite(options.method)) return options;
+  if (!isIdempotentEndpoint(options.method, options.path)) return options;
+  return { ...options, idempotencyKey: createUuidV4() };
 }
 
 function toFetchBody(body: unknown): { body?: BodyInit; contentType?: string } {
@@ -61,6 +77,7 @@ function toFetchBody(body: unknown): { body?: BodyInit; contentType?: string } {
 async function execute(
   options: ApiRequestOptions,
   allowCsrfRetry: boolean,
+  idempotencyAttempt = 0,
 ): Promise<ApiEnvelope<unknown> | Response> {
   const headers: Record<string, string> = {
     Accept: options.responseType === 'raw' ? '*/*' : 'application/json',
@@ -72,7 +89,7 @@ async function execute(
     headers[CSRF_HEADER_NAME] = csrfToken;
   }
 
-  const idempotencyKey = resolveIdempotencyKey(options);
+  const { idempotencyKey } = options;
   if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
 
   const converted = toFetchBody(options.body);
@@ -109,7 +126,16 @@ async function execute(
     );
     if (isLikelyCsrfFailure(response.status, envelope) && allowCsrfRetry && isWrite(options.method)) {
       await primeCsrf({ force: true });
-      return execute(options, false);
+      return execute(options, false, idempotencyAttempt);
+    }
+    if (
+      error.code === IDEMPOTENCY_IN_PROGRESS_CODE &&
+      options.idempotencyKey &&
+      isWrite(options.method) &&
+      idempotencyAttempt < IDEMPOTENCY_MAX_RETRIES
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, IDEMPOTENCY_RETRY_DELAY_MS));
+      return execute(options, allowCsrfRetry, idempotencyAttempt + 1);
     }
     if (!envelope && response.ok) {
       throw new ApiError({
@@ -133,7 +159,8 @@ async function execute(
   return envelope;
 }
 
-async function executeWithGetRetry(options: ApiRequestOptions): Promise<ApiEnvelope<unknown> | Response> {
+async function executeWithGetRetry(input: ApiRequestOptions): Promise<ApiEnvelope<unknown> | Response> {
+  const options = withResolvedIdempotencyKey(input);
   try {
     return await execute(options, true);
   } catch (error) {

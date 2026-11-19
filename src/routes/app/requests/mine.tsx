@@ -1,18 +1,28 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Files } from 'lucide-react';
 import { RequirePermission } from '@/auth/guards';
-import { ModulePlaceholder } from '@/components/feedback/ModulePlaceholder';
+import { RequestListPage } from '@/features/requests/pages/RequestListPage';
+import { parseRequestListSearch } from '@/features/requests/search';
 
-function MyRequestsFoundation() {
+function MyRequestsRoute() {
+  const filters = Route.useSearch();
+  const navigate = Route.useNavigate();
   return (
     <RequirePermission>
-      <ModulePlaceholder
-        icon={Files}
-        title="My Requests"
-        description="Foundation for the requester's own list, filtering, and scoped actions. Future data comes only from the documented request endpoint."
+      <RequestListPage
+        mode="mine"
+        filters={filters}
+        onFiltersChange={(next) => {
+          void navigate({
+            search: (previous) => ({ ...previous, ...next }),
+            replace: true,
+          });
+        }}
       />
     </RequirePermission>
   );
 }
 
-export const Route = createFileRoute('/app/requests/mine')({ component: MyRequestsFoundation });
+export const Route = createFileRoute('/app/requests/mine')({
+  validateSearch: parseRequestListSearch,
+  component: MyRequestsRoute,
+});

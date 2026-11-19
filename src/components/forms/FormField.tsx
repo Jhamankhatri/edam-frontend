@@ -62,6 +62,7 @@ function decorate(node: ReactNode, describedBy: string, invalid: boolean): React
 }
 
 export function FormField({ id, label, error, hint, children, className }: FormFieldProps) {
+  const labelId = `${id}-label`;
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
   const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ');
@@ -69,7 +70,7 @@ export function FormField({ id, label, error, hint, children, className }: FormF
 
   return (
     <div className={cn('space-y-2', className)}>
-      <Label htmlFor={id}>{label}</Label>
+      <Label id={labelId} htmlFor={id}>{label}</Label>
       {control}
       {hint && !error && (
         <p id={hintId} className="text-xs leading-relaxed text-muted-foreground">{hint}</p>

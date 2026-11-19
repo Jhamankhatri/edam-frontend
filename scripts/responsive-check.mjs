@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
- * Headless responsive verification for Phase 1 / Step 1.
+ * Headless responsive verification for Phase 1 / Steps 1–2.
  *
- * It checks public auth screens, the password-change screen and permission-gated
- * app-shell foundations at desktop, tablet and mobile widths. Backend-shaped API
- * responses are intercepted in the browser so the check does not need a running
- * Spring Boot service. This is a layout/behaviour smoke check, not a replacement
- * for a full axe/WCAG audit or live end-to-end backend integration.
+ * It checks public auth screens, the password-change screen, permission-gated
+ * app-shell foundations, dashboard widgets and expense-request screens at
+ * desktop, tablet and mobile widths. Backend-shaped API responses are
+ * intercepted in the browser so the check does not need a running Spring Boot
+ * service. This is a layout/behaviour smoke check, not a replacement for a full
+ * axe/WCAG audit or live end-to-end backend integration.
  */
 import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -15,6 +16,12 @@ import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import chromium, { inflate, setupLambdaEnvironment } from '@sparticuz/chromium';
+import {
+  step2MockResponse,
+  step2Permissions,
+  step2PreviewNote,
+  step2ResponsiveRoutes,
+} from './step2-preview-api.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -37,16 +44,7 @@ const viewports = [
   { name: 'mobile', width: 390, height: 844, isMobile: true, hasTouch: true },
 ];
 
-const permissions = [
-  'report:view',
-  'request:view-own',
-  'request:view-scope',
-  'request:view-all',
-  'request:create',
-  'request:edit',
-  'approval:view',
-  'notification:view',
-];
+const permissions = step2Permissions;
 
 // Development-only mock envelopes. Identity, organization and count values are
 // synthetic and exist solely to exercise responsive/permission rendering; no
@@ -67,7 +65,7 @@ const publicConfiguration = {
   themeTokens: {},  // use the re-art-directed CSS stock fallback
 };
 
-function currentUser(mustChangePassword) {
+function currentUser(mustChangePassword, permissionsOverride) {
   return {
     userId: '00000000-0000-0000-0000-000000000001',
     username: 'admin',
@@ -80,7 +78,7 @@ function currentUser(mustChangePassword) {
     branchId: null,
     branchName: null,
     roles: [],
-    permissions,
+    permissions: permissionsOverride ?? permissions,
     dataScopes: [],
     installationScope: true,
     mustChangePassword,
@@ -143,24 +141,6 @@ const routes = [
     shell: false,
   },
   {
-    name: 'Dashboard',
-    path: '/app/dashboard',
-    expectedHeading: 'Dashboard',
-    authenticated: true,
-    bootstrapped: true,
-    mustChangePassword: false,
-    shell: true,
-  },
-  {
-    name: 'My Requests',
-    path: '/app/requests/mine',
-    expectedHeading: 'My Requests',
-    authenticated: true,
-    bootstrapped: true,
-    mustChangePassword: false,
-    shell: true,
-  },
-  {
     name: 'Approval Inbox',
     path: '/app/approvals',
     expectedHeading: 'Approval Inbox',
@@ -178,6 +158,7 @@ const routes = [
     mustChangePassword: false,
     shell: true,
   },
+  ...step2ResponsiveRoutes,
 ];
 
 function envelopeSuccess(data, path) {
@@ -190,10 +171,11 @@ function envelopeSuccess(data, path) {
   };
 }
 
-function envelopeFailure(code, message, path) {
+function envelopeFailure(code, message, path, fieldErrors) {
   return {
     success: false,
     error: { code, message },
+    ...(fieldErrors ? { fieldErrors } : {}),
     correlationId: 'responsive-check-correlation',
     path,
     timestamp: new Date().toISOString(),
@@ -443,7 +425,9 @@ async function fullAudit(page, preInteraction) {
 }
 
 function attachMockApi(page, route, observability) {
-  const user = route.authenticated ? currentUser(route.mustChangePassword) : null;
+  const user = route.authenticated
+    ? currentUser(route.mustChangePassword, route.permissionsOverride)
+    : null;
 
   const respond = async (request, status, payload, extraHeaders = {}) => {
     await request.respond({
@@ -514,9 +498,21 @@ function attachMockApi(page, route, observability) {
         case '/api/v1/notifications/unread-count':
           await respond(request, 200, envelopeSuccess({ count: 2 }, path));
           return;
-        default:
+        default: {
+          const step2 = step2MockResponse({
+            url,
+            method,
+            route,
+            envelopeSuccess,
+            envelopeFailure,
+          });
+          if (step2) {
+            await respond(request, step2.status, step2.payload);
+            return;
+          }
           observability.unexpectedApiRequests.push(`${method} ${path}`);
           await respond(request, 200, envelopeSuccess(null, path));
+        }
       }
     })().catch((error) => {
       observability.runtimeErrors.push(`Request interception failed: ${String(error)}`);
@@ -668,6 +664,9 @@ async function runCheck(browser, route, viewport) {
     }
     const unexpectedConsoleErrors = observability.consoleErrors.filter(({ text, location }) => {
       if (text.includes('status of 401')) return false;
+      // Intentional mocked backend error envelopes are rendered as UI error
+      // states; Chromium also logs their HTTP status as a resource failure.
+      if (text.includes('Failed to load resource') && location.includes('/api/v1/')) return false;
       if (text.includes('favicon.ico') || location.includes('favicon.ico')) return false;
       return true;
     });
@@ -733,6 +732,7 @@ async function main() {
     for (const viewport of viewports) {
       console.log(`\n${viewport.name.toUpperCase()} ${viewport.width}×${viewport.height}`);
       for (const route of routes) {
+        if (route.viewports && !route.viewports.includes(viewport.name)) continue;
         results.push(await runCheck(browser, route, viewport));
       }
     }
@@ -770,7 +770,8 @@ async function main() {
       name: 'Chromium headless shell (@sparticuz/chromium)',
       executablePath,
     },
-    mockApi: 'Handover-shaped session, configuration, installation and badge envelopes intercepted in-browser; no live backend required.',
+    mockApi: 'Handover-shaped session, configuration, dashboard, request, lookup, activity and badge envelopes intercepted in-browser; no live backend required.',
+    preview: step2PreviewNote,
     touchTargetPolicy: 'Minimum 40×40 CSS px; 0.5px subpixel tolerance for transformed controls.',
     viewports,
     totals: {

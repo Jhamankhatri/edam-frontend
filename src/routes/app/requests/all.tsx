@@ -1,18 +1,28 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ListFilter } from 'lucide-react';
 import { RequirePermission } from '@/auth/guards';
-import { ModulePlaceholder } from '@/components/feedback/ModulePlaceholder';
+import { RequestListPage } from '@/features/requests/pages/RequestListPage';
+import { parseRequestListSearch } from '@/features/requests/search';
 
-function AllRequestsFoundation() {
+function AllRequestsRoute() {
+  const filters = Route.useSearch();
+  const navigate = Route.useNavigate();
   return (
     <RequirePermission>
-      <ModulePlaceholder
-        icon={ListFilter}
-        title="All Requests"
-        description="Foundation for the scoped register, filters, export entry point, and responsive table behavior. Backend data scope remains authoritative."
+      <RequestListPage
+        mode="all"
+        filters={filters}
+        onFiltersChange={(next) => {
+          void navigate({
+            search: (previous) => ({ ...previous, ...next }),
+            replace: true,
+          });
+        }}
       />
     </RequirePermission>
   );
 }
 
-export const Route = createFileRoute('/app/requests/all')({ component: AllRequestsFoundation });
+export const Route = createFileRoute('/app/requests/all')({
+  validateSearch: parseRequestListSearch,
+  component: AllRequestsRoute,
+});

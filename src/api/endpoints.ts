@@ -11,6 +11,15 @@ export const ENDPOINTS = {
   publicConfiguration: '/public/configuration',
   approvalsCount: '/approvals/count',
   notificationsUnreadCount: '/notifications/unread-count',
+  requests: '/expense-requests',
+  reportingDashboard: '/reporting/dashboard',
+  requestTypes: '/expense-configuration/request-types',
+  expenseCategories: '/expense-configuration/categories',
+  expenseNatures: '/expense-configuration/natures',
+  currencies: '/master-data/currencies',
+  taxAuthorities: '/master-data/tax-authorities',
+  departments: '/organization/departments',
+  branches: '/organization/branches',
 } as const;
 
 /**
