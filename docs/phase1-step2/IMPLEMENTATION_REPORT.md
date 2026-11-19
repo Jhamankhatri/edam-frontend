@@ -58,4 +58,4 @@
 - Implementation commit: `eb89018f695f39cab7695e8afc9b359e4fe93ac8` (pushed to the working branch).
 - Pull request: [#5](https://github.com/Jhamankhatri/edam-frontend/pull/5), `OPEN`, not a draft, not merged. It is intentionally left open/unmerged.
 - CI on the implementation commit: push run `44474884478` (`success`) and pull-request run `44474915430` (`success`). Both PR checks — `Pinned OpenAPI snapshot and generated types` and `Typecheck, lint, test and build` — passed.
-- Final PR head: `ad27effed5e8f4d12add3e1d2168dbb8bc20264a`. The last two commits contain delivery metadata only, not product code. Final push run `44475267632` and PR run `44475276902` both completed `success`.
+- Commits after `eb89018...` contain delivery metadata only, not product code. Use `gh pr view 5 --json headRefOid` for the exact current PR head. CI passed on the implementation commit and on each metadata-only PR head.
